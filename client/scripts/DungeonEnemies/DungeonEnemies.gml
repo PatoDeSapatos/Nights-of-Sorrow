@@ -23,14 +23,10 @@ function instantiate_enemy(_x, _y, _id) {
 }
 
 function init_enemies() {
-	var _map = ds_map_create();
-	
 	// Slime
-	ds_map_add(_map, "SLIME", new Enemy(
+	ds_map_add(global.enemies, "SLIME", new Enemy(
 		spr_slime_idle,
 		spr_slime_idle,
 		enemy_chase_idle
 	));
-	
-	return _map;
 }

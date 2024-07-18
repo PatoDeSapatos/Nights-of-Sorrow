@@ -4,8 +4,10 @@ global.server = instance_create_layer(0, 0, "Instances", obj_server);
 global.pause = false;
 global.loading = false;
 global.can_zoom = false;
-global.enemies = init_enemies();
-room_goto(rm_main_menu);
+global.enemies = ds_map_create();
+global.items = ds_map_create();
+init_items();
+init_enemies();
 
 global.controls = {
 	key_up: [ord("W"), vk_up],
@@ -14,4 +16,5 @@ global.controls = {
 	key_right: [ord("D"), vk_right]
 }
 
-randomize()
+randomize();
+room_goto(rm_test);
