@@ -8,9 +8,11 @@ import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
 
 public class DungeonDTO extends WebSocketDTO {
+    private Dungeon dungeon;
 
     public DungeonDTO(Dungeon dungeon) {
         super(MessageType.DUNGEON_STATE);
+        this.dungeon = dungeon;
 
         var data = new JSONObject();
 
@@ -25,5 +27,9 @@ public class DungeonDTO extends WebSocketDTO {
 
         data.put("entities", parsedEntities);
         packet.put("data", data);
+    }
+
+    public Dungeon getDungeon() {
+        return dungeon;
     }
 }

@@ -3,7 +3,7 @@ function Request(_reaction) constructor {
 	reaction = _reaction;
 }
 
-global.url = "http://10.122.17.16:8081";
+global.url = "http://localhost:8081";
 global.user_token = "";
 socket = network_create_socket(network_socket_ws);
 user_logged = false;
@@ -11,6 +11,7 @@ username = "";
 dungeon_code = "";
 is_user_guest = false;
 guest_password = "";
+admin_username = ""
 
 request_function = -1;
 requests = [
@@ -42,7 +43,7 @@ function send_chat_message(_type, _text) {
 }
 
 websocket_connect = function () {
-	network_connect_raw_async(socket, "10.122.17.16/ws", 8081);
+	network_connect_raw_async(socket, "localhost/ws", 8081);
 }
 
 websocket_disconnect = function () {

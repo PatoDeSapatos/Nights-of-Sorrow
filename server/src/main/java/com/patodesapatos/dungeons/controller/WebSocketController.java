@@ -12,6 +12,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
+import com.patodesapatos.dungeons.domain.dungeon.DungeonDTO;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
 import com.patodesapatos.dungeons.domain.dungeon.RoomsDTO;
 import com.patodesapatos.dungeons.domain.dungeon.WaitingDTO;
@@ -67,6 +68,11 @@ public class WebSocketController extends TextWebSocketHandler {
              */
             case JOIN_DUNGEON:
                 dto = dungeonService.joinDungeon(data.getString("invite"), username, session);
+
+                if (dto instanceof DungeonDTO) {
+                    var dungeonDTO = (DungeonDTO) dto;
+                    sendDTO(new RoomsDTO(dungeonDTO.getDungeon()), session);
+                }
                 sendDTOtoAllPlayers(dto, data);
                 break;
             /**
