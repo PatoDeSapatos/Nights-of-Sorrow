@@ -4,7 +4,20 @@ function Item_Stack( _item_id, _quantity ) constructor {
 }
 
 function get_item_by_id(_item_id) {
-	return ds_map_find_value(global.items, _item_id);
+	return struct_get(global.items, _item_id);
+}
+
+function get_item_id_by_name(_item_name) {
+	var _item_id = noone;
+	
+	// TODO finish this function
+	//struct_foreach(global.items, function(_key, _value, _item_name) {
+	//	if (_value.name == _item_name) {
+	//		_item_id = _item.id;
+	//	}
+	//});
+	
+	return _item_id;
 }
 
 function inventory_add_item( _inventory, _item_id, _quantity ) {
