@@ -1,6 +1,17 @@
 /// @description
 if ( !inventory_open ) return;
 
+// Order Tab
+draw_sprite_ext(spr_inventory_order, 0, items_box_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
+
+// Inventory Tabs
+var _tab_w = sprite_get_width(spr_inventory_tabs);
+var _tab_h = sprite_get_height(spr_inventory_tabs);
+var _current_tab_y = items_box_title_y + items_box_title_h + items_box_border/4;
+for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
+	if ( i != selected_tab ) draw_sprite_ext(spr_inventory_tabs, i, items_box_x, _current_tab_y, global.res_scale*2, global.res_scale*2, 0, c_white, 1);;
+}
+
 draw_set_color(c_white);
 draw_rectangle( 
 	items_box_x,
@@ -9,6 +20,13 @@ draw_rectangle(
 	items_box_y + items_box_h,
 	false
 );
+
+// Selected Tab
+var _current_tab_y = items_box_title_y + items_box_title_h + items_box_border/4;
+for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
+	if ( i == selected_tab ) draw_sprite_ext(spr_inventory_tabs, i, items_box_x, _current_tab_y, global.res_scale*2, global.res_scale*2, 0, c_white, 1);;
+	_current_tab_y += (_tab_h - 3) * global.res_scale*2;
+}
 
 // Items Categories
 var _categories_space = sprite_get_width(spr_items_categories)*global.res_scale*2.5 + items_box_border/4

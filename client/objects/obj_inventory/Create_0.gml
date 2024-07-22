@@ -38,8 +38,17 @@ items_box_list_surf = -1;
 // Navigation
 selected_item = 0;
 selected_category = 0;
+selected_tab = 0;
 mouse_navigation = false;
 focus = 0;
+
+// Inventory Tabs
+//tabs_y = [];
+//_current_tab_y = 0;
+//for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
+//    tabs_y[i] = _current_tab_y;
+//	_current_tab_y += (_tab_h - 3) * global.res_scale*2;
+//}
 
 // Inventory
 max_items = 10;

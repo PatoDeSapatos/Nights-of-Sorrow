@@ -63,7 +63,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.6.2.162",
+    "IDEVersion":"2024.4.1.152",
   },
   "name":"dungeons_prototipo",
   "resources":[
@@ -112,6 +112,8 @@
     {"id":{"name":"spr_hand_acessories","path":"sprites/spr_hand_acessories/spr_hand_acessories.yy",},},
     {"id":{"name":"spr_hats","path":"sprites/spr_hats/spr_hats.yy",},},
     {"id":{"name":"spr_head_acessories","path":"sprites/spr_head_acessories/spr_head_acessories.yy",},},
+    {"id":{"name":"spr_inventory_order","path":"sprites/spr_inventory_order/spr_inventory_order.yy",},},
+    {"id":{"name":"spr_inventory_tabs","path":"sprites/spr_inventory_tabs/spr_inventory_tabs.yy",},},
     {"id":{"name":"spr_items_categories","path":"sprites/spr_items_categories/spr_items_categories.yy",},},
     {"id":{"name":"spr_items","path":"sprites/spr_items/spr_items.yy",},},
     {"id":{"name":"spr_menu_chat","path":"sprites/spr_menu_chat/spr_menu_chat.yy",},},
