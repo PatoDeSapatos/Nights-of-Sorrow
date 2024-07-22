@@ -38,6 +38,7 @@ load_map_images();
 if (global.server.admin_username == global.server.username) {
 	map = generate_dungeon();
 	var _map = {
+		invite: global.server.dungeon_code,
 		initX: map.initX,
 		initY: map.initY,
 		nodeGrid: map.nodeGrid
