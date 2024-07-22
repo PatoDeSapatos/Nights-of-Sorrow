@@ -165,6 +165,7 @@ function register() {
 }
 
 function generate_init_pos() {
+	var roomSize = obj_dungeon_manager.roomSize
 	var _initX = irandom(roomsWidth - 1)
 	var _initY = irandom(roomsHeight - 1)
 	var validX = 0

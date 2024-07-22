@@ -42,7 +42,7 @@ if (global.server.admin_username == global.server.username) {
 		initY: map.initY,
 		nodeGrid: map.nodeGrid
 	}
-	send_websocket_message("DUNGEON_ROOMS_SHARE", _map);
+	global.server.send_websocket_message("DUNGEON_ROOMS_SHARE", _map);
 	cast_dungeon()
 } else {
 	waiting_map = true;
