@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Inventory",
+  "%Name":"InventoryCraftingTab",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Inventory",
+  "name":"InventoryCraftingTab",
   "parent":{
     "name":"Inventory",
     "path":"folders/Scripts/Dungeon/Inventory.yy",

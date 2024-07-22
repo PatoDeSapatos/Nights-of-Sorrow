@@ -1,4 +1,11 @@
 /// @description
+enum TABS {
+	ITEMS,
+	CRAFTING,
+	HABILITYS,
+	LENGTH
+}
+
 inventory_open = true;
 inventory_size = 64;
 
@@ -43,12 +50,13 @@ mouse_navigation = false;
 focus = 0;
 
 // Inventory Tabs
-//tabs_y = [];
-//_current_tab_y = 0;
-//for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
-//    tabs_y[i] = _current_tab_y;
-//	_current_tab_y += (_tab_h - 3) * global.res_scale*2;
-//}
+tabs_y = [];
+var _current_tab_y = items_box_title_y + items_box_title_h + items_box_border/4;;
+var _tab_h = sprite_get_height(spr_inventory_tabs);
+for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
+    tabs_y[i] = _current_tab_y;
+	_current_tab_y += (_tab_h - 3) * global.res_scale*2;
+}
 
 // Inventory
 max_items = 10;
@@ -65,3 +73,5 @@ mouse_l = 0;
 mouse_r = 0;
 
 inventory = [];
+recipes = [];
+inventory_add_recipe(recipes, 0);

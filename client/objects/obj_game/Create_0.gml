@@ -6,7 +6,9 @@ global.loading = false;
 global.can_zoom = false;
 global.enemies = ds_map_create();
 global.items = ds_map_create();
+global.recipes = {};
 init_items();
+init_recipes();
 init_enemies();
 
 global.controls = {

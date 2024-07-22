@@ -26,6 +26,10 @@ function add_item( _name, _sprId, _category, _status = -1, _max_stack = 999 ) {
 	ds_map_add( global.items, ds_map_size(global.items), new Item(_name, _sprId, _category, _status, _max_stack) );
 }
 
+function get_item_id_by_name(_item_name) {
+	
+}
+
 function init_items() {
 	// Without Status
 	add_item( "Bola de Slime", 0, ItemCategory.MATERIAL, -1, 20 );
@@ -33,4 +37,5 @@ function init_items() {
 	
 	// With Status
 	add_item( "Martelo Maluco", 2, ItemCategory.WEAPON, new Status(0, 0, 0, 5, 0, 0), 1 );
+	add_item( "Martelo Grudento", 3, ItemCategory.WEAPON, new Status(0, 0, 0, 10, 0, 0), 1 );
 }

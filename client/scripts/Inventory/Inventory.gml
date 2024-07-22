@@ -53,3 +53,7 @@ function inventory_remove_item( _inventory, _item_id, _quantity ) {
 		}
 	}
 }
+
+function inventory_add_recipe(_recipes_index, _recipe_id) {
+	array_push(_recipes_index, struct_get(global.recipes, _recipe_id));
+}
