@@ -1,5 +1,6 @@
 /// @description
 global.loading = true;
+waiting_map = false;
 
 // Server
 depth = 10
@@ -31,10 +32,21 @@ ds_grid_set_region(grid, 0, 0, width, height, undefined)
 // Dungeon Generation
 entities = ds_map_create();
 enemies_number = 5;
+map = -1
 
 load_map_images();
-map = generate_dungeon();
-cast_dungeon()
+if (global.server.admin_username == global.server.username) {
+	map = generate_dungeon();
+	var _map = {
+		initX: map.initX,
+		initY: map.initY,
+		nodeGrid: map.nodeGrid
+	}
+	send_websocket_message("DUNGEON_ROOMS_SHARE", _map);
+	cast_dungeon()
+} else {
+	waiting_map = true;
+}
 
 instance_create_layer(0, 0, "Instances", obj_dungeon_chat);
 
@@ -44,7 +56,7 @@ update_entities = function (_data) {
 	for (var i = 0; i < array_length(_entities); ++i) {
 		if ( !is_struct(_entities[i]) ) {
 			show_message(_entities[i]);
-			continue;	
+			continue;
 		}
 		
 		var _entity_id = struct_get(_entities[i], "id");
@@ -54,26 +66,7 @@ update_entities = function (_data) {
 				ds_map_find_value(entities, _entity_id).update_entity_values( struct_get(_entities[i], "data"), struct_get(_entities[i], "username") );
 			}
 		} else {
-			var initX = irandom(map.roomsWidth - 1)
-			var initY = irandom(map.roomsHeight - 1)
-			var validX = 0
-			var validY = 0
-			var valid = false
-
-			do {
-				if (map.nodeGrid[initY][initX].name == "") {
-					initX = irandom(map.roomsWidth - 1)
-					initY = irandom(map.roomsHeight - 1)
-				} else {
-					initX = ((initX * roomSize) + (roomSize div 2))
-					initY = ((initY * roomSize) + (roomSize div 2))
-					validX = tileToScreenX(initX, initX)
-					validY = tileToScreenY(initX, initY)
-					valid = true
-				}
-			} until (valid)
-
-			var _entity = instance_create_layer(validX, validY, "Instances", obj_player);
+			var _entity = instance_create_layer(map.initX, map.initY, "Instances", obj_player);
 			var _username = struct_get(_entities[i], "username");
 			
 			_entity.player_username = _username;

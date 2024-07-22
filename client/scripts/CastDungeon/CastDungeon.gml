@@ -57,7 +57,7 @@ function cast_dungeon() {
 
 			if (is_undefined(tile)) continue
 			obj_dungeon_manager.grid[# _x, _y] = tile
-			obj_dungeon_manager.map.salasGrid[floor(_y / roomSize)][floor(_x / roomSize)][_y % roomSize][_x % roomSize] = tile
+			//obj_dungeon_manager.map.salasGrid[_y div roomSize][_x div roomSize][_y % roomSize][_x % roomSize] = tile
 		}
 	}
 	surface_save(surface, working_directory + "mapa.png")
@@ -74,8 +74,5 @@ function Tile(_spr, _z, _coll, _stack=[]) constructor {
 	function get_stack() {
 		var _item = array_shift(stack);
 		return _item;
-		
-		
-		[lixo][lixo]
 	}
 }

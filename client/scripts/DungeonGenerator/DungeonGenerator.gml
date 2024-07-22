@@ -1,8 +1,7 @@
 function generate_dungeon() {
+	var roomSize = obj_dungeon_manager.roomSize
     var ambient = {
-
         roomsAmount: 40,
-
 		offsets: [
 	        new Point(0, -1), //top
 	        new Point(0, 1), //bottom
@@ -17,27 +16,19 @@ function generate_dungeon() {
         ],
 		toCollapse: [],
         nodes: [],
-        emptyNode: noone,
+        emptyNode: new Node("", ""),
         salas: 1,
         nodeGrid: [],
-        salasGrid: [],
-        roomsWidth: obj_dungeon_manager.width div obj_dungeon_manager.roomSize,
-        roomsHeight: obj_dungeon_manager.height div obj_dungeon_manager.roomSize
+        roomsWidth: obj_dungeon_manager.width div roomSize,
+        roomsHeight: obj_dungeon_manager.height div roomSize,
+		initX: -1,
+		initY: -1
 	}
 
     for (var i = 0; i < ambient.roomsHeight; i++) {
         ambient.nodeGrid[i] = []
-        ambient.salasGrid[i] = []
         for (var j = 0; j < ambient.roomsWidth; j++) {
             ambient.nodeGrid[i][j] = noone
-            ambient.salasGrid[i][j] = []
-			
-			for (var _i = 0; _i < obj_dungeon_manager.roomSize; ++_i) {
-			    ambient.salasGrid[i][j][_i] = []
-				for (var _j = 0; _j < obj_dungeon_manager.roomSize; ++_j) {
-			        ambient.salasGrid[i][j][_i][_j] = noone
-				}
-			}
         }
     }
 
@@ -45,6 +36,8 @@ function generate_dungeon() {
 	var data = date_current_datetime()
     method(ambient, collapse)()
     show_debug_message(string("finished in: {0} s with {1} rooms", date_second_span(data, date_current_datetime()), ambient.salas))
+
+	method(ambient, generate_init_pos)()
 
     return ambient
 }
@@ -157,8 +150,6 @@ function addRestritivo(i, nomeRestritivo) {
 }
 
 function register() {
-	emptyNode = new Node("", "")
-	
 	if (!directory_exists(working_directory + "\\dungeon_rooms")) {
 		return;
 	}
@@ -171,6 +162,30 @@ function register() {
 
 		_room_name = file_find_next();
 	}
+}
+
+function generate_init_pos() {
+	var _initX = irandom(roomsWidth - 1)
+	var _initY = irandom(roomsHeight - 1)
+	var validX = 0
+	var validY = 0
+	var valid = false
+
+	do {
+		if (nodeGrid[_initY][_initX].name == "") {
+			_initX = irandom(roomsWidth - 1)
+			_initY = irandom(roomsHeight - 1)
+		} else {
+			_initX = ((_initX * roomSize) + (roomSize div 2))
+			_initY = ((_initY * roomSize) + (roomSize div 2))
+			validX = tileToScreenX(_initX, _initX)
+			validY = tileToScreenY(_initX, _initY)
+			valid = true
+		}
+	} until (valid)
+	
+	initX = validX
+	initY = validY
 }
 
 function Node(_name, _fileName) constructor {

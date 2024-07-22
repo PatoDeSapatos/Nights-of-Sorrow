@@ -49,9 +49,10 @@ switch(async_load[? "type"]){
 					obj_waiting_room_menu.dungeon_privacy = _is_dungeon_public ? ("Public") : ("Private");
 					obj_waiting_room_menu.waiting_server = false;
 					obj_waiting_room_menu.admin_username = _adm;
+					global.server.admin_username = _adm
 					
 					if ( obj_waiting_room_menu.joined ) {
-						var _messages = ["arives in battle", "aproaches", "enters the battlefield", "lurks in"]
+						var _messages = ["arrives in battle", "approaches", "enters the battlefield", "lurks in"]
 						
 						global.server.send_chat_message("JOIN", _messages[irandom(array_length(_messages)-1)]);
 						obj_waiting_room_menu.joined = false;
@@ -70,6 +71,13 @@ switch(async_load[? "type"]){
 					obj_dungeon_chat.receive_message(_data);
 				}
 				break;
+			case "DUNGEON_ROOMS_SHARE":
+				with (obj_dungeon_manager) {
+					map = _data
+					cast_dungeon()
+					waiting_map = false
+				}
+				break
 		}
 		break;
 	case network_type_disconnect:
