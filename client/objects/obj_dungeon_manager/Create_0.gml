@@ -51,6 +51,8 @@ if (global.server.admin_username == global.server.username) {
 instance_create_layer(0, 0, "Instances", obj_dungeon_chat);
 
 update_entities = function (_data) {
+	if (waiting_map) return
+
 	var _entities = struct_get(_data, "entities");
 	
 	for (var i = 0; i < array_length(_entities); ++i) {

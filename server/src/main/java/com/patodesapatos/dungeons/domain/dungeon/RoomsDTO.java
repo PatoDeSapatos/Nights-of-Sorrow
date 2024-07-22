@@ -15,6 +15,6 @@ public class RoomsDTO extends WebSocketDTO {
     public RoomsDTO(JSONObject data) {
         super(MessageType.DUNGEON_ROOMS_SHARE);
 
-        packet.put("data", data.getJSONArray("data"));
+        packet.put("data", data);
     }
 }
