@@ -26,6 +26,8 @@
     {"name":"Sprites","order":3,"path":"folders/Sprites.yy",},
     {"name":"dungeon","order":4,"path":"folders/Sprites/dungeon.yy",},
     {"name":"enemies","order":3,"path":"folders/Sprites/dungeon/enemies.yy",},
+    {"name":"inventory","order":6,"path":"folders/Sprites/dungeon/inventory.yy",},
+    {"name":"items","order":5,"path":"folders/Sprites/dungeon/items.yy",},
     {"name":"menus","order":1,"path":"folders/Sprites/menus.yy",},
     {"name":"player","order":2,"path":"folders/Sprites/player.yy",},
     {"name":"customizables","order":7,"path":"folders/Sprites/player/customizables.yy",},
@@ -51,7 +53,7 @@
     {"name":"spr_hand_acessories","order":3,"path":"sprites/spr_hand_acessories/spr_hand_acessories.yy",},
     {"name":"spr_hats","order":4,"path":"sprites/spr_hats/spr_hats.yy",},
     {"name":"spr_head_acessories","order":5,"path":"sprites/spr_head_acessories/spr_head_acessories.yy",},
-    {"name":"spr_items","order":4,"path":"sprites/spr_items/spr_items.yy",},
+    {"name":"spr_items_categories","order":1,"path":"sprites/spr_items_categories/spr_items_categories.yy",},
     {"name":"spr_menu_messagebox","order":1,"path":"sprites/spr_menu_messagebox/spr_menu_messagebox.yy",},
   ],
 }

@@ -1,5 +1,5 @@
 /// @description
-inventory_open = false;
+inventory_open = true;
 inventory_size = 64;
 
 // Menu Parameters
@@ -14,11 +14,45 @@ items_box_x = gui_w - border - items_box_w;
 items_box_y = 0;
 items_box_border = items_box_w div 10;
 
-items_box_name_x = items_box_x + items_box_border;
-items_box_name_y = border;
-items_box_name_w = (items_box_w div 2) - items_box_border*2;
-items_box_name_h = 100;
+items_box_spr_size = sprite_get_height(spr_items) * (global.res_scale * 2) + 5;
 
-items_box_quantity_x = items_box_name_x + items_box_name_w + items_box_border*2;
+items_box_category_y = 0; 
+items_box_category_h = sprite_get_height(spr_items_categories) * (global.res_scale*2.5) + 5;
+
+items_box_title_y = items_box_y + items_box_category_y + items_box_category_h + items_box_border/2;
+items_box_title_h = sprite_get_height(spr_items) * global.res_scale*2 + 10;
+
+items_box_name_x = items_box_border + items_box_spr_size;
+items_box_name_y = items_box_title_y + items_box_title_h;
+items_box_name_offset = 0;
+
+items_box_name_w = (items_box_w div 2) - items_box_border*2;
+items_box_name_h = sprite_get_height(spr_items) * (global.res_scale * 2) + 5;
+//items_box_name_h = (items_box_h - items_box_title_h - items_box_border)/12;
+
+items_box_category_x = items_box_w - items_box_border;
+items_box_quantity_x = items_box_category_x - items_box_spr_size - items_box_border;
+
+items_box_list_surf = -1;
+
+// Navigation
+selected_item = 0;
+selected_category = 0;
+mouse_navigation = false;
+focus = 0;
+
+// Inventory
+max_items = 10;
+
+// inputs
+up_input = 0;
+down_input = 0;
+left_input = 0;
+right_input = 0;
+
+mouse_gui_x = 0;
+mouse_gui_y = 0;
+mouse_l = 0;
+mouse_r = 0;
 
 inventory = [];
