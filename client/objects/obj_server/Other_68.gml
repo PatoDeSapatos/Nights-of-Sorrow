@@ -77,6 +77,7 @@ switch(async_load[? "type"]){
 					cast_dungeon()
 					waiting_map = false
 				}
+				send_websocket_message("DUNGEON_STATE", {invite: dungeon_code});
 				break
 		}
 		break;

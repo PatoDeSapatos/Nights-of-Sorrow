@@ -21,6 +21,7 @@ public class Dungeon {
     private String invite;
     private boolean isPublic;
     private boolean started;
+    private JSONObject map;
 
     public Dungeon(Player player) {
         this.id = UUID.randomUUID().toString();
@@ -92,5 +93,11 @@ public class Dungeon {
         if (!removed.isEmpty() && admUsername.equals(removed) && players.size() > 0) {
             setAdmUsername( players.get(0).getUsername() );
         }
+    }
+
+    public void setMap(JSONObject data) {
+        var map = new JSONObject(data.toString());
+        map.remove("invite");
+        this.map = map;
     }
 }
