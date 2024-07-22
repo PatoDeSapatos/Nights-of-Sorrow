@@ -1,11 +1,11 @@
-function Ingredient(_item_id, _quantity) constructor {
-	item_id = _item_id;
+function Ingredient(_item_name, _quantity) constructor {
+	item_id = get_item_id_by_name( _item_name );
 	quantity = _quantity;
 }
 
-function Recipe(_ingredients, _result_id) constructor {
+function Recipe(_ingredients, _result_name) constructor {
 	ingredients = _ingredients;
-	result_id = _result_id;
+	result_id = get_item_id_by_name( _result_name );
 	
 	function can_craft(_inventory) {
 		for (var i = 0; i < array_length(ingredients); ++i) {
@@ -24,13 +24,12 @@ function Recipe(_ingredients, _result_id) constructor {
 		if ( _quantity <= 0 ) return true;
 		return false;
 	}
-	
 }
 
-function add_recipe(_ingredients, _result_id) {
-	struct_set(global.recipes, struct_names_count(global.recipes), new Recipe(_ingredients, _result_id));
+function add_recipe(_ingredients, _result_name) {
+	struct_set(global.recipes, struct_names_count(global.recipes), new Recipe(_ingredients, _result_name));
 }
 
 function init_recipes() {
-	add_recipe( [new Ingredient(0, 1), new Ingredient(2, 1)], 3 );
+	add_recipe( [new Ingredient("SLIME_BALL", 1), new Ingredient("MAD_HAMMER", 1)], "STICKY_HAMMER" );
 }

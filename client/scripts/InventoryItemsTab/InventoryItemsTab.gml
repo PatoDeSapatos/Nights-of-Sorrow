@@ -68,7 +68,7 @@ for (var i = 0; i < array_length(_inventory_copy); ++i) {
 	
 	// Item Name
 	draw_set_halign(fa_left);
-    draw_text( items_box_name_x, _y, _item.name );
+    draw_text( items_box_name_x, _y, _item.display_name );
 	
 	// Item Quantity
 	draw_set_halign(fa_center);

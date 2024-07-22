@@ -5,7 +5,7 @@ global.pause = false;
 global.loading = false;
 global.can_zoom = false;
 global.enemies = ds_map_create();
-global.items = ds_map_create();
+global.items = {};
 global.recipes = {};
 init_items();
 init_recipes();
@@ -19,4 +19,4 @@ global.controls = {
 }
 
 randomize();
-room_goto(rm_main_menu);
+room_goto(rm_test);
