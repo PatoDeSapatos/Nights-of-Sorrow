@@ -10,15 +10,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomsDTO extends WebSocketDTO {
+public class MapDTO extends WebSocketDTO {
 
-    public RoomsDTO(JSONObject data) {
-        super(MessageType.DUNGEON_ROOMS_SHARE);
-
-        packet.put("data", data);
+    public MapDTO(JSONObject data) {
+        super(MessageType.DUNGEON_ROOMS_SHARE, data);
     }
 
-    public RoomsDTO(Dungeon dungeon) {
+    public MapDTO(Dungeon dungeon) {
         this(new JSONObject().put("seed", dungeon.getMapSeed()));
     }
 }

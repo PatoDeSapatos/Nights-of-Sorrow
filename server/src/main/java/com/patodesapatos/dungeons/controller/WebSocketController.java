@@ -14,7 +14,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonDTO;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
-import com.patodesapatos.dungeons.domain.dungeon.RoomsDTO;
+import com.patodesapatos.dungeons.domain.dungeon.MapDTO;
 import com.patodesapatos.dungeons.domain.dungeon.WaitingDTO;
 import com.patodesapatos.dungeons.domain.user.UserService;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
@@ -71,7 +71,8 @@ public class WebSocketController extends TextWebSocketHandler {
 
                 if (dto instanceof DungeonDTO) {
                     var dungeonDTO = (DungeonDTO) dto;
-                    sendDTO(new RoomsDTO(dungeonDTO.getDungeon()), session);
+                    dungeonDTO.setJoinPacket();
+                    sendDTO(new MapDTO(dungeonDTO.getDungeon()), session);
                 }
                 sendDTOtoAllPlayers(dto, data);
                 break;
@@ -134,7 +135,7 @@ public class WebSocketController extends TextWebSocketHandler {
             case DUNGEON_ROOMS_SHARE:
                 var dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
                 dungeon.setMapSeed(data.getLong("seed"));
-                dto = new RoomsDTO(data);
+                dto = new MapDTO(data);
                 sendDTOtoAllPlayers(dto, data);
                 break;
             case LEAVE_DUNGEON:

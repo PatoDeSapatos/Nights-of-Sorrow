@@ -2,8 +2,6 @@ package com.patodesapatos.dungeons.domain.dungeon;
 
 import java.util.ArrayList;
 
-import org.json.JSONObject;
-
 import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
 
@@ -17,7 +15,7 @@ public class WaitingDTO extends WebSocketDTO {
     public WaitingDTO(Dungeon dungeon) {
         super(MessageType.WAITING);
 
-        var data = new JSONObject();
+        var data = getData();
 
         var parsedPlayers = new ArrayList<Player>();
         for (int i = 0; i < dungeon.getPlayers().size(); i++) {
@@ -29,7 +27,5 @@ public class WaitingDTO extends WebSocketDTO {
         data.put("invite", dungeon.getInvite());
         data.put("started", dungeon.isStarted());
         data.put("isPublic", dungeon.isPublic());
-
-        packet.put("data", data);
     }
 }
