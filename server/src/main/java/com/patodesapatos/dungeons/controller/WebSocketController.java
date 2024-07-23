@@ -132,7 +132,8 @@ public class WebSocketController extends TextWebSocketHandler {
              * data: Node[]
              */
             case DUNGEON_ROOMS_SHARE:
-                dungeonService.getDungeonByInvite(data.getString("invite")).setMap(data);
+                var dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+                dungeon.setMapSeed(data.getLong("seed"));
                 dto = new RoomsDTO(data);
                 sendDTOtoAllPlayers(dto, data);
                 break;

@@ -19,6 +19,6 @@ public class RoomsDTO extends WebSocketDTO {
     }
 
     public RoomsDTO(Dungeon dungeon) {
-        this(dungeon.getMap().put("invite", dungeon.getInvite()));
+        this(new JSONObject().put("seed", dungeon.getMapSeed()));
     }
 }
