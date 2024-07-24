@@ -11,7 +11,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonDTO;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
 import com.patodesapatos.dungeons.domain.dungeon.MapDTO;
@@ -68,13 +67,14 @@ public class WebSocketController extends TextWebSocketHandler {
              */
             case JOIN_DUNGEON:
                 dto = dungeonService.joinDungeon(data.getString("invite"), username, session);
+                DungeonDTO dungeonDTO = null;
 
                 if (dto instanceof DungeonDTO) {
-                    var dungeonDTO = (DungeonDTO) dto;
+                    dungeonDTO = (DungeonDTO) dto;
                     dungeonDTO.setJoinPacket();
-                    sendDTO(new MapDTO(dungeonDTO.getDungeon()), session);
                 }
                 sendDTOtoAllPlayers(dto, data);
+                if (dungeonDTO != null) sendDTO(new MapDTO(dungeonDTO.getDungeon()), session);
                 break;
             /**
              * data: {
