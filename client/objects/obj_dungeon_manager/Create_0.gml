@@ -1,6 +1,14 @@
-/// @description
+function generate_map() {
+	random_set_seed(mapSeed)
+
+	load_map_images();
+	map = generate_dungeon()
+	cast_dungeon()
+
+	randomize()
+}
+
 global.loading = true;
-waiting_map = false;
 
 // Server
 depth = 10
@@ -32,27 +40,23 @@ ds_grid_set_region(grid, 0, 0, width, height, undefined)
 // Dungeon Generation
 entities = ds_map_create();
 enemies_number = 5;
+mapSeed = -1
 map = -1
 
-load_map_images();
-if (global.server.admin_username == global.server.username) {
-	map = generate_dungeon();
-	var _map = {
-		invite: global.server.dungeon_code,
-		initX: map.initX,
-		initY: map.initY,
-		nodeGrid: map.nodeGrid
-	}
-	global.server.send_websocket_message("DUNGEON_ROOMS_SHARE", _map);
-	cast_dungeon()
-} else {
-	waiting_map = true;
-}
+if (!global.server.waiting_map) {
+	mapSeed = randomize()
+	generate_map()
 
+	var seedPacket = {
+		invite: global.server.dungeon_code,
+		seed: mapSeed
+	}
+	global.server.send_websocket_message("DUNGEON_ROOMS_SHARE", seedPacket);
+}
 instance_create_layer(0, 0, "Instances", obj_dungeon_chat);
 
 update_entities = function (_data) {
-	if (waiting_map) return
+	if (global.server.waiting_map) return
 
 	var _entities = struct_get(_data, "entities");
 	
