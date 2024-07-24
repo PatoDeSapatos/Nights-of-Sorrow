@@ -1,5 +1,7 @@
 package com.patodesapatos.dungeons.domain.dungeon;
 
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,5 +103,9 @@ public class DungeonService {
         if (dungeon.getPlayers().size() <= 0) {
             storage.getDungeons().remove(dungeon);
         }
+    }
+
+    public ArrayList<Dungeon> getAll() {
+        return storage.getDungeons();
     }
 }
