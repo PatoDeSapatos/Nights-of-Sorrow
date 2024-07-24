@@ -136,7 +136,7 @@ public class WebSocketController extends TextWebSocketHandler {
                 var dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
                 dungeon.setMapSeed(data.getLong("seed"));
                 dto = new MapDTO(data);
-                sendDTOtoAllPlayers(dto, data);
+                sendDTOtoAllPlayers(dto, data, session.getId());
                 break;
             case LEAVE_DUNGEON:
                 dto = dungeonService.leaveDungeon(data.getString("invite"), username);
@@ -152,17 +152,21 @@ public class WebSocketController extends TextWebSocketHandler {
         session.sendMessage(new TextMessage(dto.toString()));
     }
 
-    public void sendDTOtoAllPlayers(WebSocketDTO dto, JSONObject data) throws Exception {
+    public void sendDTOtoAllPlayers(WebSocketDTO dto, JSONObject data, String excludedSessionId) throws Exception {
         if (dto == null) return;
-        Dungeon dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+        var dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
         if (dungeon == null) return;
 
         for (int i = 0; i < dungeon.getPlayers().size(); i++) {
             String sessionId = userService.getUserById(dungeon.getPlayers().get(i).getUserId()).getSessionId();
-            if (sessionId.isEmpty()) continue;
+            if (sessionId.isEmpty() || sessionId.equals(excludedSessionId)) continue;
 
             sendDTO(dto, activeSessions.get(sessionId));
         }
+    }
+
+    public void sendDTOtoAllPlayers(WebSocketDTO dto, JSONObject data) throws Exception {
+        sendDTOtoAllPlayers(dto, data, null);
     }
 
     public void sendChat(JSONObject data) throws Exception {
