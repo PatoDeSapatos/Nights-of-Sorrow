@@ -11,7 +11,7 @@ username = "";
 dungeon_code = "";
 is_user_guest = false;
 guest_password = "";
-waiting_map = false
+mapSeed = -1
 
 request_function = -1;
 requests = [

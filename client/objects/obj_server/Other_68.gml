@@ -27,7 +27,7 @@ switch(async_load[? "type"]){
 		
 		switch(_message_type) {
 			case "WAITING":
-				if (struct_get(_data, "started") == true && room != rm_dungeon) {
+				if (struct_get(_data, "started") && room != rm_dungeon) {
 					dungeon_code = obj_waiting_room_menu.dungeon_code;
 					room_goto(rm_dungeon);
 				} else if (room != rm_waiting_room) {
@@ -42,6 +42,7 @@ switch(async_load[? "type"]){
 					var _dungeon_code = struct_get(_data, "invite");
 					var _adm = struct_get(_data, "adm")
 					var _is_dungeon_public = struct_get(_data, "isPublic");
+					var _map_seed = struct_get(_data, "seed");
 					
 					obj_waiting_room_menu.update_players(_players);
 					obj_waiting_room_menu.dungeon_code = _dungeon_code;
@@ -49,7 +50,7 @@ switch(async_load[? "type"]){
 					obj_waiting_room_menu.dungeon_privacy = _is_dungeon_public ? ("Public") : ("Private");
 					obj_waiting_room_menu.waiting_server = false;
 					obj_waiting_room_menu.admin_username = _adm;
-					global.server.waiting_map = (_adm != global.server.username)
+					global.server.mapSeed = _map_seed
 					
 					if ( obj_waiting_room_menu.joined ) {
 						var _messages = ["arrives in battle", "approaches", "enters the battlefield", "lurks in"]
@@ -61,30 +62,19 @@ switch(async_load[? "type"]){
 				break;
 			case "DUNGEON_STATE":
 				if ( room != rm_dungeon ) {
-					if (struct_exists(_data, "joinPacket")) {
-						global.server.waiting_map = true
-					}
 					room_goto(rm_dungeon);
 				} else if ( instance_exists(obj_dungeon_manager) ) {
-					obj_dungeon_manager.update_entities(_data);
+					obj_dungeon_manager.update_entities(_data)
 				}
-				break;
+				break
 			case "SEND_CHAT_MESSAGE":
 				if ( instance_exists(obj_dungeon_chat) ) {
-					obj_dungeon_chat.receive_message(_data);
+					obj_dungeon_chat.receive_message(_data)
 				}
-				break;
-			case "DUNGEON_ROOMS_SHARE":
-				with (obj_dungeon_manager) {
-					mapSeed = struct_get(_data, "seed")
-					generate_map()
-				}
-				global.server.waiting_map = false
-				send_websocket_message("DUNGEON_STATE", {invite: dungeon_code});
 				break
 		}
-		break;
+		break
 	case network_type_disconnect:
-		global.server.websocket_connect();
-		break;
+		global.server.websocket_connect()
+		break
 } 

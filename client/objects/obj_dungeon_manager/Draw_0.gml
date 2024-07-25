@@ -1,6 +1,3 @@
-/// @description
-if ( global.server.waiting_map ) return;
-
 var camX = screenToTileX(round(global.camera.camera_x), round(global.camera.camera_y))
 var camY = screenToTileY(round(global.camera.camera_x), round(global.camera.camera_y))
 var camW = screenToTileX(round(global.camera.camera_x) + global.camera.camera_w, round(global.camera.camera_y) + global.camera.camera_h)
