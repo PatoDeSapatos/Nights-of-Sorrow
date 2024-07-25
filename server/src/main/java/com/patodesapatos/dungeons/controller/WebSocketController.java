@@ -11,10 +11,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.patodesapatos.dungeons.domain.dungeon.DungeonDTO;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
-import com.patodesapatos.dungeons.domain.dungeon.MapDTO;
-import com.patodesapatos.dungeons.domain.dungeon.WaitingDTO;
 import com.patodesapatos.dungeons.domain.user.UserService;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
 import com.patodesapatos.dungeons.domain.auth.TokenService;
@@ -63,18 +60,16 @@ public class WebSocketController extends TextWebSocketHandler {
              * data: {
              *      invite,
              * }
-             * return: WaitingDTO | DungeonDTO
+             * return: WaitingDTO to everyone if the dungeon isn't started | DungeonDTO to everyone if dungeon is started UNLESS the joining player
              */
             case JOIN_DUNGEON:
-                dto = dungeonService.joinDungeon(data.getString("invite"), username, session);
-                DungeonDTO dungeonDTO = null;
-
-                if (dto instanceof DungeonDTO) {
-                    dungeonDTO = (DungeonDTO) dto;
-                    dungeonDTO.setJoinPacket();
+                var dungeon = dungeonService.joinDungeon(data.getString("invite"), username, session);
+                if (!dungeon.isStarted()) {
+                    sendDTOtoAllPlayers(dungeon.toWaitingDTO(), data);
+                } else {
+                    sendDTO(dungeon.toWaitingDTO(), session);
+                    sendDTOtoAllPlayers(dungeon.toDTO(), data, session.getId());
                 }
-                sendDTOtoAllPlayers(dto, data);
-                if (dungeonDTO != null) sendDTO(new MapDTO(dungeonDTO.getDungeon()), session);
                 break;
             /**
              * data: {
@@ -122,21 +117,12 @@ public class WebSocketController extends TextWebSocketHandler {
                 sendDTOtoAllPlayers(dto, data);
                 break;
             case GET_WAITING_STATE:
-                dto = new WaitingDTO(dungeonService.getDungeonByInvite(data.getString("invite")));
+                dto = dungeonService.getDungeonByInvite(data.getString("invite")).toWaitingDTO();
                 sendDTO(dto, session);
                 break;
             case CHANGE_DUNGEON_PRIVACY:
                 dto = dungeonService.changeDungeonPrivacy(data.getString("invite"), username);
                 sendDTOtoAllPlayers(dto, data);
-                break;
-            /**
-             * data: Node[]
-             */
-            case DUNGEON_ROOMS_SHARE:
-                var dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
-                dungeon.setMapSeed(data.getLong("seed"));
-                dto = new MapDTO(data);
-                sendDTOtoAllPlayers(dto, data, session.getId());
                 break;
             case LEAVE_DUNGEON:
                 dto = dungeonService.leaveDungeon(data.getString("invite"), username);

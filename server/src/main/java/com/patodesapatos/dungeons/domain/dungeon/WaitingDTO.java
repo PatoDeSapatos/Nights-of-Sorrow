@@ -22,9 +22,10 @@ public class WaitingDTO extends WebSocketDTO {
             parsedPlayers.add(dungeon.getPlayers().get(i).toDTO());
         }
 
-        data.put("players", parsedPlayers);
-        data.put("adm", dungeon.getAdmUsername());
         data.put("invite", dungeon.getInvite());
+        data.put("seed", dungeon.getMapSeed());
+        data.put("adm", dungeon.getAdmUsername());
+        data.put("players", parsedPlayers);
         data.put("started", dungeon.isStarted());
         data.put("isPublic", dungeon.isPublic());
     }

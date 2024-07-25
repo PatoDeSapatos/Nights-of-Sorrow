@@ -27,6 +27,7 @@ public class Dungeon {
         this.id = UUID.randomUUID().toString();
         this.invite = randomInvite();
         this.isPublic = false;
+        generateMapSeed();
 
         this.entities = new ArrayList<>();
         this.players = new ArrayList<>();
@@ -72,6 +73,10 @@ public class Dungeon {
         return null;
     }
 
+    public WaitingDTO toWaitingDTO() {
+        return new WaitingDTO(this);
+    }
+
     public DungeonDTO toDTO() {
         return new DungeonDTO(this);
     }
@@ -95,7 +100,9 @@ public class Dungeon {
         }
     }
 
-    public void setMapSeed(long seed) {
-        mapSeed = seed;
+    public void generateMapSeed() {
+        long min = 0L;
+        long max = 4294967295L; //max 32 bit unsigned int
+        mapSeed = min + (long) (Math.random() * (max - min));
     }
 }

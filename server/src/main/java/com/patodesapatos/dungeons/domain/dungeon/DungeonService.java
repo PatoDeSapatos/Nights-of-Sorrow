@@ -25,7 +25,7 @@ public class DungeonService {
         session.getAttributes().put("dungeonId", dungeon.getId());
 
         storage.saveDungeon(dungeon);
-        return new WaitingDTO(dungeon);
+        return dungeon.toWaitingDTO();
     }
 
     public Dungeon getDungeonById(String string) {
@@ -38,7 +38,7 @@ public class DungeonService {
         return dungeon.toDTO();
     }
 
-	public WebSocketDTO joinDungeon(String invite, String username, WebSocketSession session) {
+	public Dungeon joinDungeon(String invite, String username, WebSocketSession session) {
         var dungeon = getDungeonByInvite(invite);
         var user = userService.getUserByUsername(username);
 
@@ -54,8 +54,7 @@ public class DungeonService {
             player.setOnline(true);
         }
 
-        if (dungeon.isStarted()) return dungeon.toDTO();
-        else return new WaitingDTO(dungeon);
+        return dungeon;
 	}
 
     public Dungeon getDungeonByInvite(String invite) {
@@ -67,13 +66,13 @@ public class DungeonService {
         if (dungeon == null) return null;
 
         dungeon.setPlayerReady(username);
-        return new WaitingDTO(dungeon);
+        return dungeon.toWaitingDTO();
     }
 
     public WaitingDTO changeDungeonPrivacy(String invite, String username) {
         var dungeon = getDungeonByInvite(invite);
         dungeon.setPublic( !dungeon.isPublic() );
-        return new WaitingDTO(dungeon);
+        return dungeon.toWaitingDTO();
     }
 
     public WebSocketDTO leaveDungeon(String invite, String username) {
@@ -85,7 +84,7 @@ public class DungeonService {
             return null;
         }
 
-        return (dungeon.isStarted() ? (dungeon.toDTO()) : (new WaitingDTO(dungeon)));
+        return (dungeon.isStarted() ? dungeon.toDTO() : dungeon.toWaitingDTO());
     }
 
     public void leaveDungeon(WebSocketSession session) {
