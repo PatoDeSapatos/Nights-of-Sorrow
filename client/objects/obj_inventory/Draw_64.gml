@@ -1,5 +1,6 @@
 /// @description
 if ( !inventory_open ) return;
+var _prev_item = selected_item;
 
 // Inventory Tabs
 var _tab_w = sprite_get_width(spr_inventory_tabs) * global.res_scale*2;
@@ -33,4 +34,7 @@ switch ( selected_tab ) {
 	case TABS.CRAFTING:
 		inventory_draw_recipes();
 		break;
+}
+if ( _prev_item != selected_item ) {
+	get_recipe_ingredients();
 }

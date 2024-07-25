@@ -58,6 +58,21 @@ for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
 	_current_tab_y += (_tab_h - 3) * global.res_scale*2;
 }
 
+// Ingredients
+ingredients_box_x = items_box_x;
+ingredients_box_y = gui_h - items_box_h/2.8;
+ingredients_box_w = items_box_w;
+ingredients_box_h = gui_h - ingredients_box_y;
+
+ingredients_cols = 2;
+ingredients_border = 20 * global.res_scale;
+
+ingredient_scale = 1.5 * global.res_scale;
+ingredient_w = (ingredients_box_w - ingredients_border*2) / 2;
+ingredient_h = sprite_get_height(spr_items) * ingredient_scale;
+
+ingredient_spr_w = sprite_get_width(spr_items)*ingredient_scale;
+
 // Inventory
 max_items = 10;
 
@@ -74,4 +89,5 @@ mouse_r = 0;
 
 inventory = [];
 recipes = [];
+recipe_ingredients = [];
 inventory_add_recipe(recipes, 0);

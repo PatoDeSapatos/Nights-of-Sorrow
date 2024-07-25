@@ -8,6 +8,26 @@ function Recipe_Stack( _recipe_id ) constructor {
 	craftable = false;
 }
 
+function Ingredient_Stack(_item_id, _required_quantity) constructor {
+	item_id = _item_id;
+	required_quantity = _required_quantity;
+	inventory_quantity = 0;
+	
+	function update_quantity(_inventory) {
+		var _inv_quantity = 0;
+		
+		for (var i = 0; i < array_length(_inventory); ++i) {
+		    if ( _inventory[i].id == item_id ) {
+				_inv_quantity += _inventory[i].quantity;
+			}
+		}
+		
+		inventory_quantity = _inv_quantity;
+	}
+	
+	update_quantity(obj_inventory.inventory)
+}
+
 function get_item_by_id(_item_id) {
 	return struct_get(global.items, _item_id);
 }
@@ -141,6 +161,17 @@ function draw_items(_inventory, _is_recipe) {
 	selected_item = clamp(selected_item, 0, array_length(_inventory_copy) - 1);
 }
 
+function get_recipe_ingredients() {
+	if ( selected_tab == TABS.CRAFTING && selected_item >= 0 && array_length(recipes) >= selected_item ) {
+		var _recipe = get_recipe_by_id( recipes[selected_item].id );
+		var _ingredients = _recipe.ingredients;
+	
+		for (var i = 0; i < array_length(_ingredients); ++i) {
+		    recipe_ingredients[i - i % ingredients_cols, i % ingredients_cols] = new Ingredient_Stack( _ingredients[i].item_id, _ingredients[i].quantity );
+		}
+	}	
+}
+
 function inventory_add_item( _inventory, _item_id, _quantity ) {
 	var _max_stack = get_item_by_id(_item_id).max_stack;
 	var _item_in_inventory = false;
@@ -201,4 +232,10 @@ function update_recipes() {
 		var _recipe = get_recipe_by_id(_value.id);
 		_value.craftable = _recipe.can_craft(inventory);
 	});
+	
+	for (var i = 0; i < array_length(recipe_ingredients); ++i) {
+	    for (var j = 0; j < array_length(recipe_ingredients[i]); ++j) {
+		    recipe_ingredients[i, j].update_quantity(inventory);
+		}
+	}
 }
