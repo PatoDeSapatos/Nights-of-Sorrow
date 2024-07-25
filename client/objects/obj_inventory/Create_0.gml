@@ -6,6 +6,21 @@ enum TABS {
 	LENGTH
 }
 
+enum FOCUS {
+	LIST,
+	ORDER,
+	TABS,
+	LENGTH
+}
+
+enum ORDERS {
+	TYPE,
+	NAME,
+	DATE,
+	QUANTITY,
+	LENGTH
+}
+
 inventory_open = true;
 inventory_size = 64;
 
@@ -35,7 +50,6 @@ items_box_name_offset = 0;
 
 items_box_name_w = (items_box_w div 2) - items_box_border*2;
 items_box_name_h = sprite_get_height(spr_items) * (global.res_scale * 2) + 5;
-//items_box_name_h = (items_box_h - items_box_title_h - items_box_border)/12;
 
 items_box_category_x = items_box_w - items_box_border;
 items_box_quantity_x = items_box_category_x - items_box_spr_size - items_box_border;
@@ -48,6 +62,22 @@ selected_category = 0;
 selected_tab = 0;
 mouse_navigation = false;
 focus = 0;
+
+// Order
+orders = [
+	"Type",
+	"Name",
+	"Date",
+	"Quantity"
+];
+selected_order = 0;
+order_ascending = true;
+
+order_w = 0;
+for (var i = 0; i < array_length(orders); ++i) {
+    order_w = max(order_w, string_width(orders[i]));
+}
+box_delay = 0;
 
 // Inventory Tabs
 tabs_y = [];

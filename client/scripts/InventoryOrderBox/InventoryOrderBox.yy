@@ -1,9 +1,9 @@
 {
   "$GMScript":"",
-  "%Name":"Inventory",
+  "%Name":"InventoryOrderBox",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Inventory",
+  "name":"InventoryOrderBox",
   "parent":{
     "name":"Inventory",
     "path":"folders/Scripts/Dungeon/Inventory.yy",

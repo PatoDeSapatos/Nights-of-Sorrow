@@ -51,6 +51,13 @@ function draw_items(_inventory, _is_recipe) {
 	// Order Tab
 	draw_sprite_ext(spr_inventory_order, 0, items_box_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
 	
+	// Order
+	if ( mouse_l ) {
+		if ( point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - sprite_get_width(spr_inventory_order) * global.res_scale*2, items_box_title_y, items_box_x, items_box_title_y + items_box_title_h )) {
+			focus = FOCUS.ORDER;
+		}
+	}
+	
 	// Items Categories
 	var _categories_space = sprite_get_width(spr_items_categories)*global.res_scale*2.5 + items_box_border/4
 	var _categories_w = items_box_border + _categories_space*ItemCategory.LENGTH;
@@ -108,7 +115,25 @@ function draw_items(_inventory, _is_recipe) {
 			});
 		}
 	}
+	
+	var _order = noone;
+	switch( selected_order ) {
+		default: // Sort by type
+			_order = sort_by_type;
+			break;
+		case ORDERS.QUANTITY:
+			_order = sort_by_quantity;
+			break;
+		case ORDERS.NAME:
+			_order = sort_by_name;
+			break;
+		case ORDERS.DATE: 
+			_order = sort_by_date;
+			break;
+	}
+	show_debug_message(selected_order)
 
+	array_sort(_inventory_copy, _order);
 	var _current_y = items_box_name_offset;
 	for (var i = 0; i < array_length(_inventory_copy); ++i) {
 		var _y = _current_y + items_box_name_h/2 + items_box_border/2;
@@ -159,6 +184,10 @@ function draw_items(_inventory, _is_recipe) {
 		
 	selected_item += down_input - up_input;
 	selected_item = clamp(selected_item, 0, array_length(_inventory_copy) - 1);
+	
+	if ( focus == FOCUS.ORDER ) {
+		draw_order_box();
+	}
 }
 
 function get_recipe_ingredients() {
