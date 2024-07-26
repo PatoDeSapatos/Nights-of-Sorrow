@@ -10,6 +10,7 @@ enum FOCUS {
 	LIST,
 	ORDER,
 	TABS,
+	ITEM,
 	LENGTH
 }
 
@@ -63,6 +64,9 @@ selected_tab = 0;
 mouse_navigation = false;
 focus = 0;
 
+active_item = noone;
+active_item_y = -1;
+
 // Order
 orders = [
 	"Type",
@@ -105,6 +109,15 @@ ingredient_spr_w = sprite_get_width(spr_items)*ingredient_scale;
 
 // Inventory
 max_items = 10;
+
+// Bag Active Item
+bag_item_options = {
+	material: ["Discard", "Cancel"],
+	equipment: ["Equip", "Discard", "Cancel"],
+	consumable: ["Use", "Discard", "Cancel"]
+}
+
+// Crafting Active Item
 
 // inputs
 up_input = 0;

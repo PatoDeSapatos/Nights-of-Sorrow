@@ -131,7 +131,6 @@ function draw_items(_inventory, _is_recipe) {
 			_order = sort_by_date;
 			break;
 	}
-	show_debug_message(selected_order)
 
 	array_sort(_inventory_copy, _order);
 	var _current_y = items_box_name_offset;
@@ -150,12 +149,22 @@ function draw_items(_inventory, _is_recipe) {
 			var _craftable = _inventory_copy[i].craftable;
 		}
 	
-		if (mouse_navigation && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x, items_box_name_y + _y - items_box_name_h/2, items_box_x + items_box_w, items_box_name_y + _y + items_box_name_h/2)) {
+		var _mouse_hover = mouse_navigation && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x, items_box_name_y + _y - items_box_name_h/2, items_box_x + items_box_w, items_box_name_y + _y + items_box_name_h/2);
+	
+		if (_mouse_hover) {
 			selected_item = i;
 		}
 	
 		if ( selected_item == i ) {
 			draw_sprite_stretched(spr_selected_item_border, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2 );
+			if ( _mouse_hover && mouse_l ) {
+				active_item = _inventory_copy[i];
+				focus = FOCUS.ITEM;	
+			}
+		}
+		
+		if (_inventory_copy[i] == active_item) {
+			active_item_y = _y + items_box_name_y - items_box_name_h/2;	
 		}
 	
 		// Item Image
