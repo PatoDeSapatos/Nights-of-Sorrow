@@ -11,6 +11,7 @@ enum FOCUS {
 	ORDER,
 	TABS,
 	ITEM,
+	ITEM_PANEL,
 	LENGTH
 }
 
@@ -111,11 +112,73 @@ ingredient_spr_w = sprite_get_width(spr_items)*ingredient_scale;
 max_items = 10;
 
 // Bag Active Item
-bag_item_options = {
-	material: ["Discard", "Cancel"],
-	equipment: ["Equip", "Discard", "Cancel"],
-	consumable: ["Use", "Discard", "Cancel"]
+function Item_Action(_callback) constructor {
+	callback = _callback;
+	take_action = function (_selected_option) {
+		var _callback = callback;
+		with(obj_inventory) {
+			_callback(_selected_option);
+		}
+	}
 }
+
+bag_item_options = {
+	material: {
+		options: ["Discard", "Cancel"],
+		action: new Item_Action( function(_selected_option) {
+			switch (_selected_option) {
+				case 0:
+					show_discard_panel(active_item);
+					break;
+				case 1:
+					focus = FOCUS.LIST;
+					break;
+			}
+		} )
+	},
+	equipment: {
+		options: ["Equip", "Discard", "Cancel"],
+		action: new Item_Action( function(_selected_option) {
+			switch (_selected_option) {
+				case 1:
+					show_discard_panel(active_item);
+					break;
+				case 2:
+					focus = FOCUS.LIST;
+					break;
+			}
+		} )
+	},
+	consumable: {
+		options: ["Use", "Discard", "Cancel"],
+		action: new Item_Action( function(_selected_option) {
+			switch (_selected_option) {
+				case 1:
+					show_discard_panel(active_item);
+					break;
+				case 2:
+					focus = FOCUS.LIST;
+					break;
+			}
+		} )
+	}
+}
+
+// Item Quantity Panel
+item_quantity_panel_x = items_box_x + items_box_h/2;
+item_quantity_panel_y = items_box_y + items_box_h/2;
+item_panel_item_id = -1;
+active_panel = noone;
+
+discard_item_callback = function (_parameters) {
+	var _item_id = _parameters.item_id;
+	var _quantity = _parameters.quantity;
+	
+	inventory_remove_item(inventory, _item_id, _quantity);
+	focus = FOCUS.LIST;
+}
+
+discard_panel = new Item_Quantity_Panel(item_quantity_panel_x, item_quantity_panel_y, "Discard", discard_item_callback, {});
 
 // Crafting Active Item
 

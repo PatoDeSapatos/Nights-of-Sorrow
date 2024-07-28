@@ -2,38 +2,23 @@ function inventory_draw_items() {
 // Items List
 draw_items(inventory, false);
 
-if ( focus == FOCUS.ITEM && active_item != noone ) {
-	var _item_info = get_item_by_id( active_item.id );
-	var _options = noone;
-	var _selected_option = -1;
-	var _selected_option_action = noone;
+if (is_struct( active_item )) {
+	if ( focus == FOCUS.ITEM ) {
+		var _item_info = get_item_by_id( active_item.id );
+		var _item_options = noone;
+		var _selected_option = -1;
 	
-	if ( is_instanceof(_item_info, Material_Item) ) {
-		_options = bag_item_options.material;
-		_selected_option_action = function(_option) {
-			switch (_option) {
-				case 0:
-					show_discard_panel(active_item);
-					break;
-				case 1:
-					focus = FOCUS.LIST;
-					break;
-			}
+		if ( is_instanceof(_item_info, Material_Item) ) {
+			_item_options = bag_item_options.material;
+		} else if ( is_instanceof(_item_info, Equipment_Item) ) {
+			_item_options = bag_item_options.equipment;
+		} else if ( is_instanceof(_item_info, Consumable_Item) ) {
+			_item_options = bag_item_options.consumable; 
 		}
-	} else if ( is_instanceof(_item_info, Equipment_Item) ) {
-		_options = bag_item_options.equipment;
-		_selected_option_action = function(_option) {
-			
-		}
-	} else if ( is_instanceof(_item_info, Consumable_Item) ) {
-		_options = bag_item_options.consumable;
-		_selected_option_action = function(_option) {
-			
-		}	
+	
+		_selected_option = draw_item_options(_item_options.options);
+		_item_options.action.take_action(_selected_option);
 	}
-	
-	_selected_option = draw_item_options(_options);
-	_selected_option_action(_selected_option);
 }
 
 var _changed_category = selected_category;
@@ -61,5 +46,12 @@ function draw_item_options(_options) {
 }
 
 function show_discard_panel(_item) {
+	focus = FOCUS.ITEM_PANEL;
+	var _parameters = {
+		item_id: _item.id,
+		quantity: 1
+	}
 	
+	discard_panel.update(_item.id, _parameters)
+	active_panel = discard_panel;
 }

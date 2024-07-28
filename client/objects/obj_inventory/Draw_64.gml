@@ -35,6 +35,12 @@ switch ( selected_tab ) {
 		inventory_draw_recipes();
 		break;
 }
+
+// Panels
+if ( focus == FOCUS.ITEM_PANEL ) {
+	draw_item_quantity_panel();
+}
+
 if ( _prev_item != selected_item ) {
 	get_recipe_ingredients();
 }

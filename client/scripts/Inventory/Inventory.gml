@@ -8,6 +8,35 @@ function Recipe_Stack( _recipe_id ) constructor {
 	craftable = false;
 }
 
+function Item_Quantity_Panel(_x, _y, _button_name, _onclick, _onclick_parameters) constructor {
+	x = _x;
+	y = _y;
+	w = 0;
+	h = 0;
+	button_name = _button_name;
+	button_w = 0;
+	onclick = _onclick;
+	onclick_parameters = _onclick_parameters;
+	item = -1;
+	
+	onclick_handler = function(_click) {
+		if (_click) {
+			onclick(onclick_parameters);	
+		}
+	}
+	
+	update = function(_item, _onclick_parameters) {
+		item = _item;
+		onclick_parameters = _onclick_parameters;
+		
+		var _border = 20;
+		button_w = max( string_width(button_name) + _border*2, string_width("Cancel") + _border*2 );
+		w = button_w * 2 + _border*3;
+	}
+	
+	update(item, onclick_parameters);
+}
+
 function Ingredient_Stack(_item_id, _required_quantity) constructor {
 	item_id = _item_id;
 	required_quantity = _required_quantity;
@@ -53,7 +82,7 @@ function draw_items(_inventory, _is_recipe) {
 	
 	// Order
 	if ( mouse_l ) {
-		if ( point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - sprite_get_width(spr_inventory_order) * global.res_scale*2, items_box_title_y, items_box_x, items_box_title_y + items_box_title_h )) {
+		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - sprite_get_width(spr_inventory_order) * global.res_scale*2, items_box_title_y, items_box_x, items_box_title_y + items_box_title_h )) {
 			focus = FOCUS.ORDER;
 		}
 	}
@@ -157,7 +186,7 @@ function draw_items(_inventory, _is_recipe) {
 	
 		if ( selected_item == i ) {
 			draw_sprite_stretched(spr_selected_item_border, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2 );
-			if ( _mouse_hover && mouse_l ) {
+			if ( (focus == FOCUS.LIST || focus == FOCUS.ORDER || focus == FOCUS.ITEM) && _mouse_hover && mouse_l ) {
 				active_item = _inventory_copy[i];
 				focus = FOCUS.ITEM;	
 			}
@@ -196,6 +225,36 @@ function draw_items(_inventory, _is_recipe) {
 	
 	if ( focus == FOCUS.ORDER ) {
 		draw_order_box();
+	}
+}
+
+function draw_item_quantity_panel() {
+	draw_set_color(c_black);
+	draw_set_alpha(.7);
+	draw_rectangle(0, 0, gui_w, gui_h, false);
+	draw_set_alpha(1);
+	var _x = active_panel.x;
+	var _y = active_panel.y;
+	var _w = active_panel.w;
+	var _h = active_panel.h;
+	var _button_x = _x - _w/2;
+
+	draw_panel_button(_button_x, _y, _button_x + active_panel.button_w, _y + string_height(active_panel.button_name), active_panel.button_name, spr_inventory_panel_button, active_panel.onclick, active_panel.onclick_parameters);
+	//draw_text(_x - _w/2 + active_panel.button_w, _y, "Cancel");
+}
+
+function draw_panel_button(_x1, _y1, _x2, _y2, _text, _spr, _onclick, _onclick_parameters = {}) {
+	var _hover = point_in_rectangle(mouse_gui_x, mouse_gui_y, _x1, _y1, _x2, _y2);
+	var _active = _hover && mouse_l;
+	var _w = _x2 - _x1;
+	var _h = _y2 - _y1;
+	
+	draw_sprite_stretched_ext(_spr, _hover + _active, _x1, _y1, _w, _h, c_white, 1);
+	draw_set_halign(fa_middle);
+	draw_set_valign(fa_middle);
+	draw_text(_x1 + _w/2, _y1 + _h/2, _text);
+	if (_active) {
+		_onclick(_onclick_parameters);	
 	}
 }
 

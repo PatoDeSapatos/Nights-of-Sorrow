@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"SortFunctions",
   "isCompatibility":false,
   "isDnD":false,
