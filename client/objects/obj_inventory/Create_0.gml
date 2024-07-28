@@ -180,11 +180,10 @@ bag_item_options = {
 		action: new Item_Action( function(_selected_option) {
 			switch(_selected_option) {
 				case 0:
-					inventory_craft_recipe(recipes, active_item);
-					focus = FOCUS.LIST;
+					if (active_item.craftable) show_crafting_panel(active_item);
 					break;
 				case 1:
-					inventory_craft_recipe_all(recipes, active_item);
+					if (active_item.craftable) inventory_craft_recipe_all(recipes, active_item);
 					focus = FOCUS.LIST;
 					break;
 				case 2:
@@ -194,6 +193,9 @@ bag_item_options = {
 		})
 	}
 }
+
+// Item options
+item_option_selected = 0;
 
 // Item Quantity Panel
 item_quantity_panel_x = items_box_x + items_box_w/2;
@@ -212,8 +214,20 @@ discard_item_callback = function (_parameters) {
 	inventory_remove_item(inventory, _item_id, discard_panel.quantity);
 	focus = FOCUS.LIST;
 }
+craft_item_callback = function(_parameters) {
+	var _recipe = _parameters.recipe;
+	
+	typing = false
+	craft_item_panel.quantity = clamp(string_length(craft_item_panel.quantity_typing) > 0 ? (real(craft_item_panel.quantity_typing)) : (1), 1, 999);
+	craft_item_panel.quantity_typing = craft_item_panel.quantity;
+
+	repeat(craft_item_panel.quantity) inventory_craft_recipe(recipes, _recipe);
+	focus = FOCUS.LIST;	
+}
+
 
 discard_panel = new Item_Quantity_Panel(item_quantity_panel_x, item_quantity_panel_y, "How Many Items to Discard?", "Discard", discard_item_callback, {});
+craft_item_panel = new Item_Quantity_Panel(item_quantity_panel_x, item_quantity_panel_y, "How Many Items to Craft?", "Craft", craft_item_callback, {});
 
 // Crafting Active Item
 
@@ -222,6 +236,8 @@ up_input = 0;
 down_input = 0;
 left_input = 0;
 right_input = 0;
+confirm_input = 0;
+cancel_input = 0;
 
 mouse_gui_x = 0;
 mouse_gui_y = 0;

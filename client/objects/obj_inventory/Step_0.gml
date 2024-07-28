@@ -28,6 +28,8 @@ up_input = keyboard_check_pressed(vk_up);
 down_input = keyboard_check_pressed(vk_down);
 left_input = keyboard_check_pressed(vk_left);
 right_input = keyboard_check_pressed(vk_right);
+confirm_input = keyboard_check_pressed(vk_space) || keyboard_check_pressed(vk_enter);
+cancel_input = keyboard_check_pressed(vk_backspace) || keyboard_check_pressed(vk_escape);
 
 mouse_gui_x = device_mouse_x_to_gui(0);
 mouse_gui_y = device_mouse_y_to_gui(0);
@@ -35,7 +37,7 @@ mouse_l = mouse_check_button_pressed(mb_left);
 mouse_r = mouse_check_button_pressed(mb_right);
 
 
-if ( up_input || down_input ) {
+if ( up_input || down_input || left_input || right_input ) {
 	mouse_navigation = false;
 } else if ( _previous_mouse_gui_x != mouse_gui_x || _previous_mouse_gui_y != mouse_gui_y ) {
 	mouse_navigation = true;

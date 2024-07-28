@@ -30,19 +30,35 @@ if ( _changed_category != selected_category ) {
 }
 
 function draw_item_options(_options) {
+	box_delay++;
+	if (box_delay < 10) {
+		item_option_selected = 0;
+		return undefined;
+	}
+	
 	var _current_y = active_item_y;
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	for (var i = 0; i < array_length(_options); ++i) {
 		var _x = items_box_x + items_box_w + ingredients_border;
 		
+		draw_set_color(item_option_selected == i ? (c_ltgray) : (c_white));
 	    draw_text(_x, _current_y, _options[i]);
-		if (mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, _x, _current_y, _x + string_width(_options[i]), _current_y + string_height(_options[i])) ) {
-			return i;
+		if (mouse_navigation && point_in_rectangle(mouse_gui_x, mouse_gui_y, _x, _current_y, _x + string_width(_options[i]), _current_y + string_height(_options[i]))) {
+			item_option_selected = i;
+			if (mouse_l) {
+				return item_option_selected;
+			}
+		} else if ( confirm_input ) {
+			return item_option_selected;
 		}
 		
 		_current_y += string_height(_options[i]);
 	}
+	
+	item_option_selected += down_input - up_input;
+	item_option_selected = clamp(item_option_selected, 0, array_length(_options) - 1)
+	if (cancel_input) focus = FOCUS.LIST;
 }
 
 function show_discard_panel(_item) {
@@ -54,4 +70,14 @@ function show_discard_panel(_item) {
 	
 	discard_panel.update(_item, _parameters)
 	active_panel = discard_panel;
+}
+
+function show_crafting_panel(_recipe) {
+	focus = FOCUS.ITEM_PANEL;
+	var _parameters = {
+		recipe: _recipe	
+	}
+	
+	craft_item_panel.update(_recipe, _parameters);
+	active_panel = craft_item_panel;
 }

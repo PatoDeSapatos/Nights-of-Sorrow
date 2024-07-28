@@ -104,7 +104,7 @@ function draw_items(_inventory, _is_recipe) {
 		var _icon_x = items_box_x + items_box_w/2 - _categories_w/4 + _categories_space*i;
 		var _icon_y = (items_box_category_h + items_box_border)/2;
 	
-		if (focus == FOCUS.LIST && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, _icon_x - _icon_w/2, _icon_y - _icon_h/2, _icon_x + _icon_w/2, _icon_y + _icon_h/2)) {
+		if ((focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, _icon_x - _icon_w/2, _icon_y - _icon_h/2, _icon_x + _icon_w/2, _icon_y + _icon_h/2)) {
 			selected_category = i;
 		}
 	
@@ -193,7 +193,7 @@ function draw_items(_inventory, _is_recipe) {
 	
 		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && selected_item == i ) {
 			draw_sprite_stretched(spr_selected_item_border, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2 );
-			if ( (focus == FOCUS.LIST || focus == FOCUS.ORDER || focus == FOCUS.ITEM) && _mouse_hover && mouse_l ) {
+			if ( (focus == FOCUS.LIST || focus == FOCUS.ORDER || focus == FOCUS.ITEM) && (_mouse_hover && mouse_l) || (confirm_input) ) {
 				active_item = _inventory_copy[i];
 				focus = FOCUS.ITEM;	
 			}
@@ -226,8 +226,11 @@ function draw_items(_inventory, _is_recipe) {
 
 	surface_reset_target();
 	draw_surface(items_box_list_surf, items_box_x, items_box_name_y);
-		
-	selected_item += down_input - up_input;
+	
+	if (focus == FOCUS.LIST) {
+		selected_item += down_input - up_input;
+		box_delay = 0;
+	}
 	selected_item = clamp(selected_item, 0, array_length(_inventory_copy) - 1);
 }
 
@@ -286,7 +289,11 @@ function draw_item_quantity_panel() {
 	if ( mouse_l ) {
 		if ( !point_in_rectangle(mouse_gui_x, mouse_gui_y, _quantity_x, _quantity_y, _quantity_x + _quantity_w, _quantity_y + _quantity_h) ) {
 			typing = false
-			active_panel.quantity = clamp(string_length(_quantity) > 0 ? (real(_quantity)) : (1), 1, active_panel.item.quantity);
+			if ( is_instanceof(active_panel.item, Item_Stack) ) {
+				active_panel.quantity = clamp(string_length(_quantity) > 0 ? (real(_quantity)) : (1), 1, active_panel.item.quantity);
+			} else {
+				active_panel.quantity = clamp(string_length(_quantity) > 0 ? (real(_quantity)) : (1), 1, 999);
+			}
 			active_panel.quantity_typing = active_panel.quantity;
 		} else {
 			typing = true;	
