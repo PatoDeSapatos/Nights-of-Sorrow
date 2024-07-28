@@ -77,6 +77,7 @@ orders = [
 ];
 selected_order = 0;
 order_ascending = true;
+sort = 0;
 
 order_w = 0;
 for (var i = 0; i < array_length(orders); ++i) {
@@ -124,48 +125,78 @@ function Item_Action(_callback) constructor {
 
 bag_item_options = {
 	material: {
-		options: ["Discard", "Cancel"],
+		options: ["Discard", "Discard All", "Cancel"],
 		action: new Item_Action( function(_selected_option) {
 			switch (_selected_option) {
 				case 0:
 					show_discard_panel(active_item);
 					break;
 				case 1:
+					inventory_remove_item(inventory, active_item.id, active_item.quantity);
+					focus = FOCUS.LIST;
+					break;
+				case 2:
 					focus = FOCUS.LIST;
 					break;
 			}
 		} )
 	},
 	equipment: {
-		options: ["Equip", "Discard", "Cancel"],
+		options: ["Equip", "Discard", "Discard All", "Cancel"],
 		action: new Item_Action( function(_selected_option) {
 			switch (_selected_option) {
 				case 1:
 					show_discard_panel(active_item);
 					break;
 				case 2:
+					inventory_remove_item(inventory, active_item.id, active_item.quantity);
+					focus = FOCUS.LIST;
+					break;
+				case 3:
 					focus = FOCUS.LIST;
 					break;
 			}
 		} )
 	},
 	consumable: {
-		options: ["Use", "Discard", "Cancel"],
+		options: ["Use", "Discard", "Discard All", "Cancel"],
 		action: new Item_Action( function(_selected_option) {
 			switch (_selected_option) {
 				case 1:
 					show_discard_panel(active_item);
 					break;
 				case 2:
+					inventory_remove_item(inventory, active_item.id, active_item.quantity);
+					focus = FOCUS.LIST;
+					break;
+				case 3:
 					focus = FOCUS.LIST;
 					break;
 			}
 		} )
+	},
+	crafting: {
+		options: ["Craft", "Craft All", "Cancel"],
+		action: new Item_Action( function(_selected_option) {
+			switch(_selected_option) {
+				case 0:
+					inventory_craft_recipe(recipes, active_item);
+					focus = FOCUS.LIST;
+					break;
+				case 1:
+					inventory_craft_recipe_all(recipes, active_item);
+					focus = FOCUS.LIST;
+					break;
+				case 2:
+					focus = FOCUS.LIST;
+					break;
+			}
+		})
 	}
 }
 
 // Item Quantity Panel
-item_quantity_panel_x = items_box_x + items_box_h/2;
+item_quantity_panel_x = items_box_x + items_box_w/2;
 item_quantity_panel_y = items_box_y + items_box_h/2;
 item_panel_item_id = -1;
 active_panel = noone;
@@ -174,11 +205,15 @@ discard_item_callback = function (_parameters) {
 	var _item_id = _parameters.item_id;
 	var _quantity = _parameters.quantity;
 	
-	inventory_remove_item(inventory, _item_id, _quantity);
+	typing = false
+	discard_panel.quantity = clamp(string_length(discard_panel.quantity_typing) > 0 ? (real(discard_panel.quantity_typing)) : (1), 1, discard_panel.item.quantity);
+	discard_panel.quantity_typing = discard_panel.quantity;
+	
+	inventory_remove_item(inventory, _item_id, discard_panel.quantity);
 	focus = FOCUS.LIST;
 }
 
-discard_panel = new Item_Quantity_Panel(item_quantity_panel_x, item_quantity_panel_y, "Discard", discard_item_callback, {});
+discard_panel = new Item_Quantity_Panel(item_quantity_panel_x, item_quantity_panel_y, "How Many Items to Discard?", "Discard", discard_item_callback, {});
 
 // Crafting Active Item
 
@@ -192,6 +227,9 @@ mouse_gui_x = 0;
 mouse_gui_y = 0;
 mouse_l = 0;
 mouse_r = 0;
+
+typing = false;
+typing_bar = false;
 
 inventory = [];
 recipes = [];

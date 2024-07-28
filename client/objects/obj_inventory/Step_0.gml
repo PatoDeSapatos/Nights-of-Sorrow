@@ -21,10 +21,6 @@ if ( keyboard_check_pressed(ord("N")) ) {
 	inventory_remove_item(inventory, 0, 10);	
 }
 
-if ( keyboard_check_pressed(mouse_r) ) {
-	update_recipes();	
-}
-
 var _previous_mouse_gui_x = mouse_gui_x;
 var _previous_mouse_gui_y = mouse_gui_y;
 

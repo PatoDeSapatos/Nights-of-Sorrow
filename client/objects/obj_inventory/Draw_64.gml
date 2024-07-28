@@ -24,9 +24,6 @@ draw_rectangle(
 	false
 );
 
-// Selected Tab
-draw_sprite_ext(spr_inventory_tabs, selected_tab, items_box_x, tabs_y[selected_tab], global.res_scale*2, global.res_scale*2, 0, c_ltgray, 1);
-
 switch ( selected_tab ) {
 	case TABS.ITEMS:
 		inventory_draw_items();
@@ -36,9 +33,19 @@ switch ( selected_tab ) {
 		break;
 }
 
+draw_sprite_stretched(spr_inventory_bg, 0, items_box_x, items_box_y, items_box_w + global.res_scale, items_box_h);
+if ( selected_tab == TABS.CRAFTING ) draw_sprite_stretched(spr_inventory_bg, 0, items_box_x - global.res_scale, ingredients_box_y - ingredients_border, items_box_w + global.res_scale, ingredients_box_h + ingredients_border);
+
+// Selected Tab
+draw_sprite_ext(spr_inventory_tabs, selected_tab, items_box_x, tabs_y[selected_tab], global.res_scale*2, global.res_scale*2, 0, c_ltgray, 1);
+
 // Panels
 if ( focus == FOCUS.ITEM_PANEL ) {
 	draw_item_quantity_panel();
+}
+	
+if ( focus == FOCUS.ORDER ) {
+	draw_order_box();
 }
 
 if ( _prev_item != selected_item ) {

@@ -49,9 +49,9 @@ function show_discard_panel(_item) {
 	focus = FOCUS.ITEM_PANEL;
 	var _parameters = {
 		item_id: _item.id,
-		quantity: 1
+		quantity: discard_panel.quantity
 	}
 	
-	discard_panel.update(_item.id, _parameters)
+	discard_panel.update(_item, _parameters)
 	active_panel = discard_panel;
 }

@@ -22,3 +22,10 @@ function sort_by_quantity(_item1, _item2) {
 function sort_by_date(_item1, _item2) {
 	return order_ascending ? (1) : (-1);
 }
+
+function inventory_sort(_item1, _item2) {
+	if ( _item1.id == _item2.id ) {
+		return _item2.quantity - _item1.quantity;
+	}
+	return sort(_item1, _item2);
+}

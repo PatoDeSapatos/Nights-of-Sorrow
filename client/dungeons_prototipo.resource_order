@@ -58,6 +58,7 @@
     {"name":"spr_hand_acessories","order":3,"path":"sprites/spr_hand_acessories/spr_hand_acessories.yy",},
     {"name":"spr_hats","order":4,"path":"sprites/spr_hats/spr_hats.yy",},
     {"name":"spr_head_acessories","order":5,"path":"sprites/spr_head_acessories/spr_head_acessories.yy",},
+    {"name":"spr_inventory_bg","order":3,"path":"sprites/spr_inventory_bg/spr_inventory_bg.yy",},
     {"name":"spr_inventory_order","order":2,"path":"sprites/spr_inventory_order/spr_inventory_order.yy",},
     {"name":"spr_inventory_panel_button","order":2,"path":"sprites/spr_inventory_panel_button/spr_inventory_panel_button.yy",},
     {"name":"spr_inventory_tabs","order":1,"path":"sprites/spr_inventory_tabs/spr_inventory_tabs.yy",},
