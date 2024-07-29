@@ -145,6 +145,10 @@ bag_item_options = {
 		options: ["Equip", "Discard", "Discard All", "Cancel"],
 		action: new Item_Action( function(_selected_option) {
 			switch (_selected_option) {
+				case 0:
+					equip_item(active_item);
+					focus = FOCUS.LIST;
+					break;
 				case 1:
 					show_discard_panel(active_item);
 					break;
@@ -250,4 +254,13 @@ typing_bar = false;
 inventory = [];
 recipes = [];
 recipe_ingredients = [];
+equipments = {
+	head: noone,
+	body: noone,
+	legs: noone,
+	//Slots.HANDS: noone,
+	trinket1: noone,
+	trinket2: noone,
+	trinket3: noone
+}
 inventory_add_recipe(recipes, 0);

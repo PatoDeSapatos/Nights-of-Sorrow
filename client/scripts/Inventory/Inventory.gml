@@ -3,6 +3,11 @@ function Item_Stack( _item_id, _quantity ) constructor {
 	quantity = _quantity;
 }
 
+function Equipment_Stack(_item_id, _quantity, _status, _equipped) : Item_Stack(_item_id, _quantity) constructor {
+	status = _status;
+	equipped = _equipped;
+}
+
 function Recipe_Stack( _recipe_id ) constructor {
 	id = _recipe_id;
 	craftable = false;
@@ -173,6 +178,10 @@ function draw_items(_inventory, _is_recipe) {
 	for (var i = 0; i < array_length(_inventory_copy); ++i) {
 		var _y = _current_y + items_box_name_h/2 + items_box_border/2;
 		
+		if ( is_instanceof(_inventory_copy[i], Equipment_Stack) && _inventory_copy[i].equipped ) {
+			continue;	
+		}
+		
 		if ( !_is_recipe ) {
 			var _item = get_item_by_id( _inventory_copy[i].id );	
 			var _quantity = _inventory_copy[i].quantity;
@@ -330,8 +339,23 @@ function get_recipe_ingredients() {
 	}	
 }
 
+function equip_item(_item) {
+	if ( !is_instanceof(_item, Equipment_Stack) ) return;
+	
+	var _item_data = get_item_by_id(_item.id);
+	var _slot = _item_data.slot;
+	
+	if (is_struct(struct_get(equipments, _slot))) {
+		struct_get(equipments, _slot).equipped = false;
+	}
+	struct_set(equipments, _slot, _item);
+	_item.equipped = true;
+	update_inventory();
+}
+
 function inventory_add_item( _inventory, _item_id, _quantity ) {
-	var _max_stack = get_item_by_id(_item_id).max_stack;
+	var _item_data = get_item_by_id(_item_id);
+	var _max_stack = _item_data.max_stack;
 	var _item_in_inventory = false;
 	var _excess = 0;
 	
@@ -358,10 +382,19 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 	}
 	
 	if ( !_item_in_inventory ) {
-		array_push(_inventory, new Item_Stack(
-			_item_id, 
-			_excess > 0 ? (_excess) : (_quantity)
-		));
+		if ( is_instanceof(_item_data, Equipment_Item) ) {
+			array_push(_inventory, new Equipment_Stack(
+				_item_id,
+				_excess > 0 ? (_excess) : (_quantity),
+				_item_data.status,
+				false
+			));
+		} else {
+			array_push(_inventory, new Item_Stack(
+				_item_id, 
+				_excess > 0 ? (_excess) : (_quantity)
+			));
+		}
 	}
 	
 	update_inventory();
@@ -369,12 +402,18 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 
 function inventory_remove_item( _inventory, _item_id, _quantity ) {
 	for (var i = 0; i < array_length(_inventory); ++i) {
-	    if(_inventory[i].id == _item_id) {
-			_inventory[i].quantity -= _quantity;
+		var _item = _inventory[i];
+		
+	    if(_item.id == _item_id) {
+			var _new_quantity = min(_quantity, _item.quantity);
+			_item.quantity -= _new_quantity;
+			_quantity -= _new_quantity
+			
 			if (_inventory[i].quantity <= 0) {
 				array_delete( _inventory, i, 1 );
 			}
-			break;
+			
+			if ( _quantity <= 0 ) break;
 		}
 	}
 	update_inventory();

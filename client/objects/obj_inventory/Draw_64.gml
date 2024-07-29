@@ -10,7 +10,8 @@ for (var i = sprite_get_number(spr_inventory_tabs) - 1; i >= 0; --i) {
 	if ( i == selected_tab ) continue;
 	draw_sprite_ext(spr_inventory_tabs, i, items_box_x, tabs_y[i], global.res_scale*2, global.res_scale*2, 0, c_white, 1);
 	
-	if ( focus == FOCUS.LIST && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - _tab_w, tabs_y[i] + global.res_scale*6, items_box_x, tabs_y[i] + _tab_h - global.res_scale*3) ) {
+	if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - _tab_w, tabs_y[i] + global.res_scale*6, items_box_x, tabs_y[i] + _tab_h - global.res_scale*3) ) {
+		focus = FOCUS.LIST;
 		selected_tab = i;
 	}	
 }
