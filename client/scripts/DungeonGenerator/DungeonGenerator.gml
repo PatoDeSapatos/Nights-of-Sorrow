@@ -1,7 +1,7 @@
 function generate_dungeon() {
 	var roomSize = obj_dungeon_manager.roomSize
     var ambient = {
-        roomsAmount: 40,
+        roomsAmount: 30,
 		offsets: [
 	        new Point(0, -1), //top
 	        new Point(0, 1), //bottom

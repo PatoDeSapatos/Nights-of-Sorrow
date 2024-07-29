@@ -57,7 +57,7 @@ function cast_dungeon() {
 
 			if (is_undefined(tile)) continue
 			obj_dungeon_manager.grid[# _x, _y] = tile
-			//obj_dungeon_manager.map.salasGrid[_y div roomSize][_x div roomSize][_y % roomSize][_x % roomSize] = tile
+			//salasGrid[_y div roomSize][_x div roomSize][_y % roomSize][_x % roomSize]
 		}
 	}
 	surface_save(surface, working_directory + "mapa.png")

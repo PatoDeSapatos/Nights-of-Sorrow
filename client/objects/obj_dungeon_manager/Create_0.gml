@@ -22,7 +22,7 @@ global.res_scale = 1280/global.camera.camera_w;
 // Dungeon Draw
 scale = 1
 tile_size = 32 * scale
-roomSize = 16
+roomSize = 32
 roomSizeInPixels = tile_size * roomSize * 15
 room_width = roomSizeInPixels
 room_height = roomSizeInPixels
