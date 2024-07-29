@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"DungeonDraw",
+  "%Name":"TilePixelConverter",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DungeonDraw",
+  "name":"TilePixelConverter",
   "parent":{
     "name":"Dungeon",
     "path":"folders/Scripts/Dungeon.yy",

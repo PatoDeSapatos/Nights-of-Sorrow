@@ -179,7 +179,7 @@ function generate_init_pos() {
 		} else {
 			_initX = ((_initX * roomSize) + (roomSize div 2))
 			_initY = ((_initY * roomSize) + (roomSize div 2))
-			validX = tileToScreenX(_initX, _initX)
+			validX = tileToScreenX(_initX, _initY)
 			validY = tileToScreenY(_initX, _initY)
 			valid = true
 		}

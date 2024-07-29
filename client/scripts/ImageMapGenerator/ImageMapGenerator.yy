@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"MapGeneration",
+  "%Name":"ImageMapGenerator",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"MapGeneration",
+  "name":"ImageMapGenerator",
   "parent":{
     "name":"Dungeon",
     "path":"folders/Scripts/Dungeon.yy",
