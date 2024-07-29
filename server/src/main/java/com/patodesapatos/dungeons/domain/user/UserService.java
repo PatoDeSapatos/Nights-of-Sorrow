@@ -15,6 +15,7 @@ public class UserService {
     @Bean
     private void initialiazeDb() {
         saveUser(new User("PatoDeSapatos", new BCryptPasswordEncoder().encode("123456")));
+        saveUser(new User("test", new BCryptPasswordEncoder().encode("test")));
     }
 
     public ArrayList<User> getAll() {

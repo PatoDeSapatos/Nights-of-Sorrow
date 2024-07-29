@@ -28,7 +28,8 @@ switch(async_load[? "type"]){
 		switch(_message_type) {
 			case "WAITING":
 				if (struct_get(_data, "started") && room != rm_dungeon) {
-					dungeon_code = obj_waiting_room_menu.dungeon_code;
+					dungeon_code = struct_get(_data, "invite");
+					mapSeed = struct_get(_data, "seed")
 					room_goto(rm_dungeon);
 				} else if (room != rm_waiting_room) {
 					room_goto(rm_waiting_room);
@@ -42,7 +43,7 @@ switch(async_load[? "type"]){
 					var _dungeon_code = struct_get(_data, "invite");
 					var _adm = struct_get(_data, "adm")
 					var _is_dungeon_public = struct_get(_data, "isPublic");
-					var _map_seed = struct_get(_data, "seed");
+					var _map_seed = struct_get(_data, "seed")
 					
 					obj_waiting_room_menu.update_players(_players);
 					obj_waiting_room_menu.dungeon_code = _dungeon_code;
