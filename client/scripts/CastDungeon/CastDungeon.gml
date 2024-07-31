@@ -42,12 +42,11 @@ function cast_dungeon() {
 			switch (_color) {
 				//Wall
 				case 4194559:
-					tile = new Tile(0, 0, true);
-					array_push(tile.stack, obj_wall);
+					tile = new Tile(0, true, [obj_wall]);
 					break
 				//Floor
 				case 2170681:
-					tile = new Tile(1, 0, false);
+					tile = new Tile(1, false);
 					if ( enemies_number > 0 ) {
 						instantiate_enemy(tileToScreenX(_x, _y), tileToScreenY(_x, _y) , "SLIME");
 						enemies_number--;
@@ -65,12 +64,12 @@ function cast_dungeon() {
 	buffer_delete(_buffer);
 }
 
-function Tile(_spr, _z, _coll, _stack=[]) constructor {
+function Tile(_spr, _coll, _stack=[], _z = 0) constructor {
 	spr = _spr;
-	z = _z;
 	coll = _coll;
 	stack = _stack;
-	
+	z = _z
+
 	function get_stack() {
 		var _item = array_shift(stack);
 		return _item;

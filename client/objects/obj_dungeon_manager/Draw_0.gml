@@ -25,11 +25,11 @@ for (var _y = _min_y; _y < _max_y; _y++) {
 
 		draw_sprite_ext(spr_dungeon_tileset, sprite, tileToScreenX(_x, _y), tileToScreenY(_x, _y) + tile.z, scale, scale, 0, c_white, 1);
 		
-		while ( array_length(tile.stack) > 0) {
+		for (var i = array_length(tile.stack); i > 0; --i) {
 			var _stack = tile.get_stack();
 			
 			if (object_exists(_stack)) {
-				var z = tile.z - (tile_size / 2);
+				var z = tile.z - (tile_size / 2) * i;
 				var _inst_y = tileToScreenY(_x, _y) + z;
 				var _inst_x = tileToScreenX(_x, _y);
 				
