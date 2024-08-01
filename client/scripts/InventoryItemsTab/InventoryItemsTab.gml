@@ -35,13 +35,17 @@ function draw_item_options(_options) {
 		item_option_selected = 0;
 		return undefined;
 	}
+
+	var _options_copy = [];
+	array_copy(_options_copy, 0, _options, 0, array_length(_options));
 	
-	var _current_y = active_item_y;
+	var _current_y = active_item_y + items_box_name_h;
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	for (var i = 0; i < array_length(_options); ++i) {
-		var _x = items_box_x + items_box_w + ingredients_border;
+		var _x = item_option_x;
 		
+		//draw_sprite_stretched(spr_item_options_bg, 0, _x, _current_y, _options_w, string_height(_options[i]));
 		draw_set_color(item_option_selected == i ? (c_ltgray) : (c_white));
 	    draw_text(_x, _current_y, _options[i]);
 		if (mouse_navigation && point_in_rectangle(mouse_gui_x, mouse_gui_y, _x, _current_y, _x + string_width(_options[i]), _current_y + string_height(_options[i]))) {

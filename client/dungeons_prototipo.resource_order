@@ -62,6 +62,7 @@
     {"name":"spr_inventory_order","order":2,"path":"sprites/spr_inventory_order/spr_inventory_order.yy",},
     {"name":"spr_inventory_panel_button","order":2,"path":"sprites/spr_inventory_panel_button/spr_inventory_panel_button.yy",},
     {"name":"spr_inventory_tabs","order":1,"path":"sprites/spr_inventory_tabs/spr_inventory_tabs.yy",},
+    {"name":"spr_item_options_bg","order":4,"path":"sprites/spr_item_options_bg/spr_item_options_bg.yy",},
     {"name":"spr_items_categories","order":1,"path":"sprites/spr_items_categories/spr_items_categories.yy",},
     {"name":"spr_menu_messagebox","order":1,"path":"sprites/spr_menu_messagebox/spr_menu_messagebox.yy",},
   ],

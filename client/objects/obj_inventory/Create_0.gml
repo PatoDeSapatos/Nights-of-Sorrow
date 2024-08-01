@@ -29,7 +29,7 @@ inventory_size = 64;
 // Menu Parameters
 gui_w = display_get_gui_width();
 gui_h = display_get_gui_height();
-border = gui_w div 8;
+border = gui_w/20;
 
 // Items box
 items_box_w = gui_w/2.5;
@@ -201,6 +201,7 @@ bag_item_options = {
 
 // Item options
 item_option_selected = 0;
+item_option_x = items_box_x + items_box_border;
 
 // Item Quantity Panel
 item_quantity_panel_x = items_box_x + items_box_w/2;

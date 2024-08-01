@@ -136,6 +136,7 @@
     {"id":{"name":"spr_inventory_order","path":"sprites/spr_inventory_order/spr_inventory_order.yy",},},
     {"id":{"name":"spr_inventory_panel_button","path":"sprites/spr_inventory_panel_button/spr_inventory_panel_button.yy",},},
     {"id":{"name":"spr_inventory_tabs","path":"sprites/spr_inventory_tabs/spr_inventory_tabs.yy",},},
+    {"id":{"name":"spr_item_options_bg","path":"sprites/spr_item_options_bg/spr_item_options_bg.yy",},},
     {"id":{"name":"spr_items_categories","path":"sprites/spr_items_categories/spr_items_categories.yy",},},
     {"id":{"name":"spr_items","path":"sprites/spr_items/spr_items.yy",},},
     {"id":{"name":"spr_menu_chat","path":"sprites/spr_menu_chat/spr_menu_chat.yy",},},
