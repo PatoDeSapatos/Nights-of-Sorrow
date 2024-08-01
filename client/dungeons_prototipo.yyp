@@ -84,6 +84,7 @@
   "resources":[
     {"id":{"name":"fnt_chat","path":"fonts/fnt_chat/fnt_chat.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
+    {"id":{"name":"obj_chest","path":"objects/obj_chest/obj_chest.yy",},},
     {"id":{"name":"obj_dungeon_chat","path":"objects/obj_dungeon_chat/obj_dungeon_chat.yy",},},
     {"id":{"name":"obj_dungeon_enemy","path":"objects/obj_dungeon_enemy/obj_dungeon_enemy.yy",},},
     {"id":{"name":"obj_dungeon_manager","path":"objects/obj_dungeon_manager/obj_dungeon_manager.yy",},},
@@ -109,6 +110,7 @@
     {"id":{"name":"DungeonEnemies","path":"scripts/DungeonEnemies/DungeonEnemies.yy",},},
     {"id":{"name":"DungeonEnemiesStates","path":"scripts/DungeonEnemiesStates/DungeonEnemiesStates.yy",},},
     {"id":{"name":"DungeonGenerator","path":"scripts/DungeonGenerator/DungeonGenerator.yy",},},
+    {"id":{"name":"DungeonTypes","path":"scripts/DungeonTypes/DungeonTypes.yy",},},
     {"id":{"name":"GameItems","path":"scripts/GameItems/GameItems.yy",},},
     {"id":{"name":"ImageMapGenerator","path":"scripts/ImageMapGenerator/ImageMapGenerator.yy",},},
     {"id":{"name":"Inventory","path":"scripts/Inventory/Inventory.yy",},},

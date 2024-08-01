@@ -34,6 +34,7 @@
     {"name":"customizables","order":7,"path":"folders/Sprites/player/customizables.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"obj_chest","order":2,"path":"objects/obj_chest/obj_chest.yy",},
     {"name":"obj_dungeon_chat","order":2,"path":"objects/obj_dungeon_chat/obj_dungeon_chat.yy",},
     {"name":"obj_inventory","order":8,"path":"objects/obj_inventory/obj_inventory.yy",},
     {"name":"obj_iso_player","order":1,"path":"objects/obj_iso_player/obj_iso_player.yy",},
@@ -42,6 +43,7 @@
     {"name":"CastDungeon","order":2,"path":"scripts/CastDungeon/CastDungeon.yy",},
     {"name":"DungeonEnemiesStates","order":1,"path":"scripts/DungeonEnemiesStates/DungeonEnemiesStates.yy",},
     {"name":"DungeonGenerator","order":1,"path":"scripts/DungeonGenerator/DungeonGenerator.yy",},
+    {"name":"DungeonTypes","order":7,"path":"scripts/DungeonTypes/DungeonTypes.yy",},
     {"name":"Inventory","order":2,"path":"scripts/Inventory/Inventory.yy",},
     {"name":"InventoryItemsTab","order":1,"path":"scripts/InventoryItemsTab/InventoryItemsTab.yy",},
     {"name":"InventoryOrderBox","order":3,"path":"scripts/InventoryOrderBox/InventoryOrderBox.yy",},

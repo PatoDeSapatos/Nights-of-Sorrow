@@ -27,6 +27,8 @@ function cast_dungeon() {
 	var _buffer = buffer_create(4 * surface_get_width(surface) * surface_get_height(surface), buffer_fixed, 1);
 	buffer_get_surface(_buffer, surface, 0);
 	
+	var _type_table = obj_dungeon_manager.map.dungeon_type_table
+	
 	for (var _y = 0; _y < surface_get_height(surface); ++_y) {
 		for (var _x = 0; _x < surface_get_width(surface); ++_x) {
 			buffer_seek(_buffer, buffer_seek_start, 4 * (_x + _y * surface_get_width(surface)));
@@ -42,14 +44,24 @@ function cast_dungeon() {
 			switch (_color) {
 				//Wall
 				case 4194559:
-					tile = new Tile(0, true, [obj_wall]);
+					tile = new Tile(0, true, [obj_wall])
 					break
 				//Floor
 				case 2170681:
-					tile = new Tile(1, false);
+					tile = new Tile(1, false)
 					if ( enemies_number > 0 ) {
 						instantiate_enemy(tileToScreenX(_x, _y), tileToScreenY(_x, _y) , "SLIME");
 						enemies_number--;
+					}
+					break
+				//Chest
+				case 12517120:
+					tile = new Tile(1, false)
+					
+					var _chest_spawn = irandom(99) < _type_table.chest_spawn;
+					
+					if (_chest_spawn) {
+						array_push(tile.stack, obj_chest)
 					}
 					break
 			}
