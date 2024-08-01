@@ -8,10 +8,11 @@ var _tab_h = sprite_get_height(spr_inventory_tabs) * global.res_scale*2;
 
 for (var i = sprite_get_number(spr_inventory_tabs) - 1; i >= 0; --i) {
 	if ( i == selected_tab ) continue;
-	draw_sprite_ext(spr_inventory_tabs, i, items_box_x, tabs_y[i], global.res_scale*2, global.res_scale*2, 0, c_white, 1);
+	draw_sprite_ext(spr_inventory_tabs, i, tabs_x, tabs_y[i], global.res_scale*2, global.res_scale*2, 0, c_white, 1);
 	
-	if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - _tab_w, tabs_y[i] + global.res_scale*6, items_box_x, tabs_y[i] + _tab_h - global.res_scale*3) ) {
+	if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, tabs_y[i] + global.res_scale*6, tabs_x + _tab_w, tabs_y[i] + _tab_h - global.res_scale*3) ) {
 		focus = FOCUS.LIST;
+		items_box_name_offset = 0;
 		selected_tab = i;
 	}	
 }
@@ -38,7 +39,7 @@ draw_sprite_stretched(spr_inventory_bg, 0, items_box_x, items_box_y, items_box_w
 if ( selected_tab == TABS.CRAFTING ) draw_sprite_stretched(spr_inventory_bg, 0, items_box_x - global.res_scale, ingredients_box_y - ingredients_border, items_box_w + global.res_scale, ingredients_box_h + ingredients_border);
 
 // Selected Tab
-draw_sprite_ext(spr_inventory_tabs, selected_tab, items_box_x, tabs_y[selected_tab], global.res_scale*2, global.res_scale*2, 0, c_ltgray, 1);
+draw_sprite_ext(spr_inventory_tabs, selected_tab, tabs_x, tabs_y[selected_tab], global.res_scale*2, global.res_scale*2, 0, c_ltgray, 1);
 
 // Panels
 if ( focus == FOCUS.ITEM_PANEL ) {

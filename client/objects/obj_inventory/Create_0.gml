@@ -87,6 +87,7 @@ box_delay = 0;
 
 // Inventory Tabs
 tabs_y = [];
+tabs_x = items_box_x + items_box_w;
 var _current_tab_y = items_box_title_y + items_box_title_h + items_box_border/4;;
 var _tab_h = sprite_get_height(spr_inventory_tabs);
 for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {

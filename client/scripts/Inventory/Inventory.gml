@@ -91,11 +91,11 @@ function get_item_id_by_name(_item_name) {
 
 function draw_items(_inventory, _is_recipe) {
 	// Order Tab
-	draw_sprite_ext(spr_inventory_order, 0, items_box_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
+	draw_sprite_ext(spr_inventory_order, 0, tabs_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
 	
 	// Order
 	if ( mouse_l ) {
-		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x - sprite_get_width(spr_inventory_order) * global.res_scale*2, items_box_title_y, items_box_x, items_box_title_y + items_box_title_h )) {
+		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, items_box_title_y, tabs_x + sprite_get_width(spr_inventory_order)*global.res_scale*2, items_box_title_y + items_box_title_h )) {
 			focus = FOCUS.ORDER;
 		}
 	}
