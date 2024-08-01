@@ -202,6 +202,7 @@ bag_item_options = {
 // Item options
 item_option_selected = 0;
 item_option_x = items_box_x + items_box_border;
+mouse_hover_option = false;
 
 // Item Quantity Panel
 item_quantity_panel_x = items_box_x + items_box_w/2;
@@ -256,6 +257,14 @@ typing_bar = false;
 inventory = [];
 recipes = [];
 recipe_ingredients = [];
+
+// Equipment Box
+
+equipment_box_x = border;
+equipment_box_y = border;
+equipment_box_x2 = items_box_x - border;
+equipment_box_y2 = (gui_h-border*2)*0.66;
+
 equipments = {
 	head: noone,
 	body: noone,

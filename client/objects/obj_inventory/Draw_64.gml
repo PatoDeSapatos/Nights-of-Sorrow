@@ -53,3 +53,10 @@ if ( focus == FOCUS.ORDER ) {
 if ( _prev_item != selected_item ) {
 	get_recipe_ingredients();
 }
+
+// Equipment Box
+draw_set_color(c_white);
+draw_rectangle(equipment_box_x, equipment_box_y, equipment_box_x2, equipment_box_y2, false);
+for (var i = 0; i < condition; ++i) {
+    // code here
+}

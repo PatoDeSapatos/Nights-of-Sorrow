@@ -36,29 +36,38 @@ function draw_item_options(_options) {
 		return undefined;
 	}
 
-	var _options_copy = [];
-	array_copy(_options_copy, 0, _options, 0, array_length(_options));
+	var _options_h = string_height(_options[0]) + 10;
+	var _options_w = 0;
+	for (var i = 0; i < array_length(_options); ++i) {
+	    _options_w = max(_options_w, string_width(_options[i]));
+	}
+	_options_w += 10;
 	
+	var _mouse_hover = false;
 	var _current_y = active_item_y + items_box_name_h;
-	draw_set_halign(fa_left);
-	draw_set_valign(fa_top);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_center);
 	for (var i = 0; i < array_length(_options); ++i) {
 		var _x = item_option_x;
 		
-		//draw_sprite_stretched(spr_item_options_bg, 0, _x, _current_y, _options_w, string_height(_options[i]));
+		draw_sprite_stretched(spr_item_options_bg, 0, _x - _options_w/2, _current_y -_options_h/2, _options_w, _options_h);
 		draw_set_color(item_option_selected == i ? (c_ltgray) : (c_white));
 	    draw_text(_x, _current_y, _options[i]);
-		if (mouse_navigation && point_in_rectangle(mouse_gui_x, mouse_gui_y, _x, _current_y, _x + string_width(_options[i]), _current_y + string_height(_options[i]))) {
-			item_option_selected = i;
-			if (mouse_l) {
-				return item_option_selected;
+		if (mouse_navigation) { 
+			if (point_in_rectangle(mouse_gui_x, mouse_gui_y, _x - _options_w/2, _current_y - _options_h/2, _x + _options_w/2, _current_y + _options_h/2)) {
+				item_option_selected = i;
+				_mouse_hover = true;
+				if (mouse_l) {
+					return item_option_selected;
+				}
 			}
 		} else if ( confirm_input ) {
 			return item_option_selected;
 		}
-		
-		_current_y += string_height(_options[i]);
+
+		_current_y += _options_h;
 	}
+	mouse_hover_option = _mouse_hover;
 	
 	item_option_selected += down_input - up_input;
 	item_option_selected = clamp(item_option_selected, 0, array_length(_options) - 1)

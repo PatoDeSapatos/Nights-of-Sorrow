@@ -201,10 +201,22 @@ function draw_items(_inventory, _is_recipe) {
 		}
 	
 		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && selected_item == i ) {
-			draw_sprite_stretched(spr_selected_item_border, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2 );
-			if ( (focus == FOCUS.LIST || focus == FOCUS.ORDER || focus == FOCUS.ITEM) && (_mouse_hover && mouse_l) || (confirm_input) ) {
-				active_item = _inventory_copy[i];
-				focus = FOCUS.ITEM;	
+			if (focus == FOCUS.ITEM) {
+				if (!mouse_hover_option) {
+					draw_sprite_stretched(spr_selected_item_border, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2 );
+					if ( (focus == FOCUS.LIST || focus == FOCUS.ORDER || focus == FOCUS.ITEM) && (_mouse_hover && mouse_l) || (confirm_input) ) {
+						if ( focus == FOCUS.ITEM && mouse_hover_option ) break;
+						active_item = _inventory_copy[i];
+						focus = FOCUS.ITEM;	
+					}
+				}
+			} else {	
+				draw_sprite_stretched(spr_selected_item_border, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2 );
+				if ( (focus == FOCUS.LIST || focus == FOCUS.ORDER || focus == FOCUS.ITEM) && (_mouse_hover && mouse_l) || (confirm_input) ) {
+					if ( focus == FOCUS.ITEM && mouse_hover_option ) break;
+					active_item = _inventory_copy[i];
+					focus = FOCUS.ITEM;	
+				}
 			}
 		}
 		
