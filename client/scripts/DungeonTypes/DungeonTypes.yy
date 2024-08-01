@@ -1,9 +1,9 @@
 {
   "$GMScript":"",
-  "%Name":"DungeonGenerator",
+  "%Name":"DungeonTypes",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DungeonGenerator",
+  "name":"DungeonTypes",
   "parent":{
     "name":"Dungeon",
     "path":"folders/Scripts/Dungeon.yy",

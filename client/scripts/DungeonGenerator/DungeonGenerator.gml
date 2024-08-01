@@ -1,7 +1,14 @@
-function generate_dungeon() {
+function generate_dungeon(_dungeon_type = -1) {
 	var roomSize = obj_dungeon_manager.roomSize
+	
+	if (_dungeon_type == -1) {
+		_dungeon_type = irandom(dungeon_types.COUNT - 1)
+	}
+	
+	var _dungeon_type_table = get_dungeon_type_table(_dungeon_type)
     var ambient = {
-        roomsAmount: 30,
+		dungeon_type_table: _dungeon_type_table,
+        roomsAmount: _dungeon_type_table.rooms_amount,
 		offsets: [
 	        new Point(0, -1), //top
 	        new Point(0, 1), //bottom
