@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"DungeonTypes",
   "isCompatibility":false,
   "isDnD":false,

@@ -175,12 +175,9 @@ function draw_items(_inventory, _is_recipe) {
 
 	array_sort(_inventory_copy, inventory_sort);
 	var _current_y = items_box_name_offset;
+	var _prev_selected_item = selected_item;
 	for (var i = 0; i < array_length(_inventory_copy); ++i) {
 		var _y = _current_y + items_box_name_h/2 + items_box_border/2;
-		
-		if ( is_instanceof(_inventory_copy[i], Equipment_Stack) && _inventory_copy[i].equipped ) {
-			continue;	
-		}
 		
 		if ( !_is_recipe ) {
 			var _item = get_item_by_id( _inventory_copy[i].id );	
@@ -241,7 +238,7 @@ function draw_items(_inventory, _is_recipe) {
 	
 		_current_y += items_box_name_h + items_box_border/3;
 	}
-
+	
 	draw_set_valign(fa_top);
 	draw_set_color(c_white);
 
@@ -357,12 +354,19 @@ function equip_item(_item) {
 	var _item_data = get_item_by_id(_item.id);
 	var _slot = _item_data.slot;
 	
-	if (is_struct(struct_get(equipments, _slot))) {
-		struct_get(equipments, _slot).equipped = false;
+	if (!_item.equipped) {
+		if (is_struct(struct_get(equipments, _slot))) {
+			struct_get(equipments, _slot).equipped = false;
+		}
+		struct_set(equipments, _slot, _item);
+		_item.equipped = true;
+	} else {
+		_item.equipped = false;
+		struct_set(equipments, _slot, noone);
 	}
-	struct_set(equipments, _slot, _item);
-	_item.equipped = true;
+	
 	update_inventory();
+	inventory_update_status(inventory, equipments, player_equipment_status);
 }
 
 function inventory_add_item( _inventory, _item_id, _quantity ) {
@@ -422,6 +426,11 @@ function inventory_remove_item( _inventory, _item_id, _quantity ) {
 			_quantity -= _new_quantity
 			
 			if (_inventory[i].quantity <= 0) {
+				if (is_instanceof(_inventory[i], Equipment_Stack) && _inventory[i].equipped) {
+					var _item_slot = get_item_by_id(_item_id).slot;
+					struct_set(equipments, _item_slot, noone);
+					inventory_update_status(_inventory, equipments, player_equipment_status);
+				}
 				array_delete( _inventory, i, 1 );
 			}
 			
@@ -490,4 +499,25 @@ function update_inventory() {
 	}
 	
 	inventory_merge_items(inventory);
+}
+
+function inventory_update_status(_inventory, _equipped_items, _status) {
+	var _item_names = struct_get_names(_equipped_items);
+	var _status_names = struct_get_names(_status);
+	
+	for (var i = 0; i < array_length(_status_names); ++i) {
+	    struct_set(_status, _status_names[i], 0);
+	}
+	
+	for (var i = 0; i < struct_names_count(_equipped_items); ++i) {
+		var _item = struct_get(_equipped_items, _item_names[i]);
+		if (!is_struct(_item)) continue;
+		
+	    for (var j = 0; j < struct_names_count(_item.status); ++j) {
+			var _item_status = struct_get(_item.status, _status_names[j]);
+			var _current_status = struct_get(_status, _status_names[j]);
+			
+		    struct_set(_status, _status_names[j], _current_status + _item_status);
+		}
+	}
 }

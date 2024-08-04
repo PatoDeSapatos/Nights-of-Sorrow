@@ -12,6 +12,7 @@ if (is_struct( active_item )) {
 			_item_options = bag_item_options.material;
 		} else if ( is_instanceof(_item_info, Equipment_Item) ) {
 			_item_options = bag_item_options.equipment;
+			_item_options.options[0] = active_item.equipped == true ? ("Unnequip") : ("Equip");
 		} else if ( is_instanceof(_item_info, Consumable_Item) ) {
 			_item_options = bag_item_options.consumable; 
 		}

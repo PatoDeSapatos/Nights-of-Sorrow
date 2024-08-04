@@ -57,6 +57,86 @@ if ( _prev_item != selected_item ) {
 // Equipment Box
 draw_set_color(c_white);
 draw_rectangle(equipment_box_x, equipment_box_y, equipment_box_x2, equipment_box_y2, false);
-for (var i = 0; i < condition; ++i) {
-    // code here
+draw_set_color(c_black);
+draw_line_width(equipment_box_x - global.res_scale, status_box_y - equipment_box_border, equipment_box_x2, status_box_y - equipment_box_border, 2);
+draw_sprite_stretched(spr_inventory_bg, 0, equipment_box_x, equipment_box_y, equipment_box_x2 - equipment_box_x, equipment_box_y2 - equipment_box_y);
+
+var _current_x = equipment_box_x + equipment_box_border;
+var _current_y = equipment_box_y + equipment_box_border;
+var _names = struct_get_names(equipments);
+var _rows = equipment_rows;
+draw_set_halign(fa_left);
+draw_set_valign(fa_middle);
+
+for (var i = 0; i < struct_names_count(equipments); ++i) {
+	var _key = _names[i];
+	var _value = struct_get(equipments, _key);
+	
+	var _string = _key + ": ";
+	var _string_width = string_width(_string);
+	var _string_height = string_height(_string);
+	var _spr = -1;
+	
+	if (i > 0 && i % _rows == 0) {
+		_current_x += equipment_slot_w + equipment_box_border;
+		_current_y = equipment_box_y + equipment_box_border;
+	}
+	
+	draw_text(_current_x, _current_y + equipment_slot_h/2, _string);
+	
+	if (_value != noone) {
+		draw_set_color(c_black);
+		var _item = get_item_by_id(_value.id);
+		draw_sprite_stretched(spr_items, _item.sprId, _current_x + _string_width, _current_y + equipment_slot_h/4, _string_height, _string_height);
+		draw_text(_current_x + _string_width + _string_height, _current_y + equipment_slot_h/2, " " + _item.display_name);
+	}
+	
+	_current_y += equipment_slot_h;
+}
+
+_current_x = equipment_box_x + equipment_box_border;
+_current_y = status_box_y;
+_names = struct_get_names(player_equipment_status);
+_rows = status_rows;
+var _active_item_exists = false;
+var _comparing_names = noone;
+var _status = noone;
+
+if ( is_struct(active_item) && focus == FOCUS.ITEM ) {
+	if (is_instanceof(active_item, Equipment_Stack)) {
+		_status = active_item.status;
+		_comparing_names = struct_get_names(_status);	
+		_active_item_exists = true;
+	} else if (is_instanceof(active_item, Recipe_Stack)) {
+		var _recipe = get_recipe_by_id(active_item.id);
+		var _result = get_item_by_id(_recipe.result_id);
+		
+		_status = _result.status;
+		_comparing_names = struct_get_names(_status);
+		_active_item_exists = true;
+	}
+}
+
+for (var i = 0; i < struct_names_count(player_equipment_status); ++i) {
+	var _key = _names[i];
+	var _value = struct_get(player_equipment_status, _key);
+	var _string = _key + ": " + string(struct_get(player_base_status, _key) + _value);
+	var _string_width = string_width(_string);
+	
+	if (i > 0 && i % _rows == 0) {
+		_current_x += status_w;
+		_current_y = status_box_y;
+	}
+	
+	draw_set_color(c_black);
+    draw_text(_current_x, _current_y + status_h/2, _string);
+	if ( _active_item_exists ) {
+		var _comparing_status = struct_get(_status, _comparing_names[i]) + struct_get(player_base_status, _comparing_names[i]);
+		if (_comparing_status != _value + struct_get(player_base_status, _comparing_names[i])) {
+			draw_set_color(_comparing_status > _value ? (c_green) : (c_red));
+			draw_text(_current_x + _string_width, _current_y + status_h/2, " -> " + string(_comparing_status));
+		}
+	}
+	
+	_current_y += status_h;
 }

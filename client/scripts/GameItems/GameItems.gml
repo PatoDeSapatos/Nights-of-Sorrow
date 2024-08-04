@@ -5,9 +5,8 @@ enum ItemCategory {
 	LENGTH	
 }
 
-enum Slots {
-	HANDS,
-}
+// Slots
+#macro HandSlot "hands"
 
 function Item(_name, _display_name, _sprId, _category, _max_stack) constructor {
 	name = _name;
@@ -55,6 +54,6 @@ function init_items() {
 	add_material_item( "BONE", "Osso", 1, ItemCategory.MATERIAL );
 	
 	// With Status
-	add_equipment_item( "MAD_HAMMER", "Martelo Maluco", 2, ItemCategory.WEAPON, new Status(0, 0, 0, 5, 0, 0), Slots.HANDS, 1 );
-	add_equipment_item( "STICKY_HAMMER", "Martelo Grudento", 3, ItemCategory.WEAPON, new Status(0, 0, 0, 10, 0, 0), Slots.HANDS, 1 );
+	add_equipment_item( "MAD_HAMMER", "Martelo Maluco", 2, ItemCategory.WEAPON, new Status(0, 0, 0, 5, 0, 0), HandSlot, 1 );
+	add_equipment_item( "STICKY_HAMMER", "Martelo Grudento", 3, ItemCategory.WEAPON, new Status(0, 0, 0, 10, 0, 0), HandSlot, 1 );
 }
