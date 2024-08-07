@@ -6,7 +6,9 @@ enum ItemCategory {
 }
 
 // Slots
-#macro HandSlot "hands"
+#macro Hand1Slot "hand1"
+#macro Hand2Slot "hand2"
+#macro bothHandsSlot "bothHands"
 
 function Item(_name, _display_name, _sprId, _category, _max_stack) constructor {
 	name = _name;
@@ -27,13 +29,14 @@ function Consumable_Item(_name, _display_name, _sprId, _category, _effect, _max_
 	effect = _effect;	
 }
 
-function Status(_hp, _defense, _magic_defense, _attack, _magic_attack, _spd) constructor {
+function Status(_hp = 0, _defense = 0, _magic_defense = 0, _attack = 0, _magic_attack = 0, _spd = 0, _luck = 0) constructor {
 	hp = _hp;
 	defense = _defense;
 	magic_defense = _magic_defense;
 	attack = _attack;
 	magic_attack = _magic_attack;
 	spd = _spd;
+	luck = _luck;
 }
 
 function add_material_item( _name, _display_name, _sprId, _category, _max_stack = 999 ) {
@@ -54,6 +57,6 @@ function init_items() {
 	add_material_item( "BONE", "Osso", 1, ItemCategory.MATERIAL );
 	
 	// With Status
-	add_equipment_item( "MAD_HAMMER", "Martelo Maluco", 2, ItemCategory.WEAPON, new Status(0, 0, 0, 5, 0, 0), HandSlot, 1 );
-	add_equipment_item( "STICKY_HAMMER", "Martelo Grudento", 3, ItemCategory.WEAPON, new Status(0, 0, 0, 10, 0, 0), HandSlot, 1 );
+	add_equipment_item( "MAD_HAMMER", "Martelo Maluco", 2, ItemCategory.WEAPON, new Status(0, 0, 0, 5, 0, 0), bothHandsSlot, 1 );
+	add_equipment_item( "STICKY_HAMMER", "Martelo Grudento", 3, ItemCategory.WEAPON, new Status(0, 0, 0, 10, 0, 0), Hand1Slot, 1 );
 }

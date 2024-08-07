@@ -85,6 +85,10 @@ for (var i = 0; i < struct_names_count(equipments); ++i) {
 	draw_text(_current_x, _current_y + equipment_slot_h/2, _string);
 	
 	if (_value != noone) {
+		if (_value == -1) {
+			_value = struct_get(equipments, Hand1Slot);
+		}
+		
 		draw_set_color(c_black);
 		var _item = get_item_by_id(_value.id);
 		draw_sprite_stretched(spr_items, _item.sprId, _current_x + _string_width, _current_y + equipment_slot_h/4, _string_height, _string_height);

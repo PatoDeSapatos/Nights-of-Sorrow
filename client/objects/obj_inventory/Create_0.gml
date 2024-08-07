@@ -273,16 +273,7 @@ equipment_box_h = (equipment_box_y2 - equipment_box_y) - equipment_box_border*4;
 status_box_x = equipment_box_x;
 status_box_y = equipment_box_y + equipment_box_border + (equipment_box_y2 - equipment_box_y)*0.60;
 
-equipments = {
-	head: noone,
-	body: noone,
-	legs: noone,
-	hands: noone,
-	trinket1: noone,
-	trinket2: noone,
-	trinket3: noone,
-	trinket4: noone,
-}
+equipments = new Equipment_Set();
 
 equipment_rows = 4;
 equipment_slot_w = equipment_box_w/(ceil( struct_names_count(equipments)/equipment_rows ));
@@ -291,8 +282,11 @@ equipment_slot_h = (equipment_box_h*0.60)/equipment_rows;
 player_base_status = new Status(5, 5, 5, 5, 5, 5);
 player_equipment_status = new Status(0, 0, 0, 0, 0, 0);
 
-status_rows = 3;
+status_rows = 4;
 status_w = equipment_box_w/(ceil( struct_names_count(player_equipment_status)/status_rows ));
 status_h = (equipment_box_h*0.40)/status_rows;
+
+// Item desc box
+
 
 inventory_add_recipe(recipes, 0);

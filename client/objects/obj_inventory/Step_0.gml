@@ -45,7 +45,7 @@ if ( up_input || down_input || left_input || right_input ) {
 
 var _items_list_h = 0;
 for (var i = 0; i < array_length(inventory); ++i) {
-	_items_list_h += items_box_name_h + items_box_border/3;
+	_items_list_h += items_box_name_h + items_box_border/2;
 }
 
 var _sensi = 20;

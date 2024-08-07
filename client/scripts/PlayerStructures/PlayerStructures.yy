@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PlayerScripts",
+  "%Name":"PlayerStructures",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PlayerScripts",
+  "name":"PlayerStructures",
   "parent":{
     "name":"player",
     "path":"folders/Scripts/Dungeon/player.yy",

@@ -183,6 +183,10 @@ function draw_items(_inventory, _is_recipe) {
 			var _item = get_item_by_id( _inventory_copy[i].id );	
 			var _quantity = _inventory_copy[i].quantity;
 			
+			if ( is_instanceof(_inventory_copy[i], Equipment_Stack) && _inventory_copy[i].equipped ) {
+				draw_sprite_stretched(spr_inventory_item_equipped, 0, 0, _y - items_box_name_h/2 - items_box_border/4, items_box_w, items_box_name_h + items_box_border/2);	
+			}
+			
 			// Item Quantity
 			draw_set_halign(fa_center);
 			draw_text( items_box_quantity_x, _y, _quantity );
@@ -236,7 +240,7 @@ function draw_items(_inventory, _is_recipe) {
 		// Item Category
 		draw_sprite_ext( spr_items_categories, _item.category, items_box_category_x, _y, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1 );
 	
-		_current_y += items_box_name_h + items_box_border/3;
+		_current_y += items_box_name_h + items_box_border/2;
 	}
 	
 	draw_set_valign(fa_top);
@@ -355,14 +359,33 @@ function equip_item(_item) {
 	var _slot = _item_data.slot;
 	
 	if (!_item.equipped) {
-		if (is_struct(struct_get(equipments, _slot))) {
-			struct_get(equipments, _slot).equipped = false;
+		var _hand1_full = is_struct(struct_get(equipments, Hand1Slot));
+		var _hand2_full = is_struct(struct_get(equipments, Hand2Slot));
+		
+		if (_slot == bothHandsSlot) {
+			if (_hand1_full) struct_get(equipments, Hand1Slot).equipped = false;
+			if (_hand2_full) struct_get(equipments, Hand2Slot).equipped = false;
+			
+			struct_set(equipments, Hand1Slot, _item);
+			struct_set(equipments, Hand2Slot, -1);
+			_item.equipped = true;
+		} else {
+			if (is_struct(struct_get(equipments, _slot))) {
+				struct_get(equipments, _slot).equipped = false;
+			}
+			
+			struct_set(equipments, _slot, _item);
+			_item.equipped = true;		
 		}
-		struct_set(equipments, _slot, _item);
-		_item.equipped = true;
 	} else {
-		_item.equipped = false;
-		struct_set(equipments, _slot, noone);
+		if (_slot == bothHandsSlot) {
+			_item.equipped = false;
+			struct_set(equipments, Hand1Slot, noone);	
+			struct_set(equipments, Hand2Slot, noone);	
+		} else {
+			_item.equipped = false;
+			struct_set(equipments, _slot, noone);	
+		}
 	}
 	
 	update_inventory();
