@@ -48,6 +48,14 @@ public class Dungeon {
         return null;
     }
 
+    public Entity getEntityByUsername(String username) {
+        for (int i = 0; i < entities.size(); i++) {
+            var entity = entities.get(i);
+            if (entity.getUsername().equals(username)) return entity;
+        }
+        return null;
+    }
+
     public void setPlayerReady(String username) {
         var player = getPlayerByUsername(username);
         player.setReady(true);
@@ -78,7 +86,11 @@ public class Dungeon {
     }
 
     public DungeonDTO toDTO() {
-        return new DungeonDTO(this);
+        return new DungeonDTO(this, -1);
+    }
+
+    public DungeonDTO toDTO(int level) {
+        return new DungeonDTO(this, level);
     }
 
     public void updateEntity(JSONObject data) {

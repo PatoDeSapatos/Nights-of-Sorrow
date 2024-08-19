@@ -73,12 +73,16 @@ public class WebSocketController extends TextWebSocketHandler {
                 break;
             /**
              * data: {
-             *      invite,
+             *      invite
              * }
              * return: DungeonDTO
              */
             case DUNGEON_STATE:
-                dto = dungeonService.getDungeonByInvite(data.getString("invite")).toDTO();
+                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+                var entity = dungeon.getEntityByUsername(username);
+                int level = entity != null ? entity.getLevel() : -1;
+
+                dto = dungeon.toDTO(level);
                 sendDTO(dto, session);
                 break;
             /**
@@ -115,6 +119,21 @@ public class WebSocketController extends TextWebSocketHandler {
             case SET_PLAYER_READY:
                 dto = dungeonService.setPlayerReady(data.getString("invite"), username);
                 sendDTOtoAllPlayers(dto, data);
+                break;
+            /**
+             * data: {
+             *      invite,
+             *      entityId,
+             *      level
+             * }
+             */
+            case CHANGE_LEVEL:
+                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+                level = data.getInt("level");
+                dungeon.getEntityById(data.getString("entityId")).setLevel(level);
+
+                dto = dungeon.toDTO(level);
+                sendDTO(dto, session);
                 break;
             case GET_WAITING_STATE:
                 dto = dungeonService.getDungeonByInvite(data.getString("invite")).toWaitingDTO();

@@ -8,7 +8,7 @@ import com.patodesapatos.dungeons.domain.WebSocketDTO;
 public class DungeonDTO extends WebSocketDTO {
     private Dungeon dungeon;
 
-    public DungeonDTO(Dungeon dungeon) {
+    public DungeonDTO(Dungeon dungeon, int level) {
         super(MessageType.DUNGEON_STATE);
         this.dungeon = dungeon;
 
@@ -16,8 +16,9 @@ public class DungeonDTO extends WebSocketDTO {
         for (int i = 0; i < dungeon.getEntities().size(); i++) {
             var entity = dungeon.getEntities().get(i);
             var player = dungeon.getPlayerByUsername(entity.getUsername());
-            if (player != null) {
-                if (player.isOnline()) parsedEntities.add(entity.toDTO());
+
+            if (player != null && player.isOnline()) {
+                if (level < 0 && entity.getLevel() == level) parsedEntities.add(entity.toDTO());
             }
         }
 

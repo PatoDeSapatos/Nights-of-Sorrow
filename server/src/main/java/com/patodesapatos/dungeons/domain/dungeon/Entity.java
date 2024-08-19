@@ -11,12 +11,14 @@ public class Entity implements Cloneable {
     private String id;
     private String userId;
     private String username;
+    private int level;
     private JSONObject data;
 
     public Entity(Player player) {
-        this.id = UUID.randomUUID().toString();
-        this.userId = player.getUserId();
-        this.username = player.getUsername();
+        id = UUID.randomUUID().toString();
+        userId = player.getUserId();
+        username = player.getUsername();
+        level = 1;
     }
 
     public Entity toDTO() {
