@@ -64,6 +64,13 @@ function cast_dungeon() {
 						array_push(tile.stack, obj_chest)
 					}
 					break
+				//Spawn
+				case 65535:
+					tile = new Tile(1, false)
+					
+					//TODO
+					
+					break
 			}
 
 			if (is_undefined(tile)) continue

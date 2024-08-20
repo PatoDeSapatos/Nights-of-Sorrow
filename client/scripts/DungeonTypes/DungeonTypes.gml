@@ -4,17 +4,18 @@ enum dungeon_types {
 }
 
 function get_dungeon_type_table(_type, _level) {
+	var spawnables = [
+		[spawns.MERCADOR, 0.5]
+	]
 	var _default_table = {
-		rooms_amount: round(3.5 * _level),
-		chest_spawn: 20 + (0.5 * _level)
-		/*spawnables: [
-			["mercador", 0.5]
-		]*/
+		chest_spawn: 20 + (0.5 * _level),
+		rooms_amount: max(10, round(3.5 * _level) + array_length(spawnables)),
+		spawnables
 	}
 
-	switch(_type) {
-		
-	}
+	/*switch(_type) {
+		case dungeon_types.:
+	}*/
 
 	return _default_table
 }

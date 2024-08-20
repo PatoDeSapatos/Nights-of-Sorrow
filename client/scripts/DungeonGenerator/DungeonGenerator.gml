@@ -23,7 +23,7 @@ function generate_dungeon(_dungeon_type = -1, _level = 1) {
         ],
 		toCollapse: [],
         nodes: [],
-        emptyNode: new Node("", ""),
+        emptyNode: new Node(""),
         salas: 1,
         nodeGrid: [],
         roomsWidth: obj_dungeon_manager.width div roomSize,
@@ -48,6 +48,7 @@ function generate_dungeon(_dungeon_type = -1, _level = 1) {
 
 	method(ambient, generate_init_pos)()
 	method(ambient, generate_end_pos)()
+	//for each spawnable...
 
     return ambient
 }
@@ -106,8 +107,9 @@ function collapse() {
 		if (array_length(potentialNodes) <= 0) {
 
             if (initial) {
-                var rndNode = nodes[irandom(array_length(nodes) - 1)]
-                nodeGrid[atual.y][atual.x] = rndNode
+                var init_node = nodes[irandom(array_length(nodes) - 1)]
+                nodeGrid[atual.y][atual.x] = init_node
+				salas += string_length(init_node.name)
                 initial = false
             } else {
                 nodeGrid[atual.y][atual.x] = emptyNode
@@ -123,8 +125,9 @@ function collapse() {
                 randomNode = 0
             }
 
-            salas++
-            nodeGrid[atual.y][atual.x] = potentialNodes[randomNode]
+			var new_node = potentialNodes[randomNode]
+            salas += string_length(new_node.name) - 1
+            nodeGrid[atual.y][atual.x] = new_node
         }
 	}
 }
@@ -166,24 +169,23 @@ function register() {
 	
 	var _room_name = file_find_first(working_directory + "\\dungeon_rooms\\generated\\*.png", 0);
 	while(_room_name != "") {
-		var _direction = string_upper(string_split(string_split(_room_name, "_")[2], ".")[0])
 
-		array_push(nodes, new Node(_direction, _room_name))
-
+		array_push(nodes, new Node(_room_name))
 		_room_name = file_find_next();
 	}
 }
 
-function not_empty_rooms(_name_length = -1) {
+function spawn_rooms(_name_length = -1, exclude_marked = true) {
 	var _ner_array = []
 	for (var _y = 0; _y < array_length(nodeGrid); ++_y) {
 	    for (var _x = 0; _x < array_length(nodeGrid[_y]); ++_x) {
 
-			var _node_name = nodeGrid[_y][_x].name
+			var _node = nodeGrid[_y][_x]
 
-			if (_node_name == "") continue
+			if (_node.name == "" || !array_contains(_node.args, "s")) continue
+			if (exclude_marked && _node.spawn != -1) continue
 			if (_name_length != -1) {
-				if (string_length(_node_name) != _name_length) continue
+				if (string_length(_node.name) != _name_length) continue
 			}
 
 		    array_push(_ner_array, {
@@ -197,10 +199,10 @@ function not_empty_rooms(_name_length = -1) {
 
 function generate_init_pos() {
 	var roomSize = obj_dungeon_manager.roomSize
-	var _ner_array = not_empty_rooms()
-	var _room = _ner_array[irandom(array_length(_ner_array) - 1)]
+	var _sprm_array = spawn_rooms()
+	var _room = _sprm_array[irandom(array_length(_sprm_array) - 1)]
 	
-	nodeGrid[_room.y][_room.x].initial = true
+	nodeGrid[_room.y][_room.x].spawn = spawns.INITIAL
 
 	var _initX = ((_room.x * roomSize) + (roomSize div 2))
 	var _initY = ((_room.y * roomSize) + (roomSize div 2))
@@ -211,13 +213,8 @@ function generate_init_pos() {
 
 function generate_end_pos() {
 	var roomSize = obj_dungeon_manager.roomSize
-	var _ner_array = not_empty_rooms(1)
-	var _room = -1
-	
-	do {
-		_room = _ner_array[irandom(array_length(_ner_array) - 1)]
-
-	} until (nodeGrid[_room.y][_room.x].initial)
+	var _sprm_array = spawn_rooms(1)
+	var _room = _sprm_array[irandom(array_length(_sprm_array) - 1)]
 
 	var _endX = ((_room.x * roomSize) + (roomSize div 2))
 	var _endY = ((_room.y * roomSize) + (roomSize div 2))
@@ -226,9 +223,17 @@ function generate_end_pos() {
 	endY = tileToScreenY(_endX, _endY)
 }
 
-function Node(_name, _fileName) constructor {
-    name = _name
+function Node(_fileName) constructor {
     fileName = _fileName
+	name = ""
+	args = []
+	spawn = -1
+
+	if (fileName != "") {
+		var _args = string_split(string_split(_fileName, ".")[0], "_")
+		name = string_upper(_args[2])
+		array_copy(args, 0, _args, 3, array_length(_args))
+	}
 }
 
 function Point(_x, _y) constructor {

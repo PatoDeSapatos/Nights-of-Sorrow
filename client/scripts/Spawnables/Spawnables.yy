@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Spawnables",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Spawnables",
+  "parent":{
+    "name":"Dungeon",
+    "path":"folders/Scripts/Dungeon.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
