@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Spawnables",
+  "%Name":"DungeonReviewer",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Spawnables",
+  "name":"DungeonReviewer",
   "parent":{
     "name":"Dungeon",
     "path":"folders/Scripts/Dungeon.yy",

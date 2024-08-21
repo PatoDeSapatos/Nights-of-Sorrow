@@ -19,3 +19,9 @@ function get_dungeon_type_table(_type, _level) {
 
 	return _default_table
 }
+
+enum spawns {
+	INITIAL,
+	END,
+	MERCADOR
+}

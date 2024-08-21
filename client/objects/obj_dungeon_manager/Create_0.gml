@@ -3,6 +3,7 @@ function generate_map() {
 
 	load_map_images();
 	map = generate_dungeon()
+	review_dungeon()
 	cast_dungeon()
 
 	randomize()

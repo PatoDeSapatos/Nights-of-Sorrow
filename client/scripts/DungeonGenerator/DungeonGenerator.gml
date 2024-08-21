@@ -29,9 +29,7 @@ function generate_dungeon(_dungeon_type = -1, _level = 1) {
         roomsWidth: obj_dungeon_manager.width div roomSize,
         roomsHeight: obj_dungeon_manager.height div roomSize,
 		initX: -1,
-		initY: -1,
-		endX: -1,
-		endY: -1
+		initY: -1
 	}
 
     for (var i = 0; i < ambient.roomsHeight; i++) {
@@ -45,10 +43,6 @@ function generate_dungeon(_dungeon_type = -1, _level = 1) {
 	var data = date_current_datetime()
     method(ambient, collapse)()
     show_debug_message(string("finished in: {0} s with {1} rooms", date_second_span(data, date_current_datetime()), ambient.salas))
-
-	method(ambient, generate_init_pos)()
-	method(ambient, generate_end_pos)()
-	//for each spawnable...
 
     return ambient
 }
@@ -173,54 +167,6 @@ function register() {
 		array_push(nodes, new Node(_room_name))
 		_room_name = file_find_next();
 	}
-}
-
-function spawn_rooms(_name_length = -1, exclude_marked = true) {
-	var _ner_array = []
-	for (var _y = 0; _y < array_length(nodeGrid); ++_y) {
-	    for (var _x = 0; _x < array_length(nodeGrid[_y]); ++_x) {
-
-			var _node = nodeGrid[_y][_x]
-
-			if (_node.name == "" || !array_contains(_node.args, "s")) continue
-			if (exclude_marked && _node.spawn != -1) continue
-			if (_name_length != -1) {
-				if (string_length(_node.name) != _name_length) continue
-			}
-
-		    array_push(_ner_array, {
-				x: _x,
-				y: _y
-			})
-		}
-	}
-	return _ner_array
-}
-
-function generate_init_pos() {
-	var roomSize = obj_dungeon_manager.roomSize
-	var _sprm_array = spawn_rooms()
-	var _room = _sprm_array[irandom(array_length(_sprm_array) - 1)]
-	
-	nodeGrid[_room.y][_room.x].spawn = spawns.INITIAL
-
-	var _initX = ((_room.x * roomSize) + (roomSize div 2))
-	var _initY = ((_room.y * roomSize) + (roomSize div 2))
-
-	initX = tileToScreenX(_initX, _initY)
-	initY = tileToScreenY(_initX, _initY)
-}
-
-function generate_end_pos() {
-	var roomSize = obj_dungeon_manager.roomSize
-	var _sprm_array = spawn_rooms(1)
-	var _room = _sprm_array[irandom(array_length(_sprm_array) - 1)]
-
-	var _endX = ((_room.x * roomSize) + (roomSize div 2))
-	var _endY = ((_room.y * roomSize) + (roomSize div 2))
-
-	endX = tileToScreenX(_endX, _endY)
-	endY = tileToScreenY(_endX, _endY)
 }
 
 function Node(_fileName) constructor {

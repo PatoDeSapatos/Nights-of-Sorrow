@@ -39,6 +39,7 @@ function generate_rotated_image(_image_name) {
 	var _name_splited = string_split(_image_name, "_");
 	var _room_identifier = _name_splited[0] + "_" + _name_splited[1] + "_";
 	var _room_directions = _name_splited[2];
+	var _room_args = "_" + string_join_ext("_", _name_splited, 3)
 	
 	var _current_name = working_directory + "dungeon_rooms\\source\\" + _image_name;
 	var _new_file_name = working_directory + "dungeon_rooms\\generated\\" + _image_name; 
@@ -64,19 +65,19 @@ function generate_rotated_image(_image_name) {
 	
 	for (var i = 0; i < _cicles; ++i) {
 	    var _rotated_name = generate_rotated_name(_current_direction);
-		_new_file_name = working_directory + "dungeon_rooms\\generated\\" + _room_identifier + _rotated_name + ".png";
+		_new_file_name = working_directory + "dungeon_rooms\\generated\\" + _room_identifier + _rotated_name + _room_args + ".png";
 		
 		if ( _rotated_name == "" || file_exists(_new_file_name) ) {
 			continue;
 		}
 		
-		// Setting sprite
+		// Setting sprite 
 		var _sprite = sprite_add(_current_name, 1, 0, 0, 0, 0);
 		var _width = sprite_get_width(_sprite);
 		var _height = sprite_get_height(_sprite);
 				
 		_current_direction = _rotated_name;
-		_current_name = working_directory + "dungeon_rooms\\generated\\" + _room_identifier + _current_direction + ".png";
+		_current_name = working_directory + "dungeon_rooms\\generated\\" + _room_identifier + _current_direction + _room_args + ".png";
 		
 		// Setting Surface
 		var _surf = surface_create(_width, _height);
