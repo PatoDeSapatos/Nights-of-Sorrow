@@ -2,7 +2,7 @@ function generate_map() {
 	random_set_seed(global.server.mapSeed)
 
 	load_map_images();
-	map = generate_dungeon()
+	map = generate_dungeon(, global.server.level)
 	review_dungeon()
 	cast_dungeon()
 
@@ -39,8 +39,8 @@ player_bottom = -1
 ds_grid_set_region(grid, 0, 0, width, height, undefined)
 
 // Dungeon Generation
-entities = ds_map_create();
-enemies_number = 5;
+entities = ds_map_create()
+enemies_number = 1
 map = -1
 
 generate_map()

@@ -10,6 +10,7 @@ socket = network_create_socket(network_socket_ws);
 user_logged = false;
 username = "";
 dungeon_code = "";
+level = 1
 is_user_guest = false;
 guest_password = "";
 mapSeed = -1

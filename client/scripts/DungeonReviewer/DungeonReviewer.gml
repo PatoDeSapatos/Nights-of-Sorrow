@@ -10,33 +10,38 @@ function review_dungeon() {
 	method(ambient, generate_init_pos)()
 	method(ambient, generate_spawnables)()
 }
-//errooooo
+
 function assure() {
+	//assure end room
 	if (array_length(spawn_rooms(1)) == 0) {
 		var _not_spawns = get_nodes(["s"], true)
+
 		for (var ii = 0; ii < array_length(_not_spawns); ++ii) {
 		    if (string_length(_not_spawns[ii].node.name) == 1) {
+
 				var _old = _not_spawns[ii]
 				var _new_array = find_nodes(_old.node.name, ["s"])
 				var _new = _new_array[irandom(array_length(_new_array) - 1)]
 				nodeGrid[_old.y][_old.x] = _new
+				break
 			}
 		}
 	}
 
-	var _spawn_rooms_length = array_length(spawn_rooms(, false))
-	var _spawnables_length = array_length(map.dungeon_type_table.spawnables)
+	var _spawn_rooms_length = array_length(spawn_rooms())
+	var _spawnables_length = array_length(map.dungeon_type_table.spawnables) + 2 //+ end and init rooms
 
 	if (_spawn_rooms_length < _spawnables_length) {
 		var _nodes = get_nodes(["s"], true)
 		
-		for (var i = 0; i < _spawn_rooms_length - _spawnables_length; ++i) {
-		    var _old_node = _nodes[irandom(array_length(_nodes) - 1)]
+		for (var i = 0; i < (_spawnables_length - _spawn_rooms_length); ++i) {
+			var _old_index = irandom(array_length(_nodes) - 1)
+		    var _old_node = _nodes[_old_index]
+			array_delete(_nodes, _old_index, 1)
+
 			var _new_nodes_array = find_nodes(_old_node.node.name, ["s"])
 			var _new_node = _new_nodes_array[irandom(array_length(_new_nodes_array) - 1)]
 
-			show_debug_message(_old_node)
-			show_debug_message(_new_node)
 			nodeGrid[_old_node.y][_old_node.x] = _new_node
 		}
 	}
@@ -135,7 +140,7 @@ function find_nodes(_name, args_array) {
 	for (var i = 0; i < array_length(map.nodes); ++i) {
 	    var _node = map.nodes[i]
 		
-		if (string_length(_node.name) != _name) continue
+		if (_node.name != _name) continue
 		
 		var valid = true
 		for (var ii = 0; ii < array_length(args_array); ++ii) {
