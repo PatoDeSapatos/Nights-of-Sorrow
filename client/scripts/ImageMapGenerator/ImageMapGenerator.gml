@@ -38,8 +38,9 @@ function rotate_map_images(_rooms) {
 function generate_rotated_image(_image_name) {
 	var _name_splited = string_split(_image_name, "_");
 	var _room_identifier = _name_splited[0] + "_" + _name_splited[1] + "_";
-	var _room_directions = _name_splited[2];
-	var _room_args = "_" + string_join_ext("_", _name_splited, 3)
+	var _room_directions = _name_splited[2]
+	var _args_joined = string_join_ext("_", _name_splited, 3)
+	var _room_args = (_args_joined == "" ? "" : "_") + string_split(_args_joined, ".")[0]
 	
 	var _current_name = working_directory + "dungeon_rooms\\source\\" + _image_name;
 	var _new_file_name = working_directory + "dungeon_rooms\\generated\\" + _image_name; 

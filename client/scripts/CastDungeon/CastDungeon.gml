@@ -73,6 +73,7 @@ function cast_dungeon() {
 					if (_room.spawn != -1) {
 						switch(_room.spawn) {
 							case spawns.END:
+								tile.spr = 7
 								array_push(tile.stack, obj_exit)
 								break
 							case spawns.MERCADOR:
