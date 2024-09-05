@@ -77,5 +77,5 @@ switch(async_load[? "type"]){
 		break
 	case network_type_disconnect:
 		global.server.websocket_connect()
-		break
+		break;
 } 

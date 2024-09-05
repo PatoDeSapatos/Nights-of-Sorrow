@@ -48,6 +48,8 @@ switch (page) {
 				menu_change_page(MAIN_MENU_PAGES.PUBLIC_DUNGEON);
 			} else if ( option_selected == 1 ) {
 				menu_change_page(MAIN_MENU_PAGES.PRIVATE_DUNGEON);
+			} else if ( option_selected == 2 ) {
+				menu_change_page(MAIN_MENU_PAGES.ENTER_IP);
 			} else if ( option_selected == array_length(options[page])-1 ) {
 				menu_change_page(MAIN_MENU_PAGES.PRINCIPAL);
 				return;
@@ -95,10 +97,31 @@ switch (page) {
 			}
 		}
 		break;
+	case MAIN_MENU_PAGES.ENTER_IP:
+		draw_text_input_page(enter_ip_callback);
+		break;
+	case MAIN_MENU_PAGES.ENTER_PORT:
+		draw_text_input_page(enter_port_callback);
+		break;
+	case MAIN_MENU_PAGES.PUBLIC_DUNGEON:
+		global.loading = true;
+		
+		var _url = global.url + "/dungeon/public";
+		var _header = ds_map_create();
+	
+		ds_map_add(_header, "Content-Type", "application/json");
+		get_dungeons = http_request(_url, "GET", _header, "");
+		ds_map_destroy(_header);
+		
+		for (var i = 0; i < array_length(public_dungeons); ++i) {
+		    show_message(public_dungeons[i]);
+		}
+		
+		if (input_back) menu_change_page(MAIN_MENU_PAGES.PRINCIPAL);
+		break;
 	case MAIN_MENU_PAGES.PRIVATE_DUNGEON:
 		draw_text_input_page(enter_dungeon_with_code_callback);
 		break;
-		
 }
 
 if ( !global.loading && input_back && page > 0 ) {
