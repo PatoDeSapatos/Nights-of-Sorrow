@@ -50,7 +50,7 @@ function cast_dungeon() {
 				case 2170681:
 					tile = new Tile(1, false)
 					if ( enemies_number > 0 ) {
-						instantiate_enemy(tileToScreenX(_x, _y), tileToScreenY(_x, _y) , "SLIME");
+						instantiate_enemy(tileToScreenX(_x, _y), tileToScreenY(_x, _y), "SLIME");
 						enemies_number--;
 					}
 					break
@@ -67,9 +67,19 @@ function cast_dungeon() {
 				//Spawn
 				case 65535:
 					tile = new Tile(1, false)
-					
-					//TODO
-					
+
+					var _room = nodeGrid[_y div roomSize][_x div roomSize]
+
+					if (_room.spawn != -1) {
+						switch(_room.spawn) {
+							case spawns.END:
+								array_push(tile.stack, obj_exit)
+								break
+							case spawns.MERCADOR:
+								array_push(tile.stack, obj_npc_test)
+								break
+						}
+					}
 					break
 			}
 

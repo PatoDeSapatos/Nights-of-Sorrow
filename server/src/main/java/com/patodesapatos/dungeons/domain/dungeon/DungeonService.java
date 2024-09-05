@@ -107,4 +107,15 @@ public class DungeonService {
     public ArrayList<Dungeon> getAll() {
         return storage.getDungeons();
     }
+
+    public ArrayList<PublicDTO> getAllPublic() {
+        var publics = new ArrayList<PublicDTO>();
+
+        for (Dungeon dungeon : storage.getDungeons()) {
+            if (dungeon.isPublic()) {
+                publics.add(new PublicDTO(dungeon));
+            }
+        }
+        return publics;
+    }
 }

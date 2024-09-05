@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
+import com.patodesapatos.dungeons.domain.dungeon.PublicDTO;
 
 @RestController
 @RequestMapping("dungeon")
@@ -20,5 +21,10 @@ public class DungeonController {
     @GetMapping
     public ResponseEntity<ArrayList<Dungeon>> getAll() {
         return ResponseEntity.ok(dungeonService.getAll());
+    }
+
+    @GetMapping("public")
+    public ResponseEntity<ArrayList<PublicDTO>> getAllPublic() {
+        return ResponseEntity.ok(dungeonService.getAllPublic());
     }
 }

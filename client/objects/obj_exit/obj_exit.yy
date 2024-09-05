@@ -1,16 +1,15 @@
 {
   "$GMObject":"",
-  "%Name":"obj_dungeon_enemy",
+  "%Name":"obj_exit",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_dungeon_enemy",
+  "name":"obj_exit",
   "overriddenProperties":[],
   "parent":{
-    "name":"enemies",
-    "path":"folders/Objetos/dungeon/entities/enemies.yy",
+    "name":"tile_entities",
+    "path":"folders/Objetos/dungeon/entities/tile_entities.yy",
   },
   "parentObjectId":{
     "name":"par_entity",
@@ -33,7 +32,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_dungeon_tileset",
+    "path":"sprites/spr_dungeon_tileset/spr_dungeon_tileset.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }
