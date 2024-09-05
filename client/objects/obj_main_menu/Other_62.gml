@@ -34,6 +34,11 @@ switch( async_load[? "id"] ) {
 			create_error_message("Username and password dont't match");
 		}
 		break;
+	case get_dungeons:
+		if ( async_load[? "status"] == 0 ) {
+			var _data = json_parse(async_load[? "result"]);
+		}
+		break;
 }
 
 menu_change_page(page);

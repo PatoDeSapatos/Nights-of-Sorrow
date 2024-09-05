@@ -16,13 +16,18 @@ input_down = -1;
 input_forward = -1;
 input_back = -1;
 
+public_dungeons = [];
+
 // Requests
 username_exists = -1;
 user_register = -1;
 user_login = -1;
+get_dungeons = -1;
 
 username = "";
 password = "";
+ip = "";
+port = "";
 
 // Options per page
 function setup_options( _page ) {
@@ -31,7 +36,7 @@ function setup_options( _page ) {
 			options[MAIN_MENU_PAGES.PRINCIPAL] = ["Enter in Dungeon", "Create Dungeon", global.server.user_logged && !global.server.is_user_guest ? ("Account") : ("Register/Login"), "Options", "Exit"];
 			break;
 		case MAIN_MENU_PAGES.ENTER_DUNGEON:
-			options[MAIN_MENU_PAGES.ENTER_DUNGEON] = ["Public Dungeons", "Enter With Code", "Back"];
+			options[MAIN_MENU_PAGES.ENTER_DUNGEON] = ["Public Dungeons", "Enter With Code", "Enter with IP", "Back"];
 			break;
 		case MAIN_MENU_PAGES.CREATE_DUNGEON:
 			options[MAIN_MENU_PAGES.CREATE_DUNGEON] = ["Carregando..."];
@@ -65,6 +70,12 @@ function setup_options( _page ) {
 			break;
 		case MAIN_MENU_PAGES.PRIVATE_DUNGEON: // Enter Private Dungeon
 			options[MAIN_MENU_PAGES.PRIVATE_DUNGEON] = ["Dungeon Code:", "", "Enter", "Cancel"];
+			break;
+		case MAIN_MENU_PAGES.ENTER_IP:
+			options[MAIN_MENU_PAGES.ENTER_IP] = ["IP:", "", "Enter", "Cancel"];
+			break;
+		case MAIN_MENU_PAGES.ENTER_PORT:
+			options[MAIN_MENU_PAGES.ENTER_PORT] = ["Port:", "", "Enter", "Cancel"];
 			break;
 		case MAIN_MENU_PAGES.REGISTER_LOGIN:
 			options[MAIN_MENU_PAGES.REGISTER_LOGIN] = ["Register", "Login"];
@@ -132,4 +143,20 @@ enter_dungeon_with_code_callback = function (_code) {
 	struct_set(_data, "invite", _code);
 	global.server.dungeon_code = _code;
 	global.server.send_websocket_message("JOIN_DUNGEON", _data);	
+}
+
+enter_ip_callback = function (_ip) {
+	if (_ip == "") return;
+	
+	ip = _ip;
+	menu_change_page(MAIN_MENU_PAGES.ENTER_PORT);
+}
+
+enter_port_callback = function(_port) {
+	if (_port == "") return;
+	port = _port;
+	
+	obj_server.set_url(ip, port);
+	obj_server.websocket_connect();
+	menu_change_page(MAIN_MENU_PAGES.PRINCIPAL);
 }
