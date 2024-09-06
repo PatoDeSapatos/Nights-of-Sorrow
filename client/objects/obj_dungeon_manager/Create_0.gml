@@ -1,5 +1,5 @@
 function generate_map() {
-	random_set_seed(global.server.mapSeed)
+	random_set_seed(global.server.mapSeed + global.server.level)
 
 	load_map_images();
 	map = generate_dungeon(, global.server.level)
@@ -52,7 +52,7 @@ update_entities = function (_data) {
 	
 	for (var i = 0; i < array_length(_entities); ++i) {
 		if ( !is_struct(_entities[i]) ) {
-			show_message(_entities[i]);
+			show_debug_message(_entities[i]);
 			continue;
 		}
 		
@@ -60,7 +60,7 @@ update_entities = function (_data) {
 		
 		if ( ds_map_exists(entities, _entity_id) ) {
 			if (is_struct(struct_get(_entities[i], "data"))) {
-				ds_map_find_value(entities, _entity_id).update_entity_values( struct_get(_entities[i], "data"), struct_get(_entities[i], "username") );
+				ds_map_find_value(entities, _entity_id).update_entity_values( struct_get(_entities[i], "data"), struct_get(_entities[i], "username"), struct_get(_entities[i], "level") );
 			}
 		} else {
 			var _entity = instance_create_layer(map.initX, map.initY, "Instances", obj_player);
