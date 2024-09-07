@@ -352,44 +352,75 @@ function get_recipe_ingredients() {
 	}	
 }
 
-function equip_item(_item) {
+function equip_item(_item, _struct = equipments) {
 	if ( !is_instanceof(_item, Equipment_Stack) ) return;
 	
 	var _item_data = get_item_by_id(_item.id);
 	var _slot = _item_data.slot;
 	
 	if (!_item.equipped) {
-		var _hand1_full = is_struct(struct_get(equipments, Hand1Slot));
-		var _hand2_full = is_struct(struct_get(equipments, Hand2Slot));
+		var _hand1_full = is_struct(struct_get(_struct, Hand1Slot));
+		var _hand2_full = is_struct(struct_get(_struct, Hand2Slot));
 		
 		if (_slot == bothHandsSlot) {
-			if (_hand1_full) struct_get(equipments, Hand1Slot).equipped = false;
-			if (_hand2_full) struct_get(equipments, Hand2Slot).equipped = false;
+			if (_hand1_full) struct_get(_struct, Hand1Slot).equipped = false;
+			if (_hand2_full) struct_get(_struct, Hand2Slot).equipped = false;
 			
-			struct_set(equipments, Hand1Slot, _item);
-			struct_set(equipments, Hand2Slot, -1);
+			struct_set(_struct, Hand1Slot, _item);
+			struct_set(_struct, Hand2Slot, -1);
 			_item.equipped = true;
-		} else {
-			if (is_struct(struct_get(equipments, _slot))) {
-				struct_get(equipments, _slot).equipped = false;
+		} else if (_slot == Hand1Slot) {
+			var _hand2 = struct_get(_struct, Hand2Slot);
+			
+			if (_hand2 == -1) {
+				struct_get(_struct, Hand1Slot).equipped = false;
+				struct_set(_struct, Hand1Slot, noone);
+				struct_set(_struct, Hand2Slot, noone);
+				_hand1_full = false;	
+				_hand2_full = false;
 			}
 			
-			struct_set(equipments, _slot, _item);
+			if (_hand1_full) {
+				if (_hand2_full) _hand2.equipped = false;			
+				
+				_item.equipped = true;
+				_item.second_hand = true;
+				struct_set(_struct, Hand2Slot, _item);
+			} else {
+				_item.equipped = true;
+				_item.second_hand = false;
+				struct_set(_struct, Hand1Slot, _item);
+			}
+		} else {
+			if (is_struct(struct_get(_struct, _slot))) {
+				struct_get(_struct, _slot).equipped = false;
+			}
+			
+			struct_set(_struct, _slot, _item);
 			_item.equipped = true;		
 		}
 	} else {
 		if (_slot == bothHandsSlot) {
 			_item.equipped = false;
-			struct_set(equipments, Hand1Slot, noone);	
-			struct_set(equipments, Hand2Slot, noone);	
+			struct_set(_struct, Hand1Slot, noone);	
+			struct_set(_struct, Hand2Slot, noone);	
+		} else if (_slot == Hand1Slot) {
+			if (_item.second_hand) {
+				struct_set(_struct, Hand2Slot, noone);
+			} else {
+				struct_set(_struct, Hand1Slot, noone);
+			}
+			
+			_item.second_hand = false;
+			_item.equipped = false;
 		} else {
 			_item.equipped = false;
-			struct_set(equipments, _slot, noone);	
+			struct_set(_struct, _slot, noone);	
 		}
 	}
 	
 	update_inventory();
-	inventory_update_status(inventory, equipments, player_equipment_status);
+	inventory_update_status(inventory, _struct, player_equipment_status);
 }
 
 function inventory_add_item( _inventory, _item_id, _quantity ) {
@@ -435,15 +466,22 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 			));
 		}
 	}
-	
+
+	create_inventory_operation(_item_id, _quantity, "Added");
 	update_inventory();
 }
 
 function inventory_remove_item( _inventory, _item_id, _quantity ) {
+	create_inventory_operation(_item_id, _quantity, "Removed");
+	
 	for (var i = 0; i < array_length(_inventory); ++i) {
 		var _item = _inventory[i];
 		
 	    if(_item.id == _item_id) {
+			if (is_instanceof(_item, Equipment_Stack) && _item.equipped) {
+				equip_item(_item);
+			}
+			
 			var _new_quantity = min(_quantity, _item.quantity);
 			_item.quantity -= _new_quantity;
 			_quantity -= _new_quantity
@@ -460,6 +498,7 @@ function inventory_remove_item( _inventory, _item_id, _quantity ) {
 			if ( _quantity <= 0 ) break;
 		}
 	}
+	
 	update_inventory();
 }
 
@@ -543,4 +582,9 @@ function inventory_update_status(_inventory, _equipped_items, _status) {
 		    struct_set(_status, _status_names[j], _current_status + _item_status);
 		}
 	}
+}
+
+function create_inventory_operation(_item_id, _quantity, _type) {
+	if ( !instance_exists(obj_inventory_operation) ) instance_create_depth(0, 0, -9999, obj_inventory_operation);
+	obj_inventory_operation.add_item(_item_id, _quantity, _type);
 }

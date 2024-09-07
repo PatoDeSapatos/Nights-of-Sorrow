@@ -87,12 +87,14 @@ for (var i = 0; i < struct_names_count(equipments); ++i) {
 	if (_value != noone) {
 		if (_value == -1) {
 			_value = struct_get(equipments, Hand1Slot);
+			draw_set_alpha(.7);
 		}
 		
 		draw_set_color(c_black);
 		var _item = get_item_by_id(_value.id);
 		draw_sprite_stretched(spr_items, _item.sprId, _current_x + _string_width, _current_y + equipment_slot_h/4, _string_height, _string_height);
 		draw_text(_current_x + _string_width + _string_height, _current_y + equipment_slot_h/2, " " + _item.display_name);
+		draw_set_alpha(1);
 	}
 	
 	_current_y += equipment_slot_h;
@@ -113,7 +115,7 @@ if ( is_struct(active_item) && focus == FOCUS.ITEM ) {
 		_active_item_exists = true;
 	} else if (is_instanceof(active_item, Recipe_Stack)) {
 		var _recipe = get_recipe_by_id(active_item.id);
-		var _result = get_item_by_id(_recipe.result_id);
+		_result = get_item_by_id(_recipe.result_id);
 		
 		_status = _result.status;
 		_comparing_names = struct_get_names(_status);
@@ -135,7 +137,8 @@ for (var i = 0; i < struct_names_count(player_equipment_status); ++i) {
 	draw_set_color(c_black);
     draw_text(_current_x, _current_y + status_h/2, _string);
 	if ( _active_item_exists ) {
-		var _comparing_status = struct_get(_status, _comparing_names[i]) + struct_get(player_base_status, _comparing_names[i]);
+		var _comparing_status = (struct_get(player_base_status, _comparing_names[i]) ) + struct_get(_status, _comparing_names[i]);
+		
 		if (_comparing_status != _value + struct_get(player_base_status, _comparing_names[i])) {
 			draw_set_color(_comparing_status > _value ? (c_green) : (c_red));
 			draw_text(_current_x + _string_width, _current_y + status_h/2, " -> " + string(_comparing_status));
