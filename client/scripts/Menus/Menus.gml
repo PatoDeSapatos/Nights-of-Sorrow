@@ -10,7 +10,10 @@ enum MAIN_MENU_PAGES {
 	LOGIN_PASSWORD,
 	PRIVATE_DUNGEON,
 	PUBLIC_DUNGEON,
-	REGISTER_LOGIN
+	ENTER_IP,
+	ENTER_PORT,
+	REGISTER_LOGIN,
+	LENGTH
 }
 
 function menu_get_option_selected() {
@@ -35,9 +38,16 @@ function draw_text_input_page(_callback) {
 			reading_string = keyboard_string;
 			if ( string_length(reading_string) > max_string_length ) {
 				var _string = string_copy(reading_string, 0, max_string_length);
+				
 				reading_string = _string;
 				keyboard_string = _string;
 			}
+			
+			if (keyboard_check(vk_control) && keyboard_check_pressed(ord("V"))) {
+				reading_string += clipboard_get_text();	
+				keyboard_string = reading_string;
+			}
+			
 			if ( string_char_at(reading_string, string_length(reading_string)-1) != "|" ) {
 				reading_string = reading_string + "|";	
 			}

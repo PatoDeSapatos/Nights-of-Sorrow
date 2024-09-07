@@ -1,20 +1,17 @@
 {
   "$GMObject":"",
-  "%Name":"obj_dungeon_enemy",
-  "eventList":[
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-  ],
+  "%Name":"obj_npc_test",
+  "eventList":[],
   "managed":true,
-  "name":"obj_dungeon_enemy",
+  "name":"obj_npc_test",
   "overriddenProperties":[],
   "parent":{
-    "name":"enemies",
-    "path":"folders/Objetos/dungeon/entities/enemies.yy",
+    "name":"npcs",
+    "path":"folders/Objetos/dungeon/entities/npcs.yy",
   },
   "parentObjectId":{
-    "name":"par_entity",
-    "path":"objects/par_entity/par_entity.yy",
+    "name":"par_npc",
+    "path":"objects/par_npc/par_npc.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

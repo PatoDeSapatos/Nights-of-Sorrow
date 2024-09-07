@@ -86,7 +86,7 @@ state_player_free = function () {
 	y += vspd;
 }
 
-update_entity_values = function(_new_values, _username) {
+update_entity_values = function(_new_values, _username, _level) {
 	if (_username != global.server.username) {
 		x = struct_get(_new_values, "x");
 		y = struct_get(_new_values, "y");
@@ -95,6 +95,11 @@ update_entity_values = function(_new_values, _username) {
 		image_index = struct_get(_new_values, "image_index");
 		facing_right = struct_get(_new_values, "facing_right");
 		facing_up = struct_get(_new_values, "facing_up");
+	} else {
+		if (_level != global.server.level) {
+			global.server.level = _level
+			room_restart()
+		}
 	}
 }
 

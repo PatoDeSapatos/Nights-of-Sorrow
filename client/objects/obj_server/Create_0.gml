@@ -2,13 +2,15 @@ function Request(_reaction) constructor {
 	id = -1;
 	reaction = _reaction;
 }
-
-global.url = "http://localhost:8081";
+ip = "localhost";
+port = "8081";
+global.url = "http://" + ip + ":" + port;
 global.user_token = "";
 socket = network_create_socket(network_socket_ws);
 user_logged = false;
 username = "";
 dungeon_code = "";
+level = 1
 is_user_guest = false;
 guest_password = "";
 mapSeed = -1
@@ -43,7 +45,7 @@ function send_chat_message(_type, _text) {
 }
 
 websocket_connect = function () {
-	network_connect_raw_async(socket, "localhost/ws", 8081);
+	network_connect_raw_async(socket, ip + "/ws", port);
 }
 
 websocket_disconnect = function () {
@@ -56,6 +58,13 @@ websocket_disconnect = function () {
 		ds_map_destroy(_header);
 	}
 	network_destroy(socket);	
+}
+
+set_url = function(_ip, _port) {
+	ip = _ip;
+	port = _port;
+	
+	global.url = "http://" + ip + ":" + port;
 }
 
 websocket_connect();

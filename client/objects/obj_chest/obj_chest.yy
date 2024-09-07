@@ -6,12 +6,12 @@
   "name":"obj_chest",
   "overriddenProperties":[],
   "parent":{
-    "name":"structures",
-    "path":"folders/Objetos/dungeon/structures.yy",
+    "name":"tile_entities",
+    "path":"folders/Objetos/dungeon/entities/tile_entities.yy",
   },
   "parentObjectId":{
-    "name":"par_dungeon_structure",
-    "path":"objects/par_dungeon_structure/par_dungeon_structure.yy",
+    "name":"par_entity",
+    "path":"objects/par_entity/par_entity.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
