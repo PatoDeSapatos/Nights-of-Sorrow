@@ -19,6 +19,7 @@
     {"$GMFolder":"","%Name":"Fontes","folderPath":"folders/Fontes.yy","name":"Fontes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Linhas do tempo","folderPath":"folders/Linhas do tempo.yy","name":"Linhas do tempo","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Objetos","folderPath":"folders/Objetos.yy","name":"Objetos","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"core","folderPath":"folders/Objetos/core.yy","name":"core","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"dungeon","folderPath":"folders/Objetos/dungeon.yy","name":"dungeon","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"entities","folderPath":"folders/Objetos/dungeon/entities.yy","name":"entities","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"enemies","folderPath":"folders/Objetos/dungeon/entities/enemies.yy","name":"enemies","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -27,7 +28,6 @@
     {"$GMFolder":"","%Name":"inventory","folderPath":"folders/Objetos/dungeon/inventory.yy","name":"inventory","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"player","folderPath":"folders/Objetos/dungeon/player.yy","name":"player","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"structures","folderPath":"folders/Objetos/dungeon/structures.yy","name":"structures","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"core","folderPath":"folders/Objetos/core.yy","name":"core","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"menus","folderPath":"folders/Objetos/menus.yy","name":"menus","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Particle Systems","folderPath":"folders/Particle Systems.yy","name":"Particle Systems","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Scripts","folderPath":"folders/Scripts.yy","name":"Scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -87,6 +87,7 @@
   "name":"dungeons_prototipo",
   "resources":[
     {"id":{"name":"fnt_chat","path":"fonts/fnt_chat/fnt_chat.yy",},},
+    {"id":{"name":"Network","path":"notes/Network/Network.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
     {"id":{"name":"obj_chest","path":"objects/obj_chest/obj_chest.yy",},},
     {"id":{"name":"obj_dungeon_chat","path":"objects/obj_dungeon_chat/obj_dungeon_chat.yy",},},
