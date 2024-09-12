@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"DungeonGenerator",
   "parent":{
-    "name":"Dungeon",
-    "path":"folders/Scripts/Dungeon.yy",
+    "name":"map",
+    "path":"folders/Scripts/Dungeon/map.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

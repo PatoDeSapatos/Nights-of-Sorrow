@@ -4,21 +4,29 @@ function collision() {
 	var htile = obj_dungeon_manager.grid[# screenToTileX(x + hspd, y)-1, screenToTileY(x + hspd, y)-1]
 	if (!is_undefined(htile)) {
 		if (htile.coll) {
-			//x -= x mod tile_size
-			//if (sign(hspd) == 1) x += tile_size - 1
 			hspd = 0
 			collides = true
 		}
+		htile.collide() //ativar colisão de stacks que não tem colisão também
 	}
 
 	var vtile = obj_dungeon_manager.grid[# screenToTileX(x, y + vspd)-1, screenToTileY(x, y + vspd)-1]
 	if (!is_undefined(vtile)) {
 		if (vtile.coll) {
-			//y -= y mod tile_size
-			//if (sign(vspd) == 1) y += tile_size - 1
 			vspd = 0
 			collides = true
 		}
+		vtile.collide()
+	}
+	
+	var dtile = obj_dungeon_manager.grid[# screenToTileX(x + hspd, y + vspd)-1, screenToTileY(x + hspd, y + vspd)-1]
+	if (!is_undefined(dtile)) {
+		if (dtile.coll) {
+			hspd = 0
+			vspd = 0
+			collides = true
+		}
+		dtile.collide()
 	}
 
 	return collides

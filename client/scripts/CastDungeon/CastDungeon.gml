@@ -56,7 +56,7 @@ function cast_dungeon() {
 					break
 				//Chest
 				case 12517120:
-					tile = new Tile(1, false)
+					tile = new Tile(1, true)
 					
 					var _chest_spawn = irandom(99) < _type_table.chest_spawn;
 					
@@ -66,7 +66,7 @@ function cast_dungeon() {
 					break
 				//Spawn
 				case 65535:
-					tile = new Tile(1, false)
+					tile = new Tile(1, true)
 
 					var _room = nodeGrid[_y div roomSize][_x div roomSize]
 
@@ -77,6 +77,7 @@ function cast_dungeon() {
 								array_push(tile.stack, obj_exit)
 								break
 							case spawns.MERCADOR:
+								tile.coll = false
 								array_push(tile.stack, obj_npc_test)
 								break
 						}
@@ -98,10 +99,21 @@ function Tile(_spr, _coll, _stack=[], _z = 0) constructor {
 	spr = _spr;
 	coll = _coll;
 	stack = _stack;
+	stack_instances = []
 	z = _z
 
 	function get_stack() {
 		var _item = array_shift(stack);
 		return _item;
+	}
+	
+	function collide() {
+		for (var i = 0; i < array_length(stack_instances); ++i) {
+		    var _instance = stack_instances[i]
+
+			if (asset_get_index(object_get_name(object_get_parent(_instance.object_index))) != par_entity) return
+
+			if (_instance.coll && is_method(_instance.interaction)) _instance.interaction()
+		}
 	}
 }
