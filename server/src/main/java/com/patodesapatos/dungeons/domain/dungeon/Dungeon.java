@@ -17,6 +17,7 @@ public class Dungeon {
     private String id;
     private ArrayList<Player> players;
     private ArrayList<Entity> entities;
+    private int entitiesId;
     private String admUsername;
     private String invite;
     private boolean isPublic;
@@ -30,6 +31,7 @@ public class Dungeon {
         generateMapSeed();
 
         this.entities = new ArrayList<>();
+        this.entitiesId = 0;
         this.players = new ArrayList<>();
         addPlayer(player);
         this.admUsername = player.getUsername();
@@ -37,7 +39,7 @@ public class Dungeon {
 
     public void addPlayer(Player player) {
         players.add(player);
-        entities.add(new Entity(player));
+        entities.add(new Entity(player, ++entitiesId));
     }
 
     public Player getPlayerByUsername(String username) {
@@ -73,10 +75,10 @@ public class Dungeon {
         return RandomStringUtils.randomAlphanumeric(4).toUpperCase();
     }
 
-    public Entity getEntityById(String id) {
+    public Entity getEntityById(int id) {
         for (int i = 0; i < entities.size(); i++) {
             var entity = entities.get(i);
-            if (entity.getId().equals(id)) return entity;
+            if (entity.getId() == id) return entity;
         }
         return null;
     }
@@ -86,15 +88,17 @@ public class Dungeon {
     }
 
     public DungeonDTO toDTO() {
-        return new DungeonDTO(this, -1);
+        return new DungeonDTO(this, null);
     }
 
-    public DungeonDTO toDTO(int level) {
-        return new DungeonDTO(this, level);
+    public DungeonDTO toDTO(Entity reqEntity) {
+        return new DungeonDTO(this, reqEntity);
     }
 
-    public void updateEntity(JSONObject data) {
-        getEntityById(data.getString("entityId")).setData(data.getJSONObject("data"));
+    public Entity updateEntity(JSONObject data) {
+        var entity = getEntityById(data.getInt("entityId"));
+        entity.setData(data.getJSONObject("data"));
+        return entity;
     }
 
     public void removePlayer(String username) {

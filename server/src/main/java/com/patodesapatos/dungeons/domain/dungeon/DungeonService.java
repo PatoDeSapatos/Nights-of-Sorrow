@@ -34,8 +34,7 @@ public class DungeonService {
 
     public DungeonDTO updateEntity(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
-        dungeon.updateEntity(data);
-        return dungeon.toDTO();
+        return dungeon.toDTO(dungeon.updateEntity(data));
     }
 
 	public Dungeon joinDungeon(String invite, String username, WebSocketSession session) {

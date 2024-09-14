@@ -1,21 +1,19 @@
 package com.patodesapatos.dungeons.domain.dungeon;
 
-import java.util.UUID;
-
 import org.json.JSONObject;
 
 import lombok.Data;
 
 @Data
 public class Entity implements Cloneable {
-    private String id;
+    private int id;
     private String userId;
     private String username;
     private int level;
     private JSONObject data;
 
-    public Entity(Player player) {
-        id = UUID.randomUUID().toString();
+    public Entity(Player player, int dungeonEntitiesId) {
+        id = dungeonEntitiesId;
         userId = player.getUserId();
         username = player.getUsername();
         level = 1;
