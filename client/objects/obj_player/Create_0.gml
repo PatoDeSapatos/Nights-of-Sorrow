@@ -104,3 +104,4 @@ update_entity_values = function(_new_values, _username, _level) {
 }
 
 state = state_player_free;
+alarm[0] = 3

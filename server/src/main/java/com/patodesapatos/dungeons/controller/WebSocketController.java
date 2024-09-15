@@ -36,7 +36,7 @@ public class WebSocketController extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String jsonString = message.getPayload();
         JSONObject packet = new JSONObject(jsonString);
-        
+
         MessageType type = MessageType.valueOf(packet.getString("messageType"));
         JSONObject data = packet.getJSONObject("data");
 

@@ -1,7 +1,7 @@
 Avg:
 
 Packet size: 650 > 530 Bytes (750 > 520 from client, 550 > 540 server response)
-Packets per second: 120 packet/s (60 from client, 60 server responses)
+Packets per second: 40 packet/s (20 from client, 20 server responses)
 
-73 > 64 kB/s
-250 > 230 MB/h
+73 > 21 kB/s
+250 > 76 MB/h
