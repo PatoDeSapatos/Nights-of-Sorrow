@@ -38,11 +38,10 @@ public class WebSocketController extends TextWebSocketHandler {
         JSONObject packet = new JSONObject(jsonString);
         
         MessageType type = MessageType.valueOf(packet.getString("messageType"));
-        String token = packet.getString("token");
         JSONObject data = packet.getJSONObject("data");
 
-        var username = tokenService.validateToken(token);
-        if (username.isEmpty()) return;
+        var username = (String) session.getAttributes().get("username");
+        if (username == null || username.isEmpty()) return;
 
         WebSocketDTO dto;
         switch (type) {
@@ -181,15 +180,30 @@ public class WebSocketController extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+
+        var token = session.getUri().getPath().replace("/ws/", "");
+        var username = tokenService.validateToken(token);
+        if (username == "") {
+            session.close(CloseStatus.BAD_DATA.withReason("Invalid auth token."));
+            return;
+        }
+
+        session.getAttributes().put("username", username);
         activeSessions.put(session.getId(), session);
-        log.info("User Connected: {}", session.getId());
+        log.info("User connected: {} ({})", username, session.getId());
         super.afterConnectionEstablished(session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String sessionId = session.getId();
-        log.info("User Disconnected: {}", sessionId);
+
+        if (status.getReason() == null) {
+            log.info("User disconnected: {}", sessionId);
+        } else {
+            log.info("User disconnected: {} ({})", status.getReason(), sessionId);
+        }
+
         activeSessions.remove(sessionId);
         dungeonService.leaveDungeon(session);
         super.afterConnectionClosed(session, status);
