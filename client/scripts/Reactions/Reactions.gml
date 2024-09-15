@@ -5,4 +5,5 @@ function create_guest_reaction() {
 	global.server.guest_password = struct_get(_res, "password");
 	global.server.user_logged = true;
 	global.server.is_user_guest = true;
+	websocket_connect()
 }

@@ -6,7 +6,7 @@ ip = "localhost";
 port = "8081";
 global.url = "http://" + ip + ":" + port;
 global.user_token = "";
-socket = network_create_socket(network_socket_ws);
+socket = -1
 user_logged = false;
 username = "";
 dungeon_code = "";
@@ -25,7 +25,6 @@ function send_websocket_message(_type, _data) {
 	
 	var _message = ds_map_create();
 	ds_map_add(_message, "messageType", _type);
-	ds_map_add(_message, "token", global.user_token);
 	ds_map_add(_message, "data", _data);
 
 	buffer_write(Buffer , buffer_text  , json_encode(_message));
@@ -45,7 +44,9 @@ function send_chat_message(_type, _text) {
 }
 
 websocket_connect = function () {
-	network_connect_raw_async(socket, ip + "/ws", port);
+	if (socket != -1) websocket_disconnect()
+	socket = network_create_socket(network_socket_ws);
+	network_connect_raw_async(socket, ip + "/ws/" + global.user_token, port);
 }
 
 websocket_disconnect = function () {
@@ -57,7 +58,7 @@ websocket_disconnect = function () {
 		user_register = http_request(_url, "POST", _header, global.server.username);
 		ds_map_destroy(_header);
 	}
-	network_destroy(socket);	
+	network_destroy(socket);
 }
 
 set_url = function(_ip, _port) {
@@ -67,4 +68,14 @@ set_url = function(_ip, _port) {
 	global.url = "http://" + ip + ":" + port;
 }
 
-websocket_connect();
+function login_guest() {
+	global.loading = true;
+	var _url = global.url + "/user/guest";
+	var _header = ds_map_create();
+	
+	ds_map_add(_header, "Content-Type", "application/json");
+	requests[0].id = http_request(_url, "POST", _header, "");
+	ds_map_destroy(_header);
+}
+
+login_guest()
