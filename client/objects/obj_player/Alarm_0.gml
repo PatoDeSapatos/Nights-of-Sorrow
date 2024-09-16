@@ -1,3 +1,5 @@
+if (player_username != global.server.username) return
+
 var _data = {};
 var _entity_data = {
 	x: round(x),
