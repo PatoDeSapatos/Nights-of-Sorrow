@@ -63,13 +63,13 @@ if ( player_username == global.server.username ) {
 	var xgap = (_x - x)
 	var ygap = (_y - y)
 
-	if (abs(xgap) < 0.1) {
+	if (abs(xgap) < 0.05) {
 		x = _x
 	} else {
 		x += min(spd, xgap / 3)
 	}
 
-	if (abs(ygap) < 0.1) {
+	if (abs(ygap) < 0.05) {
 		y = _y
 	} else {
 		y += min(spd, ygap / 3)
