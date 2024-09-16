@@ -57,4 +57,9 @@ if ( player_username == global.server.username ) {
 			sprites[array_length(sprites)-1].image = -1;	
 		}
 	}
+} else {
+	if (x == _x && y == _y) return;
+
+	x += (_x - x) / 3
+	y += (_y - y) / 3
 }

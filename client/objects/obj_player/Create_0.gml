@@ -88,8 +88,8 @@ state_player_free = function () {
 
 update_entity_values = function(_new_values, _username, _level) {
 	if (_username != global.server.username) {
-		x = struct_get(_new_values, "x");
-		y = struct_get(_new_values, "y");
+		_x = struct_get(_new_values, "x");
+		_y = struct_get(_new_values, "y");
 		sprites = struct_get(_new_values, "sprites");
 		sprite_index = struct_get(_new_values, "sprite_index");
 		image_index = struct_get(_new_values, "image_index");
