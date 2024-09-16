@@ -59,7 +59,19 @@ if ( player_username == global.server.username ) {
 	}
 } else {
 	if (x == _x && y == _y) return;
+	
+	var xgap = (_x - x)
+	var ygap = (_y - y)
 
-	x += (_x - x) / 3
-	y += (_y - y) / 3
+	if (abs(xgap) < 0.1) {
+		x = _x
+	} else {
+		x += min(spd, xgap / 3)
+	}
+
+	if (abs(ygap) < 0.1) {
+		y = _y
+	} else {
+		y += min(spd, ygap / 3)
+	}
 }
