@@ -5,6 +5,7 @@ function generate_map() {
 	map = generate_dungeon(, global.server.level)
 	review_dungeon()
 	cast_dungeon()
+	radar = instance_create_layer(0, 0, "Instances", obj_radar)
 
 	randomize()
 }

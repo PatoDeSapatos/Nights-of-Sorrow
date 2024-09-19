@@ -94,7 +94,7 @@ function cast_dungeon() {
 		}
 	}
 	surface_save(surface, working_directory + "mapa.png")
-	surface_free(surface);
+	obj_dungeon_manager.map.surf = surface
 	buffer_delete(_buffer);
 }
 
