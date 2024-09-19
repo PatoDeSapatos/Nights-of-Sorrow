@@ -1,4 +1,9 @@
 /// @description Insert description here
+if (instance_exists(obj_inventory) && obj_inventory.inventory_open) {
+	focus = false;
+	typing = false;
+}
+
 if ( message_box_hover ) {
 	window_set_cursor(cr_beam);
 	if (mouse_check_button_pressed(mb_left)) {
@@ -23,6 +28,7 @@ if ( point_in_rectangle(mouse_x, mouse_y, chat_x, chat_y, chat_x + width, chat_y
 } else {
 	if (alarm[0] <= 0) alarm[0] = 50;
 	if ( mouse_check_button_pressed(mb_any) ) {
+		global.pause = false;
 		typing = false;	
 	}
 }
@@ -49,7 +55,8 @@ if (focus) {
 	typing = false;
 }
 
-if ( keyboard_check_pressed(ord("O")) ) {
+if ( keyboard_check_pressed(ord("O")) && ( instance_exists(obj_inventory) && !obj_inventory.inventory_open ) ) {
+	global.pause = true;
 	typing = true;
 }
 

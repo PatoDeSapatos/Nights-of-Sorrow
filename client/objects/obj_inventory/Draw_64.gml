@@ -2,6 +2,12 @@
 if ( !inventory_open ) return;
 var _prev_item = selected_item;
 
+draw_set_color(c_black);
+draw_set_alpha(.7);
+draw_rectangle(0, 0, gui_w, gui_h, false);
+draw_set_color(c_white);
+draw_set_alpha(1);
+
 // Inventory Tabs
 var _tab_w = sprite_get_width(spr_inventory_tabs) * global.res_scale*2;
 var _tab_h = sprite_get_height(spr_inventory_tabs) * global.res_scale*2;
@@ -147,3 +153,5 @@ for (var i = 0; i < struct_names_count(player_equipment_status); ++i) {
 	
 	_current_y += status_h;
 }
+
+draw_set_color(c_white);

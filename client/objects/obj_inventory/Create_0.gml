@@ -23,7 +23,7 @@ enum ORDERS {
 	LENGTH
 }
 
-inventory_open = true;
+inventory_open = false;
 inventory_size = 64;
 
 // Menu Parameters

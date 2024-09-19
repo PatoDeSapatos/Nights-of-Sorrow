@@ -12,13 +12,15 @@ if ( player_username == global.server.username ) {
 		struct_set(struct_get(inputs, _key), "value", _active);
 	});
 
-	up = inputs.input_up.value;
-	down = inputs.input_down.value;
-	left = inputs.input_left.value;
-	right = inputs.input_right.value;
+	if (!global.pause) {
+		up = inputs.input_up.value;
+		down = inputs.input_down.value;
+		left = inputs.input_left.value;
+		right = inputs.input_right.value;
 
-	input_magnitude = (down - up != 0) || (right - left != 0);
-	input_direction = point_direction(0, 0, (right - left), (down - up));
+		input_magnitude = (down - up != 0) || (right - left != 0);
+		input_direction = point_direction(0, 0, (right - left), (down - up));
+	}
 
 	state();
 	

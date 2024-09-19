@@ -30,5 +30,7 @@ chat_x = 0;
 chat_y = 0 + display_get_gui_height() - height;
 
 receive_message = function(_message) {
+	focus = true;
+	alarm[0] = 60;
 	array_push(messages, _message);
 }

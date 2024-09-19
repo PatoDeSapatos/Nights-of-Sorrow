@@ -16,9 +16,9 @@ depth = 10
 global.server.send_websocket_message("DUNGEON_STATE", {invite: obj_server.dungeon_code});
 
 // Camera
-global.camera.camera_w = 640;
-global.camera.camera_h = 360;
-global.res_scale = 1280/global.camera.camera_w;
+//global.camera.camera_w = 640;
+//global.camera.camera_h = 360;
+//global.res_scale = 1280/global.camera.camera_w;
 
 // Dungeon Draw
 scale = 1
@@ -46,6 +46,7 @@ map = -1
 generate_map()
 
 instance_create_layer(0, 0, "Instances", obj_dungeon_chat)
+instance_create_layer(0, 0, "Instances", obj_inventory)
 
 update_entities = function (_data) {
 	var _entities = struct_get(_data, "entities");
