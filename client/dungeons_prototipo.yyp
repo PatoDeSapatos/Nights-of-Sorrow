@@ -105,6 +105,7 @@
     {"id":{"name":"obj_npc_test","path":"objects/obj_npc_test/obj_npc_test.yy",},},
     {"id":{"name":"obj_pathfinder","path":"objects/obj_pathfinder/obj_pathfinder.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
+    {"id":{"name":"obj_radar","path":"objects/obj_radar/obj_radar.yy",},},
     {"id":{"name":"obj_server","path":"objects/obj_server/obj_server.yy",},},
     {"id":{"name":"obj_waiting_room_menu","path":"objects/obj_waiting_room_menu/obj_waiting_room_menu.yy",},},
     {"id":{"name":"obj_wall","path":"objects/obj_wall/obj_wall.yy",},},
