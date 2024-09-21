@@ -55,7 +55,7 @@ if (focus) {
 	typing = false;
 }
 
-if ( keyboard_check_pressed(ord("O")) && ( instance_exists(obj_inventory) && !obj_inventory.inventory_open ) ) {
+if ( keyboard_check_pressed(ord("T")) && ( instance_exists(obj_inventory) && !obj_inventory.inventory_open ) ) {
 	global.pause = true;
 	typing = true;
 }

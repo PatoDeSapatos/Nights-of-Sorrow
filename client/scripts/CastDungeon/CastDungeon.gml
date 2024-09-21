@@ -113,10 +113,16 @@ function Tile(_spr, _coll, _stack=[], _z = 0) constructor {
 	function collide() {
 		for (var i = 0; i < array_length(stack_instances); ++i) {
 		    var _instance = stack_instances[i]
+			
+			var _parent = object_get_parent(_instance.object_index)
 
-			if (asset_get_index(object_get_name(object_get_parent(_instance.object_index))) != par_entity) return
+			if (_parent != par_entity && _parent != par_tile_entity) return;
 
-			if (_instance.coll && is_method(_instance.interaction)) _instance.interaction()
+			if (_instance.coll && is_method(_instance.coll_interaction)) _instance.coll_interaction()
 		}
+	}
+	
+	function get_stack_instance() {
+		return stack_instances[0]
 	}
 }

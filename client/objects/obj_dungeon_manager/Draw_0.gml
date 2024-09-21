@@ -34,6 +34,12 @@ for (var _y = _min_y; _y < _max_y; _y++) {
 				var _inst_x = tileToScreenX(_x, _y);
 				
 				var _instance = instance_create_depth(_inst_x, _inst_y, -(_inst_y - z/2), _stack);
+				
+				var _parent = object_get_parent(_stack)
+				if ((_parent == par_entity || _parent == par_tile_entity) && is_method(_instance.set_uid)) {
+					_instance.set_uid(_x, _y)
+				}
+				
 				array_push(tile.stack_instances, _instance)
 			}
 		}

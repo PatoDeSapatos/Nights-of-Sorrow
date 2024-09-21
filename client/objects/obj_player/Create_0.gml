@@ -98,7 +98,6 @@ update_entity_values = function(_new_values, _username, _level) {
 	} else {
 		if (_level != global.server.level) {
 			global.server.level = _level
-			surface_free(obj_dungeon_manager.map.surf)
 			room_restart()
 		}
 	}

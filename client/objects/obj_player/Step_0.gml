@@ -68,12 +68,12 @@ if ( player_username == global.server.username ) {
 	if (abs(xgap) < 0.05) {
 		x = _x
 	} else {
-		x += min(spd, xgap / 3)
+		x += xgap / 3
 	}
 
 	if (abs(ygap) < 0.05) {
 		y = _y
 	} else {
-		y += min(spd, ygap / 3)
+		y += ygap / 3
 	}
 }

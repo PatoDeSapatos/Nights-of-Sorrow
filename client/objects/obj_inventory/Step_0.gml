@@ -1,6 +1,7 @@
 /// @description
 if ( keyboard_check_pressed( ord("I") ) && !global.pause ) {
 	inventory_open = !inventory_open;
+	radar_open = false
 	if (global.pause) global.pause = false;
 }
 
@@ -14,7 +15,7 @@ if ( keyboard_check_pressed(ord("K")) ) {
 }
 
 // Slime
-if (keyboard_check_pressed(ord("M"))) {
+if (keyboard_check_pressed(ord("B"))) {
 	inventory_add_item(inventory, 0, 3);	
 }
 

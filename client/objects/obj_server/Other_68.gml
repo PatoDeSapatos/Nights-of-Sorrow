@@ -67,6 +67,15 @@ switch(async_load[? "type"]){
 					obj_dungeon_chat.receive_message(_data)
 				}
 				break
+			case "TILE_ENTITY":
+				var _id = struct_get(realData, "id");
+
+				if (_data != undefined) {
+					obj_dungeon_manager.set_tile_entity(_id, _data)
+				} else {
+					obj_dungeon_manager.gen_tile_entity(_id)
+				}
+				break
 		}
 		break
 	case network_type_disconnect:

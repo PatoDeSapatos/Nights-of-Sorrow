@@ -5,12 +5,13 @@ import com.patodesapatos.dungeons.domain.WebSocketDTO;
 
 public class TileEntityDTO extends WebSocketDTO {
 
-    public TileEntityDTO(TileEntity tileEntity) {
+    public TileEntityDTO(String id, TileEntity tileEntity) {
         super(MessageType.TILE_ENTITY, null);
+
+        packet.put("id", id);
 
         if (tileEntity != null) {
             packet.put("data", tileEntity.getData());
-            getData().put("id", tileEntity.getId());
         }
     }
 }
