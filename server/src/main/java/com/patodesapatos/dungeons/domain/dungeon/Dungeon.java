@@ -17,6 +17,7 @@ public class Dungeon {
     private String id;
     private ArrayList<Player> players;
     private ArrayList<Entity> entities;
+    private ArrayList<TileEntity> tileEntities;
     private int entitiesId;
     private String admUsername;
     private String invite;
@@ -120,5 +121,17 @@ public class Dungeon {
         long min = 0L;
         long max = 4294967295L; //max 32 bit unsigned int
         mapSeed = min + (long) (Math.random() * (max - min));
+    }
+
+    public TileEntity getTileEntityById(String id) {
+        for (int i = 0; i < tileEntities.size(); i++) {
+            var tileEntity = tileEntities.get(i);
+            if (tileEntity.getId().equals(id)) return tileEntity;
+        }
+        return null;
+    }
+
+    public void addTileEntity(TileEntity tileEntity) {
+        tileEntities.add(tileEntity);
     }
 }

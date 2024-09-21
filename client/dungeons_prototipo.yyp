@@ -68,7 +68,6 @@
     {"$GMIncludedFile":"","%Name":"rm_0_U_s.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_0_U_s.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"rm_1_U.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_1_U.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"rm_10_URDL.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_10_URDL.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"rm_11_UD.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_11_UD.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"rm_12_UD.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_12_UD.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"rm_13_UD.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_13_UD.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"rm_2_UR_s.png","CopyToMask":-1,"filePath":"datafiles/dungeon_rooms/source","name":"rm_2_UR_s.png","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -83,7 +82,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.8.1.171",
+    "IDEVersion":"2024.800.0.618",
   },
   "name":"dungeons_prototipo",
   "resources":[

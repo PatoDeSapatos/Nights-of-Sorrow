@@ -146,6 +146,27 @@ public class WebSocketController extends TextWebSocketHandler {
                 dto = dungeonService.leaveDungeon(data.getString("invite"), username);
                 if (dto != null) sendDTOtoAllPlayers(dto, data);
                 break;
+            /**
+             * data: {
+             *      invite,
+             *      tileEntId
+             * }
+             * return TileEntityDTO
+             */
+            case GET_TILE_ENTITY:
+                dto = dungeonService.getTileEntity(data);
+                sendDTO(dto, session);
+                break;
+            /**
+             * data: {
+             *      invite,
+             *      tileEntId,
+             *      data
+             * }
+             */
+            case ADD_TILE_ENTITY:
+                dungeonService.addTileEntity(data);
+                break;
             default:
                 throw new Exception("Message Type: '" + type + "' not accepted!");
         }

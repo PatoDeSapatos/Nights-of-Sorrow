@@ -37,6 +37,18 @@ public class DungeonService {
         return dungeon.toDTO(dungeon.updateEntity(data));
     }
 
+    public TileEntityDTO getTileEntity(JSONObject data) {
+        var dungeon = getDungeonByInvite(data.getString("invite"));
+        var tileEntity = dungeon.getTileEntityById(data.getString("tileEntId"));
+        return new TileEntityDTO(tileEntity);
+    }
+
+    public void addTileEntity(JSONObject data) {
+        var dungeon = getDungeonByInvite(data.getString("invite"));
+        var tileEntity = new TileEntity(data.getString("tileEntId"), data.getJSONObject("data"));
+        dungeon.addTileEntity(tileEntity);
+    }
+
 	public Dungeon joinDungeon(String invite, String username, WebSocketSession session) {
         var dungeon = getDungeonByInvite(invite);
         var user = userService.getUserByUsername(username);
