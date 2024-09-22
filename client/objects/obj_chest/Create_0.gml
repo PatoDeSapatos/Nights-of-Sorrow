@@ -23,7 +23,7 @@ gen_data = function() {
 	
 	for (var i = 0; i < slots; ++i) {
 	    if (irandom(99) < item_spawn) {
-			array_push(data.inventory, )
+			array_push(data.inventory, struct_get(global.items, irandom(struct_names_count(global.items))))
 		}
 	}
 }

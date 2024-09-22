@@ -1,5 +1,6 @@
 function generate_map() {
 	random_set_seed(global.server.mapSeed + global.server.level)
+	show_debug_message(global.server.mapSeed + global.server.level)
 
 	load_map_images();
 	map = generate_dungeon(, global.server.level)
@@ -102,4 +103,3 @@ function gen_tile_entity(_id) {
 }
 
 global.loading = false;
-show_debug_message(global.items)

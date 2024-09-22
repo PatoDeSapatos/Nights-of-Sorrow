@@ -33,7 +33,7 @@ camera_set_view_pos( view_camera[0], x - (camera_w*0.5), y - (camera_h*0.5) );
 camera_x = camera_get_view_x(view_camera[0]);
 camera_y = camera_get_view_y(view_camera[0]);
 
-if (keyboard_check(ord("V"))) {
+if (keyboard_check_pressed(ord("V"))) {
 	if (view_visible[1] == 0) {
 		view_visible[1] = 1
 		camera_set_view_size(view_camera[1], room_width, room_height)
