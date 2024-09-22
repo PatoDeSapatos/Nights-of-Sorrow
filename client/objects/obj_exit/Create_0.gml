@@ -1,6 +1,6 @@
 collided = false
 
-interaction = function () {
+coll_interaction = function () {
 	if (collided) return
 
 	global.server.send_websocket_message("CHANGE_LEVEL", {

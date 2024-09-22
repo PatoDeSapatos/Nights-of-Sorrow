@@ -12,8 +12,8 @@
     "path":"folders/Objetos/dungeon/entities/tile_entities.yy",
   },
   "parentObjectId":{
-    "name":"par_entity",
-    "path":"objects/par_entity/par_entity.yy",
+    "name":"par_tile_entity",
+    "path":"objects/par_tile_entity/par_tile_entity.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

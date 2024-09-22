@@ -39,8 +39,10 @@ public class DungeonService {
 
     public TileEntityDTO getTileEntity(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
-        var tileEntity = dungeon.getTileEntityById(data.getString("tileEntId"));
-        return new TileEntityDTO(tileEntity);
+        var tileEntId = data.getString("tileEntId");
+
+        var tileEntity = dungeon.getTileEntityById(tileEntId);
+        return new TileEntityDTO(tileEntId, tileEntity);
     }
 
     public void addTileEntity(JSONObject data) {
