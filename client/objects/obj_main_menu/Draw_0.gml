@@ -45,7 +45,7 @@ switch (page) {
 	case MAIN_MENU_PAGES.ENTER_DUNGEON:
 		if ( input_forward ) {
 			if ( option_selected == 0 ) {
-				menu_change_page(MAIN_MENU_PAGES.PUBLIC_DUNGEON);
+				load_public_dungeons();
 			} else if ( option_selected == 1 ) {
 				menu_change_page(MAIN_MENU_PAGES.PRIVATE_DUNGEON);
 			} else if ( option_selected == 2 ) {
@@ -104,20 +104,25 @@ switch (page) {
 		draw_text_input_page(enter_port_callback);
 		break;
 	case MAIN_MENU_PAGES.PUBLIC_DUNGEON:
-		global.loading = true;
-		
-		var _url = global.url + "/dungeon/public";
-		var _header = ds_map_create();
-	
-		ds_map_add(_header, "Content-Type", "application/json");
-		get_dungeons = http_request(_url, "GET", _header, "");
-		ds_map_destroy(_header);
-		
-		for (var i = 0; i < array_length(public_dungeons); ++i) {
-		    show_message(public_dungeons[i]);
+
+		if (option_selected < array_length(public_dungeons) && input_forward) {
+			var _data = {};
+			var _code = public_dungeons[option_selected].invite;
+			
+			struct_set(_data, "invite", _code);
+			global.server.dungeon_code = _code;
+			global.server.send_websocket_message("JOIN_DUNGEON", _data);		
 		}
 		
-		if (input_back) menu_change_page(MAIN_MENU_PAGES.PRINCIPAL);
+		if (page > 0 && (keyboard_check_pressed(vk_left) || keyboard_check_pressed(ord("A")))) {
+			page--;
+		}
+		
+		if ( page < pd_total_pages && (keyboard_check_pressed(vk_right) || keyboard_check_pressed(ord("D"))) ) {
+			page++;
+		}
+		
+		if (input_back || (option_selected == array_length(options[MAIN_MENU_PAGES.PUBLIC_DUNGEON])-1 && input_forward)) menu_change_page(MAIN_MENU_PAGES.PRINCIPAL);
 		break;
 	case MAIN_MENU_PAGES.PRIVATE_DUNGEON:
 		draw_text_input_page(enter_dungeon_with_code_callback);

@@ -17,6 +17,10 @@ input_forward = -1;
 input_back = -1;
 
 public_dungeons = [];
+pd_limit = 4;
+pd_total_pages = 0;
+pd_page = 0;
+pd_offset = 0;
 
 // Requests
 username_exists = -1;
@@ -66,7 +70,15 @@ function setup_options( _page ) {
 			options[MAIN_MENU_PAGES.LOGIN_PASSWORD] = ["Password:", "", "Send", "Cancel"];
 			break;
 		case MAIN_MENU_PAGES.PUBLIC_DUNGEON:
-			options[MAIN_MENU_PAGES.PUBLIC_DUNGEON] = ["Public Dungeons"];
+			options[MAIN_MENU_PAGES.PUBLIC_DUNGEON] = [];
+			if (array_length(public_dungeons) <= 0) options[MAIN_MENU_PAGES.PUBLIC_DUNGEON, 0] = "Empty Public Dungeons List"
+		
+			for (var i = 0; i < array_length(public_dungeons); ++i) {
+			    array_push( options[MAIN_MENU_PAGES.PUBLIC_DUNGEON], public_dungeons[i].adm );
+			}
+			
+			array_push(options[MAIN_MENU_PAGES.PUBLIC_DUNGEON], "Back");
+			
 			break;
 		case MAIN_MENU_PAGES.PRIVATE_DUNGEON: // Enter Private Dungeon
 			options[MAIN_MENU_PAGES.PRIVATE_DUNGEON] = ["Dungeon Code:", "", "Enter", "Cancel"];
@@ -89,6 +101,18 @@ function menu_change_page( _page ) {
 	page = _page;
 	setup = true;
 	setup_options(_page);
+}
+
+function load_public_dungeons() {
+	global.loading = true;
+		
+	var _url = global.url + "/dungeon/public?limit=" + string(pd_limit) + "&offset=" + string(pd_limit * pd_page);
+	var _header = ds_map_create();
+	
+	ds_map_add(_header, "Content-Type", "application/json");
+	get_dungeons = http_request(_url, "GET", _header, "");
+	ds_map_destroy(_header);
+	global.loading = false;
 }
 
 register_username_callback = function(_username) {

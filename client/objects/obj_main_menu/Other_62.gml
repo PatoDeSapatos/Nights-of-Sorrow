@@ -39,6 +39,9 @@ switch( async_load[? "id"] ) {
 	case get_dungeons:
 		if ( async_load[? "status"] == 0 ) {
 			var _data = json_parse(async_load[? "result"]);
+			public_dungeons = _data.dungeons;
+			pd_total_pages = ceil( _data.count / pd_limit );
+			menu_change_page(MAIN_MENU_PAGES.PUBLIC_DUNGEON);
 		}
 		break;
 }
