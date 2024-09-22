@@ -31,6 +31,7 @@ public class Dungeon {
         this.isPublic = false;
         generateMapSeed();
 
+        this.tileEntities = new ArrayList<>();
         this.entities = new ArrayList<>();
         this.entitiesId = 0;
         this.players = new ArrayList<>();
@@ -132,6 +133,6 @@ public class Dungeon {
     }
 
     public void addTileEntity(TileEntity tileEntity) {
-        tileEntities.add(tileEntity);
+        if (getTileEntityById(tileEntity.getId()) == null) tileEntities.add(tileEntity);
     }
 }

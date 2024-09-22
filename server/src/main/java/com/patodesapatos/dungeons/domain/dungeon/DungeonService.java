@@ -34,6 +34,7 @@ public class DungeonService {
 
     public DungeonDTO updateEntity(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
+        if (dungeon == null) return null;
         return dungeon.toDTO(dungeon.updateEntity(data));
     }
 

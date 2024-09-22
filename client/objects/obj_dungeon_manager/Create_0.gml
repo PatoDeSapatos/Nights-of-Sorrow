@@ -81,7 +81,7 @@ update_entities = function (_data) {
 
 function set_tile_entity(_id, _data) {
 	var decoded_id = decode_tile_entity_id(_id)
-	var tile_entity = map.grid[# decoded_id.x, decoded_id.y].get_stack_instance()
+	var tile_entity = grid[# decoded_id.x, decoded_id.y].get_stack_instance()
 	tile_entity.set_data(_data)
 }
 
@@ -89,7 +89,7 @@ function gen_tile_entity(_id) {
 	random_set_seed(global.server.mapSeed + global.server.level)
 
 	var decoded_id = decode_tile_entity_id(_id)
-	var tile_entity = map.grid[# decoded_id.x, decoded_id.y].get_stack_instance()
+	var tile_entity = grid[# decoded_id.x, decoded_id.y].get_stack_instance()
 	tile_entity.gen_data()
 
 	var _data = {
@@ -97,7 +97,7 @@ function gen_tile_entity(_id) {
 		tileEntId: _id,
 		data: tile_entity.data
 	}
-	global.server.send_websocket_message("SET_TILE_ENTITY", _data)
+	global.server.send_websocket_message("ADD_TILE_ENTITY", _data)
 
 	randomize()
 }

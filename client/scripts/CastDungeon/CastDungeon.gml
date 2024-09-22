@@ -55,7 +55,7 @@ function cast_dungeon() {
 					}
 					break
 				//Chest
-				case 12517120:
+				case 16711833:
 					tile = new Tile(1, true)
 					
 					var _chest_spawn = irandom(99) < _type_table.chest_spawn;

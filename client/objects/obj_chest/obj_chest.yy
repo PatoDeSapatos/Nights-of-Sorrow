@@ -37,7 +37,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_dungeon_tileset",
+    "path":"sprites/spr_dungeon_tileset/spr_dungeon_tileset.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }
