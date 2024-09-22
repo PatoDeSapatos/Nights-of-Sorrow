@@ -1,13 +1,12 @@
 package com.patodesapatos.dungeons.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
@@ -30,21 +29,15 @@ public class DungeonController {
     }
 
     @GetMapping("public")
-    public ResponseEntity<ArrayList<PublicDTO>> getAllPublic() {
-        return ResponseEntity.ok(dungeonService.getAllPublic());
-    }
-
-    @GetMapping("public?limit={limit}&offset={offset}")
-    public ResponseEntity<PublicOffsetDTO> getPublicOffset(@PathVariable int limit, @PathVariable int offset) {
+    public ResponseEntity<PublicOffsetDTO> getPublicOffset(@RequestParam int limit, @RequestParam int offset) {
         ArrayList<PublicDTO> dungeons = dungeonService.getAllPublic();
 
         if (offset + limit >= dungeons.size()) {
-            limit = dungeons.size()-1;
-        } 
+            limit = dungeons.size() - offset;
+        }
 
         PublicOffsetDTO dto = new PublicOffsetDTO(dungeons.subList(offset, offset + limit), dungeons.size());
 
         return ResponseEntity.ok(dto);
     }
-
 }
