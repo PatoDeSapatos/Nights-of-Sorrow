@@ -1,6 +1,5 @@
 function generate_map() {
 	random_set_seed(global.server.mapSeed + global.server.level)
-	show_debug_message(global.server.mapSeed + global.server.level)
 
 	load_map_images();
 	map = generate_dungeon(, global.server.level)
