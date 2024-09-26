@@ -6,8 +6,6 @@ function generate_map() {
 	review_dungeon()
 	cast_dungeon()
 	radar = instance_create_layer(0, 0, "Instances", obj_radar)
-
-	randomize()
 }
 
 global.loading = true;
@@ -85,8 +83,6 @@ function set_tile_entity(_id, _data) {
 }
 
 function gen_tile_entity(_id) {
-	random_set_seed(global.server.mapSeed + global.server.level)
-
 	var decoded_id = decode_tile_entity_id(_id)
 	var tile_entity = grid[# decoded_id.x, decoded_id.y].get_stack_instance()
 	tile_entity.gen_data()
@@ -97,8 +93,6 @@ function gen_tile_entity(_id) {
 		data: tile_entity.data
 	}
 	global.server.send_websocket_message("ADD_TILE_ENTITY", _data)
-
-	randomize()
 }
 
 global.loading = false;
