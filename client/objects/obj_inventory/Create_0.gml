@@ -86,6 +86,7 @@ for (var i = 0; i < array_length(orders); ++i) {
 box_delay = 0;
 
 // Inventory Tabs
+has_tabs = true;
 tabs_y = [];
 tabs_x = items_box_x + items_box_w;
 var _current_tab_y = items_box_title_y + items_box_title_h + items_box_border/4;;
@@ -259,7 +260,7 @@ recipes = [];
 recipe_ingredients = [];
 
 // Equipment Box
-
+has_equipment_box = true;
 equipment_box_x = border;
 equipment_box_y = border;
 equipment_box_x2 = items_box_x - border;
@@ -287,6 +288,4 @@ status_w = equipment_box_w/(ceil( struct_names_count(player_equipment_status)/st
 status_h = (equipment_box_h*0.40)/status_rows;
 
 // Item desc box
-
-
 inventory_add_recipe(recipes, 0);

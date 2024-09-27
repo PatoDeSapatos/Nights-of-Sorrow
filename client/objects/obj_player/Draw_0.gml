@@ -37,3 +37,11 @@ draw_text(
 );
 draw_set_valign(fa_top);
 draw_set_halign(fa_left);
+
+if (!global.pause) {
+	var _looking_tile;
+
+	if (facing_up && facing_right) {
+		
+	}
+}

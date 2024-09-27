@@ -83,13 +83,14 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.800.0.618",
+    "IDEVersion":"2024.8.1.171",
   },
   "name":"dungeons_prototipo",
   "resources":[
     {"id":{"name":"fnt_chat","path":"fonts/fnt_chat/fnt_chat.yy",},},
     {"id":{"name":"Network","path":"notes/Network/Network.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
+    {"id":{"name":"obj_chest_inventory","path":"objects/obj_chest_inventory/obj_chest_inventory.yy",},},
     {"id":{"name":"obj_chest","path":"objects/obj_chest/obj_chest.yy",},},
     {"id":{"name":"obj_dungeon_chat","path":"objects/obj_dungeon_chat/obj_dungeon_chat.yy",},},
     {"id":{"name":"obj_dungeon_enemy","path":"objects/obj_dungeon_enemy/obj_dungeon_enemy.yy",},},
@@ -104,6 +105,7 @@
     {"id":{"name":"obj_menu_button","path":"objects/obj_menu_button/obj_menu_button.yy",},},
     {"id":{"name":"obj_npc_test","path":"objects/obj_npc_test/obj_npc_test.yy",},},
     {"id":{"name":"obj_pathfinder","path":"objects/obj_pathfinder/obj_pathfinder.yy",},},
+    {"id":{"name":"obj_player_inventory","path":"objects/obj_player_inventory/obj_player_inventory.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
     {"id":{"name":"obj_radar","path":"objects/obj_radar/obj_radar.yy",},},
     {"id":{"name":"obj_server","path":"objects/obj_server/obj_server.yy",},},
