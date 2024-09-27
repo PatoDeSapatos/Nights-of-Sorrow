@@ -90,31 +90,34 @@ function get_item_id_by_name(_item_name) {
 }
 
 function draw_items(_inventory, _is_recipe) {
-	// Order Tab
-	draw_sprite_ext(spr_inventory_order, 0, tabs_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
+	if (has_tabs) {
+		// Order Tab
+		draw_sprite_ext(spr_inventory_order, 0, tabs_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
 	
-	// Order
-	if ( mouse_l ) {
-		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, items_box_title_y, tabs_x + sprite_get_width(spr_inventory_order)*global.res_scale*2, items_box_title_y + items_box_title_h )) {
-			focus = FOCUS.ORDER;
-		}
-	}
-	
-	// Items Categories
-	var _categories_space = sprite_get_width(spr_items_categories)*global.res_scale*2.5 + items_box_border/4
-	var _categories_w = items_box_border + _categories_space*ItemCategory.LENGTH;
-	for (var i = 0; i < ItemCategory.LENGTH; ++i) {
-		var _icon_w = sprite_get_width(spr_items_categories)*global.res_scale*2.5;
-		var _icon_h = sprite_get_height(spr_items_categories)*global.res_scale*2.5;
-		var _icon_x = items_box_x + items_box_w/2 - _categories_w/4 + _categories_space*i;
-		var _icon_y = (items_box_category_h + items_box_border)/2;
-	
-		if ((focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, _icon_x - _icon_w/2, _icon_y - _icon_h/2, _icon_x + _icon_w/2, _icon_y + _icon_h/2)) {
-			selected_category = i;
+		// Order
+		if ( mouse_l ) {
+			if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, items_box_title_y, tabs_x + sprite_get_width(spr_inventory_order)*global.res_scale*2, items_box_title_y + items_box_title_h )) {
+				focus = FOCUS.ORDER;
+			}
 		}
 	
-		var _alpha = selected_category == i ? (1) : (.5);
-	    draw_sprite_ext(spr_items_categories, i, _icon_x, _icon_y, global.res_scale*2.5, global.res_scale*2.5, 0, c_white, _alpha);
+
+		// Items Categories
+		var _categories_space = sprite_get_width(spr_items_categories)*global.res_scale*2.5 + items_box_border/4
+		var _categories_w = items_box_border + _categories_space*ItemCategory.LENGTH;
+		for (var i = 0; i < ItemCategory.LENGTH; ++i) {
+			var _icon_w = sprite_get_width(spr_items_categories)*global.res_scale*2.5;
+			var _icon_h = sprite_get_height(spr_items_categories)*global.res_scale*2.5;
+			var _icon_x = items_box_x + items_box_w/2 - _categories_w/4 + _categories_space*i;
+			var _icon_y = (items_box_category_h + items_box_border)/2;
+	
+			if ((focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, _icon_x - _icon_w/2, _icon_y - _icon_h/2, _icon_x + _icon_w/2, _icon_y + _icon_h/2)) {
+				selected_category = i;
+			}
+	
+			var _alpha = selected_category == i ? (1) : (.5);
+		    draw_sprite_ext(spr_items_categories, i, _icon_x, _icon_y, global.res_scale*2.5, global.res_scale*2.5, 0, c_white, _alpha);
+		}
 	}
 
 	// Items Title

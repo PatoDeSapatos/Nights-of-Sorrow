@@ -19,7 +19,10 @@ if ( player_username == global.server.username ) {
 		right = inputs.input_right.value;
 
 		input_magnitude = (down - up != 0) || (right - left != 0);
-		input_direction = point_direction(0, 0, (right - left), (down - up));
+		
+		if (input_magnitude) {
+			input_direction = point_direction(0, 0, (right - left), (down - up));
+		}
 	}
 
 	state();

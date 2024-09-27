@@ -1,6 +1,6 @@
 /// @description
-if ( keyboard_check_pressed( ord("I") ) && !global.pause ) {
-	inventory_open = !inventory_open;
+if ( keyboard_check_pressed( ord("I") ) ) {
+	self.inventory_open = !self.inventory_open;
 	radar_open = false
 	if (global.pause) global.pause = false;
 }
