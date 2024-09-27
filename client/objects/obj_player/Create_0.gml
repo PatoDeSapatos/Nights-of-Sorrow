@@ -95,6 +95,7 @@ update_entity_values = function(_new_values, _username, _level) {
 		image_index = struct_get(_new_values, "image_index");
 		facing_right = struct_get(_new_values, "facing_right");
 		facing_up = struct_get(_new_values, "facing_up");
+		level = _level
 	} else {
 		if (_level != global.server.level) {
 			global.server.level = _level

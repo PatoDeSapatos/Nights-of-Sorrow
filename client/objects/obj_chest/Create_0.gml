@@ -36,7 +36,7 @@ set_data = function(_data) {
 }
 
 show_gui = function() {
-	//if (gui_open) return;
+	if (gui_open) return;
 	show_debug_message(data)
 	gui_open = true
 }
