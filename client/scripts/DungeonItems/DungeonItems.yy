@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"DungeonTypes",
+  "%Name":"DungeonItems",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DungeonTypes",
+  "name":"DungeonItems",
   "parent":{
     "name":"tables",
     "path":"folders/Scripts/Dungeon/map/tables.yy",

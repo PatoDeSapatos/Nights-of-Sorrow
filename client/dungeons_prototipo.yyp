@@ -36,6 +36,7 @@
     {"$GMFolder":"","%Name":"Inventory","folderPath":"folders/Scripts/Dungeon/Inventory.yy","name":"Inventory","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Items","folderPath":"folders/Scripts/Dungeon/Items.yy","name":"Items","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"map","folderPath":"folders/Scripts/Dungeon/map.yy","name":"map","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"tables","folderPath":"folders/Scripts/Dungeon/map/tables.yy","name":"tables","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"player","folderPath":"folders/Scripts/Dungeon/player.yy","name":"player","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Server","folderPath":"folders/Scripts/Server.yy","name":"Server","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Sequências","folderPath":"folders/Sequências.yy","name":"Sequências","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -83,7 +84,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.8.1.171",
+    "IDEVersion":"2024.1100.0.710",
   },
   "name":"dungeons_prototipo",
   "resources":[
@@ -125,6 +126,7 @@
     {"id":{"name":"DungeonEnemies","path":"scripts/DungeonEnemies/DungeonEnemies.yy",},},
     {"id":{"name":"DungeonEnemiesStates","path":"scripts/DungeonEnemiesStates/DungeonEnemiesStates.yy",},},
     {"id":{"name":"DungeonGenerator","path":"scripts/DungeonGenerator/DungeonGenerator.yy",},},
+    {"id":{"name":"DungeonItems","path":"scripts/DungeonItems/DungeonItems.yy",},},
     {"id":{"name":"DungeonReviewer","path":"scripts/DungeonReviewer/DungeonReviewer.yy",},},
     {"id":{"name":"DungeonTypes","path":"scripts/DungeonTypes/DungeonTypes.yy",},},
     {"id":{"name":"GameItems","path":"scripts/GameItems/GameItems.yy",},},
