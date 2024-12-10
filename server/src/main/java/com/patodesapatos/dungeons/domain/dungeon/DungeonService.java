@@ -38,6 +38,18 @@ public class DungeonService {
         return dungeon.toDTO(dungeon.updateEntity(data));
     }
 
+    public InventoryDTO getInventory(JSONObject data) {
+        var dungeon = getDungeonByInvite(data.getString("invite"));
+        var entity = dungeon.getEntityById(data.getInt("entityId"));
+        return new InventoryDTO(entity);
+    }
+
+    public void updateInventory(JSONObject data) {
+        var dungeon = getDungeonByInvite(data.getString("invite"));
+        var entity = dungeon.getEntityById(data.getInt("entityId"));
+        entity.setInventory(data.getJSONArray("inventory"));
+    }
+
     public TileEntityDTO getTileEntity(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
         var tileEntId = data.getString("tileEntId");

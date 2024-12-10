@@ -16,5 +16,9 @@ public enum MessageType {
 
     TILE_ENTITY,
     GET_TILE_ENTITY,
-    ADD_TILE_ENTITY
+    ADD_TILE_ENTITY,
+
+    INVENTORY,
+    UPDATE_INVENTORY,
+    GET_INVENTORY
 }
