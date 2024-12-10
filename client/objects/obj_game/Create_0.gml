@@ -7,6 +7,7 @@ global.can_zoom = false;
 global.enemies = ds_map_create();
 global.items = {};
 global.recipes = {};
+global.player_inventory = noone;
 init_items();
 init_recipes();
 init_enemies();
@@ -19,4 +20,4 @@ global.controls = {
 }
 
 randomize();
-room_goto(rm_main_menu);
+room_goto(rm_test);

@@ -433,6 +433,8 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 	var _excess = 0;
 	
 	for (var i = 0; i < array_length(_inventory) ; ++i) {
+		if (_inventory[i] == undefined) continue;
+		
 	    if ( _inventory[i].id == _item_id ) {
 			var _final_quantity = _inventory[i].quantity + _quantity;
 			
@@ -470,12 +472,12 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 		}
 	}
 
-	create_inventory_operation(_item_id, _quantity, "Added");
+	if (global.player_inventory == self) create_inventory_operation(_item_id, _quantity, "Added");
 	update_inventory();
 }
 
 function inventory_remove_item( _inventory, _item_id, _quantity ) {
-	create_inventory_operation(_item_id, _quantity, "Removed");
+	if (global.player_inventory == self) create_inventory_operation(_item_id, _quantity, "Removed");
 	
 	for (var i = 0; i < array_length(_inventory); ++i) {
 		var _item = _inventory[i];
@@ -508,13 +510,16 @@ function inventory_remove_item( _inventory, _item_id, _quantity ) {
 function inventory_merge_items(_inventory) {
 	for (var i = 0; i < array_length(_inventory); ++i) {
 	    var _item = _inventory[i];
+		if (_item == undefined) continue;
+		
 		var _max_stack = get_item_by_id(_item.id).max_stack;
 		var _quantity = _item.quantity;
 		if ( _item.quantity >= _max_stack ) continue;
 		
 		for (var j = 0; j < array_length(_inventory); ++j) {
-		    if (i == j) continue;
-			var _checking_stack = _inventory[j];
+		    var _checking_stack = _inventory[j];
+			if ((i == j) || (_checking_stack == undefined || _item == undefined)) continue
+			
 			if ( _checking_stack.id == _item.id && _checking_stack.quantity < _max_stack ) {
 				var _space = get_item_by_id(_checking_stack.id).max_stack - _checking_stack.quantity;
 				_checking_stack.quantity += _space;
@@ -529,12 +534,38 @@ function inventory_merge_items(_inventory) {
 	}	
 }
 
+function inventory_transfer_item(_source, _dest, _item_id, _quantity) {
+	var _itens_in_source = get_item_quantity_in_inventory(_source, _item_id);
+	
+	if (_itens_in_source <= 0) return;
+
+	if (_itens_in_source < _quantity) {
+		_quantity = _itens_in_source;
+	}
+
+	inventory_add_item(_dest, _item_id, _quantity);
+	inventory_remove_item(_source, _item_id, _quantity);
+}
+
+function get_item_quantity_in_inventory(_inventory, _item_id) {
+	var _quantity = 0;
+	
+	for (var i = 0; i < array_length(_inventory); ++i) {
+		if (_inventory[i].id == _item_id) {
+			_quantity = _inventory[i].quantity;		
+		}
+	}
+	
+	return _quantity;
+}
+
 function inventory_add_recipe(_recipes_index, _recipe_id) {
 	array_push(_recipes_index, new Recipe_Stack( _recipe_id ));
 	update_inventory();
 }
 
 function inventory_craft_recipe(_recipes_index, _recipe) {
+	show_message(instance_number(obj_chest_inventory))
 	if ( !_recipe.craftable ) return;
 	
 	var _recipe_data = get_recipe_by_id(_recipe.id);
@@ -552,14 +583,16 @@ function inventory_craft_recipe_all(_recipes_index, _recipe) {
 }
 
 function update_inventory() {
-	array_foreach(recipes, function(_value, _index) {
-		var _recipe = get_recipe_by_id(_value.id);
-		_value.craftable = _recipe.can_craft(inventory);
-	});
+	if (variable_instance_exists(self, "recipes")) {
+		array_foreach(recipes, function(_value, _index) {
+			var _recipe = get_recipe_by_id(_value.id);
+			_value.craftable = _recipe.can_craft(inventory);
+		});
 	
-	for (var i = 0; i < array_length(recipe_ingredients); ++i) {
-	    for (var j = 0; j < array_length(recipe_ingredients[i]); ++j) {
-		    recipe_ingredients[i, j].update_quantity(inventory);
+		for (var i = 0; i < array_length(recipe_ingredients); ++i) {
+		    for (var j = 0; j < array_length(recipe_ingredients[i]); ++j) {
+			    recipe_ingredients[i, j].update_quantity(inventory);
+			}
 		}
 	}
 	
