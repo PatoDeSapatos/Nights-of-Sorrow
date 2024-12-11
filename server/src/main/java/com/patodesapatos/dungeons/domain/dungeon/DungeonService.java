@@ -9,6 +9,11 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.patodesapatos.dungeons.domain.Storage;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.DungeonDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.InventoryDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.PublicDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.TileEntityDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.WaitingDTO;
 import com.patodesapatos.dungeons.domain.user.UserService;
 
 @Service

@@ -1,7 +1,8 @@
-package com.patodesapatos.dungeons.domain.dungeon;
+package com.patodesapatos.dungeons.domain.dungeon.dto;
 
 import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
+import com.patodesapatos.dungeons.domain.dungeon.Entity;
 
 public class InventoryDTO extends WebSocketDTO {
     
