@@ -167,6 +167,27 @@ public class WebSocketController extends TextWebSocketHandler {
             case ADD_TILE_ENTITY:
                 dungeonService.addTileEntity(data);
                 break;
+            /**
+             * data: {
+             *      invite,
+             *      entityId,
+             *      inventory: Item[]
+             * }
+             */
+            case UPDATE_INVENTORY:
+                dungeonService.updateInventory(data);
+                break;
+            /**
+             * data: {
+             *      invite,
+             *      entityId
+             * }
+             * return: InventoryDTO
+             */
+            case GET_INVENTORY:
+                dto = dungeonService.getInventory(data);
+                sendDTO(dto, session);
+                break;
             default:
                 throw new Exception("Message Type: '" + type + "' not accepted!");
         }

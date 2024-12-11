@@ -1,5 +1,6 @@
 package com.patodesapatos.dungeons.domain.dungeon;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import lombok.Data;
@@ -11,6 +12,7 @@ public class Entity implements Cloneable {
     private String username;
     private int level;
     private JSONObject data;
+    private JSONArray inventory;
 
     public Entity(Player player, int dungeonEntitiesId) {
         id = dungeonEntitiesId;
@@ -23,6 +25,7 @@ public class Entity implements Cloneable {
         try {
             var dto = (Entity) clone();
             dto.setUserId(null);
+            dto.setInventory(null);
             return dto;
         } catch (Exception e) {
             System.err.println("Entity clone not supported.");
