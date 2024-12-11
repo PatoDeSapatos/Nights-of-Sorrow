@@ -3,7 +3,7 @@ enum dungeon_types {
 	COUNT
 }
 
-function get_dungeon_type_table(_type, _level) {
+function get_dungeon_table(_type, _level) {
 
 	var spawnables = [
 		[spawns.MERCADOR, 0.5]

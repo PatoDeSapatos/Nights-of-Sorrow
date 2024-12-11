@@ -27,7 +27,7 @@ function cast_dungeon() {
 	var _buffer = buffer_create(4 * surface_get_width(surface) * surface_get_height(surface), buffer_fixed, 1);
 	buffer_get_surface(_buffer, surface, 0);
 	
-	var _type_table = obj_dungeon_manager.map.dungeon_type_table
+	var _type_table = obj_dungeon_manager.map.dungeon_table
 	
 	for (var _y = 0; _y < surface_get_height(surface); ++_y) {
 		for (var _x = 0; _x < surface_get_width(surface); ++_x) {

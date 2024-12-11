@@ -80,7 +80,7 @@ function get_item_id_by_name(_item_name) {
 	var _item_ids = struct_get_names(global.items);
 	for (var i = 0; i < array_length(_item_ids); ++i) {
 		var _item = struct_get( global.items, _item_ids[i]);
-	    if (  _item.name == _item_name ) {
+	    if ( _item.name == _item_name ) {
 			_item_id = _item_ids[i]
 			break;
 		}
@@ -597,6 +597,15 @@ function update_inventory() {
 	}
 	
 	inventory_merge_items(inventory);
+
+	if (self == global.player_inventory) {
+		var _data = {
+			invite: global.server.dungeon_code,
+			entityId: obj_dungeon_manager.player_entity_id,
+			inventory
+		}
+		global.server.send_websocket_message("UPDATE_INVENTORY", _data)
+	}
 }
 
 function inventory_update_status(_inventory, _equipped_items, _status) {

@@ -6,15 +6,13 @@ import com.patodesapatos.dungeons.domain.dungeon.Entity;
 
 public class InventoryDTO extends WebSocketDTO {
     
-    public InventoryDTO(Entity entity) {
+    public InventoryDTO(int id, Entity entity) {
         super(MessageType.INVENTORY, null);
 
-        if (entity != null) {
-            packet.put("id", entity.getId());
+        packet.put("id", id);
 
-            if (entity.getInventory() != null) {
-                packet.put("data", entity.getInventory());
-            }
+        if (entity != null) {
+            packet.put("data", entity.getInventory());
         }
     }
 }

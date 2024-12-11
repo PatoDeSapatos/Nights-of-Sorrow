@@ -45,14 +45,21 @@ public class DungeonService {
 
     public InventoryDTO getInventory(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
-        var entity = dungeon.getEntityById(data.getInt("entityId"));
-        return new InventoryDTO(entity);
+        if (dungeon == null) return null; //TODO: investigar
+
+        var entityId = data.getInt("entityId");
+
+        var entity = dungeon.getEntityById(entityId);
+        return new InventoryDTO(entityId, entity);
     }
 
     public void updateInventory(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
         var entity = dungeon.getEntityById(data.getInt("entityId"));
-        entity.setInventory(data.getJSONArray("inventory"));
+
+        if (entity != null) {//TODO: investigar
+            entity.setInventory(data.getJSONArray("inventory"));
+        }
     }
 
     public TileEntityDTO getTileEntity(JSONObject data) {
