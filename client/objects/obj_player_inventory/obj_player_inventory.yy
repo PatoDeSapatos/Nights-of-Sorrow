@@ -1,7 +1,10 @@
 {
   "$GMObject":"",
   "%Name":"obj_player_inventory",
-  "eventList":[],
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
   "managed":true,
   "name":"obj_player_inventory",
   "overriddenProperties":[],
@@ -9,7 +12,10 @@
     "name":"inventory",
     "path":"folders/Objetos/dungeon/inventory.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_inventory",
+    "path":"objects/obj_inventory/obj_inventory.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

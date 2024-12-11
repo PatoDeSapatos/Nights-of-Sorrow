@@ -36,6 +36,7 @@
     {"name":"customizables","order":7,"path":"folders/Sprites/player/customizables.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"fnt_inventory_title","order":1,"path":"fonts/fnt_inventory_title/fnt_inventory_title.yy",},
     {"name":"obj_chest_inventory","order":9,"path":"objects/obj_chest_inventory/obj_chest_inventory.yy",},
     {"name":"obj_dungeon_chat","order":6,"path":"objects/obj_dungeon_chat/obj_dungeon_chat.yy",},
     {"name":"obj_dungeon_manager","order":4,"path":"objects/obj_dungeon_manager/obj_dungeon_manager.yy",},

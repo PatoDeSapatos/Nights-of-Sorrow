@@ -1,4 +1,5 @@
 /// @description
+
 enum TABS {
 	ITEMS,
 	CRAFTING,
@@ -144,7 +145,7 @@ bag_item_options = {
 		} )
 	},
 	equipment: {
-		options: ["Equip", "Discard", "Discard All", "Cancel"],
+		options: ["Equip/Unnequip", "Discard", "Discard All", "Cancel"],
 		action: new Item_Action( function(_selected_option) {
 			switch (_selected_option) {
 				case 0:
@@ -202,7 +203,7 @@ bag_item_options = {
 
 // Item options
 item_option_selected = 0;
-item_option_x = items_box_x + items_box_border;
+item_option_x = items_box_x + items_box_border*1.5;
 mouse_hover_option = false;
 
 // Item Quantity Panel

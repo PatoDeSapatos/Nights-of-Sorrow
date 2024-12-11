@@ -83,11 +83,12 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.8.1.171",
+    "IDEVersion":"2024.6.2.162",
   },
   "name":"dungeons_prototipo",
   "resources":[
     {"id":{"name":"fnt_chat","path":"fonts/fnt_chat/fnt_chat.yy",},},
+    {"id":{"name":"fnt_inventory_title","path":"fonts/fnt_inventory_title/fnt_inventory_title.yy",},},
     {"id":{"name":"Network","path":"notes/Network/Network.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
     {"id":{"name":"obj_chest_inventory","path":"objects/obj_chest_inventory/obj_chest_inventory.yy",},},
