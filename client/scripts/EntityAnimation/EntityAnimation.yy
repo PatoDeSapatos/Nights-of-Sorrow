@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Transition",
+  "%Name":"EntityAnimation",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Transition",
+  "name":"EntityAnimation",
   "parent":{
-    "name":"Camera",
-    "path":"folders/Scripts/Camera.yy",
+    "name":"entities",
+    "path":"folders/Scripts/Dungeon/entities.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

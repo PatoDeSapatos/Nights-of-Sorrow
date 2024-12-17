@@ -7,6 +7,10 @@ if ( follow != noone && instance_exists(follow) ) {
 	y = lerp(y, target_y, camera_delay);
 }
 
+if (state != noone) {
+	state();	
+}
+
 if ( global.can_zoom ) { 
 	var _wheel = mouse_wheel_down() - mouse_wheel_up();
 	

@@ -6,7 +6,7 @@
   "name":"DungeonEnemiesStates",
   "parent":{
     "name":"enemies",
-    "path":"folders/Scripts/Dungeon/enemies.yy",
+    "path":"folders/Scripts/Dungeon/entities/enemies.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

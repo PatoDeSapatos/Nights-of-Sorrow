@@ -12,7 +12,7 @@ function Cell(_x, _y, _g, _prev, _solid) constructor {
 	}
 }
 
-function get_shortest_path(_grid, _x1, _y1, _x2, _y2, _range) {
+function get_shortest_path(_grid, _x1, _y1, _x2, _y2, _range=0) {
 	var _start = new Cell(_x1, _y1, 0, -1,false);
 	var _end = new Cell(_x2, _y2, 0, -1, false);
 	var _grid_copy = [];
