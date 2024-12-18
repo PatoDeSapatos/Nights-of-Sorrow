@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnemiesUiLibrary",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnemiesUiLibrary",
+  "parent":{
+    "name":"enemies",
+    "path":"folders/Scripts/Dungeon/entities/enemies.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

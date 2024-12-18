@@ -30,8 +30,12 @@ init_y = obj_camera.camera_y + obj_camera.camera_h/2 - grid_h/2;
 
 
 // Combat Variables
+state = battle_state_init;
+
 units = [];
 player_units = [];
+queued_allies = [];
+queued_enemies = [];
 turns = 0;
 rounds = 0;
 
