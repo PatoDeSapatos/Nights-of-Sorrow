@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 
+import com.patodesapatos.dungeons.domain.battle.Battle;
 import com.patodesapatos.dungeons.domain.dungeon.dto.DungeonDTO;
 import com.patodesapatos.dungeons.domain.dungeon.dto.WaitingDTO;
 
@@ -19,9 +20,11 @@ import lombok.Data;
 public class Dungeon {
     private String id;
     private ArrayList<Player> players;
-    private ArrayList<Entity> entities;
     private ArrayList<TileEntity> tileEntities;
+    private ArrayList<Entity> entities;
     private int entitiesId;
+    private ArrayList<Battle> battles;
+    private int battlesId;
     private String admUsername;
     private String invite;
     private boolean isPublic;
@@ -34,6 +37,8 @@ public class Dungeon {
         this.isPublic = false;
         generateMapSeed();
 
+        this.battles = new ArrayList<>();
+        this.battlesId = 0;
         this.tileEntities = new ArrayList<>();
         this.entities = new ArrayList<>();
         this.entitiesId = 0;
@@ -136,6 +141,22 @@ public class Dungeon {
     }
 
     public void addTileEntity(TileEntity tileEntity) {
-        if (getTileEntityById(tileEntity.getId()) == null) tileEntities.add(tileEntity);
+        if (!tileEntities.contains(tileEntity)) tileEntities.add(tileEntity);
+    }
+
+    public Battle getBattleById(int id) {
+        for (int i = 0; i < battles.size(); i++) {
+            var battle = battles.get(i);
+            if (battle.getId() == id) return battle;
+        }
+        return null;
+    }
+
+    public void createBattle(Entity[] entities) {
+        for (Entity entity : entities) {
+            if (entity.getBattleId() != -1) return;
+        }
+
+        battles.add(new Battle(++battlesId, entities));
     }
 }
