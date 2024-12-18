@@ -5,10 +5,10 @@ function generate_dungeon(_dungeon_type = -1, _level = 1) {
 		_dungeon_type = irandom(dungeon_types.COUNT - 1)
 	}
 	
-	var _dungeon_type_table = get_dungeon_type_table(_dungeon_type, _level)
+	var _dungeon_table = get_dungeon_table(_dungeon_type, _level)
     var ambient = {
-		dungeon_type_table: _dungeon_type_table,
-        roomsAmount: _dungeon_type_table.rooms_amount,
+		dungeon_table: _dungeon_table,
+        roomsAmount: _dungeon_table.rooms_amount,
 		offsets: [
 	        new Point(0, -1), //top
 	        new Point(0, 1), //bottom

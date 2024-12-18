@@ -34,6 +34,7 @@ start_x = room_width / 2
 start_y = room_height / 4
 selected = -1
 player_bottom = -1
+player_entity_id = -1
 
 ds_grid_set_region(grid, 0, 0, width, height, undefined)
 
@@ -45,7 +46,7 @@ map = -1
 generate_map()
 
 instance_create_layer(0, 0, "Instances", obj_dungeon_chat)
-instance_create_layer(0, 0, "Instances", obj_inventory)
+instance_create_layer(0, 0, "Instances", obj_player_inventory)
 
 update_entities = function (_data) {
 	var _entities = struct_get(_data, "entities");
@@ -74,7 +75,13 @@ update_entities = function (_data) {
 			_entity.entity_id = _entity_id;
 			ds_map_set(entities, _entity_id, _entity);
 			if ( global.server.username == _username ) {
-				global.camera.follow = _entity;	
+				player_entity_id = _entity_id
+				global.camera.follow = _entity
+
+				global.server.send_websocket_message("GET_INVENTORY", {
+					invite: global.server.dungeon_code,
+					entityId: player_entity_id
+				})
 			}
 		}
 	}
@@ -97,6 +104,16 @@ function gen_tile_entity(_id) {
 		data: tile_entity.data
 	}
 	global.server.send_websocket_message("ADD_TILE_ENTITY", _data)
+}
+
+function set_inventory(_id, _data) {
+	if (player_entity_id == _id) {
+		global.player_inventory.inventory = _data
+	}
+}
+
+function create_inventory(_id) {
+	//TODO
 }
 
 function check_level() {

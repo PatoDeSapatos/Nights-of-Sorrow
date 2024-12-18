@@ -1,4 +1,6 @@
-package com.patodesapatos.dungeons.domain.dungeon;
+package com.patodesapatos.dungeons.domain.dungeon.dto;
+
+import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
 
 public class PublicDTO {
     public final String adm;

@@ -6,6 +6,9 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 
+import com.patodesapatos.dungeons.domain.dungeon.dto.DungeonDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.WaitingDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
