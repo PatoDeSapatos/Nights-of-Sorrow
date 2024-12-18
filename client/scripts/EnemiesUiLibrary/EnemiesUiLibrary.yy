@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Transition",
+  "%Name":"EnemiesUiLibrary",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Transition",
+  "name":"EnemiesUiLibrary",
   "parent":{
-    "name":"Camera",
-    "path":"folders/Scripts/Camera.yy",
+    "name":"enemies",
+    "path":"folders/Scripts/Dungeon/entities/enemies.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

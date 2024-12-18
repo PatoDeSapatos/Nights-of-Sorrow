@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Transition",
+  "%Name":"PathFindingArray",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Transition",
+  "name":"PathFindingArray",
   "parent":{
-    "name":"Camera",
-    "path":"folders/Scripts/Camera.yy",
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

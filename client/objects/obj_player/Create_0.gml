@@ -4,25 +4,14 @@ function Input(_key_name) constructor {
 	key_name = _key_name;
 }
 
-function Sprite(_sprite, _image) constructor {
-	sprite = _sprite;
-	image = _image;
-}
-
 idle_frames = 4;
 current_image = 0;
 animation_spd = 5;
 
-sprites = [
-	new Sprite(spr_hair, 0),
-	new Sprite(spr_head_acessories, 0),
-	new Sprite(spr_hand_acessories, 0),
-	new Sprite(spr_hats, 0),
-];
+sprites = new SpriteSet(0, 0, 0, 0, 0);
 head_sprites = [spr_hair, spr_head_acessories, spr_hats];
 facing_right = 1;
 facing_up = false;
-clothing = 0;
 
 state = -1;
 hspd = -1;

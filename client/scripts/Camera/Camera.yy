@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Transition",
+  "%Name":"Camera",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Transition",
+  "name":"Camera",
   "parent":{
     "name":"Camera",
     "path":"folders/Scripts/Camera.yy",

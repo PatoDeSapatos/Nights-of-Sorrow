@@ -11,3 +11,19 @@ if (instance_exists(obj_wall)) {
 } else if (keyboard_check_pressed(ord("X"))) {
 	instance_activate_object(obj_wall);	
 }
+
+if (keyboard_check_pressed(ord("E")) && !instance_exists(obj_battle_manager)) {
+	init_demo_battle(8);
+}
+
+if (keyboard_check_pressed(ord("Z"))) {
+	camera_zoom(20);
+}
+
+if (keyboard_check_pressed(ord("X"))) {
+	camera_zoom(20, false);
+}
+
+if (keyboard_check_pressed(ord("C"))) {
+	camera_zoom_reset();
+}

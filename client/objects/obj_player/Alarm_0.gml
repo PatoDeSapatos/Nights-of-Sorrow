@@ -1,3 +1,5 @@
+/// @desc updating entity in server
+
 if (player_username != global.server.username) return
 
 var _data = {};

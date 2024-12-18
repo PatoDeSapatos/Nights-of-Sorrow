@@ -11,7 +11,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"player",
-    "path":"folders/Objetos/dungeon/player.yy",
+    "path":"folders/Objetos/dungeon/entities/player.yy",
   },
   "parentObjectId":null,
   "persistent":false,

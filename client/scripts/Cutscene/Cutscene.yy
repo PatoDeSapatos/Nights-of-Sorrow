@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Transition",
+  "%Name":"Cutscene",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Transition",
+  "name":"Cutscene",
   "parent":{
-    "name":"Camera",
-    "path":"folders/Scripts/Camera.yy",
+    "name":"battle",
+    "path":"folders/Scripts/Dungeon/battle.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
