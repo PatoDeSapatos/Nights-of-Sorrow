@@ -34,162 +34,20 @@ public class WebSocketController extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String jsonString = message.getPayload();
-        JSONObject packet = new JSONObject(jsonString);
+        var jsonString = message.getPayload();
+        var packet = new JSONObject(jsonString);
 
-        MessageType type = MessageType.valueOf(packet.getString("messageType"));
-        JSONObject data = packet.getJSONObject("data");
+        var type = MessageType.valueOf(packet.getString("messageType"));
+        var data = packet.getJSONObject("data");
+        var isBattle = packet.has("isBattle") && packet.getBoolean("isBattle");
 
         var username = (String) session.getAttributes().get("username");
         if (username == null || username.isEmpty()) return;
 
-        WebSocketDTO dto;
-        switch (type) {
-            case PING:
-                session.sendMessage(new TextMessage("Pong!"));
-                break;
-            /**
-             * return: WaitingDTO
-             */
-            case CREATE_DUNGEON:
-                dto = dungeonService.createDungeon(username, session);
-                sendDTO(dto, session);
-                break;
-            /**
-             * data: {
-             *      invite,
-             * }
-             * return: WaitingDTO to everyone if the dungeon isn't started | DungeonDTO to everyone if dungeon is started UNLESS the joining player
-             */
-            case JOIN_DUNGEON:
-                var dungeon = dungeonService.joinDungeon(data.getString("invite"), username, session);
-                if (!dungeon.isStarted()) {
-                    sendDTOtoAllPlayers(dungeon.toWaitingDTO(), data);
-                } else {
-                    sendDTO(dungeon.toWaitingDTO(), session);
-                    sendDTOtoAllPlayers(dungeon.toDTO(), data, session.getId());
-                }
-                break;
-            /**
-             * data: {
-             *      invite
-             * }
-             * return: DungeonDTO
-             */
-            case DUNGEON_STATE:
-                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
-                var entity = dungeon.getEntityByUsername(username);
-
-                dto = dungeon.toDTO(entity);
-                sendDTO(dto, session);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      entityId,
-             *      data: {
-             *          ...EntityData
-             *      }
-             * }
-             * return: DungeonDTO
-             */
-            case UPDATE_ENTITY:
-                dto = dungeonService.updateEntity(data);
-                sendDTO(dto, session);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      type,
-             *      content
-             * }
-             * return: ChatMessage
-             */
-            case SEND_CHAT_MESSAGE:
-                data.put("sender", username);
-                sendChat(data);
-                break;
-            /**
-             * data: {
-             *      invite
-             * }
-             */
-            case SET_PLAYER_READY:
-                dto = dungeonService.setPlayerReady(data.getString("invite"), username);
-                sendDTOtoAllPlayers(dto, data);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      entityId,
-             *      level
-             * }
-             */
-            case CHANGE_LEVEL:
-                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
-
-                entity = dungeon.getEntityById(data.getInt("entityId"));
-                entity.setLevel(data.getInt("level"));
-
-                dto = dungeon.toDTO(entity);
-                sendDTO(dto, session);
-                break;
-            case GET_WAITING_STATE:
-                dto = dungeonService.getDungeonByInvite(data.getString("invite")).toWaitingDTO();
-                sendDTO(dto, session);
-                break;
-            case CHANGE_DUNGEON_PRIVACY:
-                dto = dungeonService.changeDungeonPrivacy(data.getString("invite"), username);
-                sendDTOtoAllPlayers(dto, data);
-                break;
-            case LEAVE_DUNGEON:
-                dto = dungeonService.leaveDungeon(data.getString("invite"), username);
-                if (dto != null) sendDTOtoAllPlayers(dto, data);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      tileEntId
-             * }
-             * return TileEntityDTO
-             */
-            case GET_TILE_ENTITY:
-                dto = dungeonService.getTileEntity(data);
-                sendDTO(dto, session);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      tileEntId,
-             *      data
-             * }
-             */
-            case ADD_TILE_ENTITY:
-                dungeonService.addTileEntity(data);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      entityId,
-             *      inventory: Item[]
-             * }
-             */
-            case UPDATE_INVENTORY:
-                dungeonService.updateInventory(data);
-                break;
-            /**
-             * data: {
-             *      invite,
-             *      entityId
-             * }
-             * return: InventoryDTO
-             */
-            case GET_INVENTORY:
-                dto = dungeonService.getInventory(data);
-                sendDTO(dto, session);
-                break;
-            default:
-                throw new Exception("Message Type: '" + type + "' not accepted!");
+        if (!isBattle) {
+            DungeonWSHandler.handle(this, session, username, type, data);
+        } else {
+            BattleWSHandler.handle(this, session, username, type, data);
         }
     }
 
