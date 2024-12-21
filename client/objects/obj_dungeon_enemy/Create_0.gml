@@ -12,5 +12,5 @@ _target_y = -1;
 spd = 2;
 moving = false;
 
-sprite_index = dungeon_stats.idle_spr;
+sprite_index = dungeon_stats.sprites.idle;
 state = dungeon_stats.init_state;

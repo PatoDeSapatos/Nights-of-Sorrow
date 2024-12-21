@@ -17,6 +17,8 @@ facing_right = 1;
 facing_up = false;
 clothing = 0;
 
+is_broken = false;
+
 ready = false;
 
 z = obj_battle_manager.tile_size/4;

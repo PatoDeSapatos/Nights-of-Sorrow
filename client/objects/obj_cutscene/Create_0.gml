@@ -2,6 +2,7 @@
 
 // Pre defined variables
 // cutscene = [];
+setup = false;
 
 action = 0;
 timer = 0;
@@ -14,4 +15,4 @@ cutscene_skip = false;
 cutscene_skip_percentage = 0;
 cutscene_skip_rate = .02;
 
-depth = -10000
+depth = -10000;

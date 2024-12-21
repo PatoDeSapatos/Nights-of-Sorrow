@@ -14,6 +14,7 @@ if (!is_array(allies) || !is_array(enemies) || !is_array(grid)) {
 
 // Visual Variables
 scale = 2;
+cursor_in_range = false;
 animating = false;
 path = [];
 mouse_hover = {
@@ -28,16 +29,37 @@ grid_h = (array_length(grid)/2)*tile_size;
 init_x = obj_camera.camera_x + obj_camera.camera_w/2;
 init_y = obj_camera.camera_y + obj_camera.camera_h/2 - grid_h/2;
 
+// inputs
+r_click = false;
+l_click = false;
+confirm_input = false;
 
 // Combat Variables
 state = battle_state_init;
 
+action_done = false;
+player_turn = false;
 units = [];
 player_units = [];
 queued_allies = [];
 queued_enemies = [];
 turns = 0;
 rounds = 0;
+
+targeted_tiles = [];
+
+unit_hover = noone;
+
+movement_actions = 0;
+main_actions = 0;
+special_actions = 0;
+
+extra_action = false;
+extra_turn_user = noone;
+extra_turn_given = false;
+
+waiting_frames = 30;
+current_waiting_frames = 0;
 
 depth = 1000;
 
@@ -54,7 +76,6 @@ for (var i = 0; i < array_length(allies); ++i) {
 	array_push(units, _unit);
 	
 	if (_allie.is_player) {
-		obj_camera.follow = _unit;
 		array_push(player_units, _unit);
 	}
 }

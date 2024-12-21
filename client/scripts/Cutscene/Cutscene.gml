@@ -3,6 +3,7 @@ function action_end() {
 		action++;
 		timer = 0;
 		image = 0;
+		setup = false;
 		if (action >= array_length(cutscene)) {
 			if (instance_exists(obj_battle_manager)) obj_battle_manager.animating = false;
 			instance_destroy();
@@ -66,4 +67,45 @@ function cutscene_move_character(_id, _x, _y, _relative, _spd) {
 			action_end();
 		}	
 	}
+}
+
+function cutscene_use_action(_user, _action, _targets) {
+	if (!setup && !is_undefined(_action.userAnimation) && !is_undefined( _user.unit.sprites[$ _action.userAnimation] ) ) {
+		image = _user.sprite_index;
+		_user.sprite_index = _user.unit.sprites[$ _action[$ "userAnimation"]];
+		_user.image_index = 0;
+		setup = true;
+	}
+	
+	var _frames = (_user.object_index == obj_party_unit) ? _user.idle_frames-1 : sprite_get_number(_user.sprite_index)-1;
+	
+	if (_user.image_index >= _frames) {
+		if (!is_undefined(_action.hit_effect)) {
+			for (var i = 0; i < array_length(_targets); ++i) {
+			    var _target = _targets[i];
+				var _effect = instance_create_depth(_target.x, _target.y, _target.depth-1, obj_battle_effect);
+				_effect.sprite_index = _action.hit_effect;
+			}
+		}
+
+		_action.func(_user, _targets);
+		_user.sprite_index = image;
+		_user.image_index = 0;
+		action_end();
+	}
+}
+
+function cutscene_animate_once(_id, _sprite_index) {
+	if (!setup) {
+		image = _id.sprite_index;
+		_id.sprite_index = _sprite_index;
+		_id.image_index = 0;
+		setup = true;
+	}
+	
+	if (_id.image_index >= sprite_get_number(_sprite_index)-1) {
+		_id.sprite_index = image;
+		action_end();
+	}
+	
 }

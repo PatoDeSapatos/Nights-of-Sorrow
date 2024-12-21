@@ -13,11 +13,11 @@ if (instance_exists(obj_wall)) {
 }
 
 if (keyboard_check_pressed(ord("E")) && !instance_exists(obj_battle_manager)) {
-	init_demo_battle(8);
+	init_demo_battle(20);
 }
 
 if (keyboard_check_pressed(ord("Z"))) {
-	camera_zoom(20);
+	camera_zoom(30);
 }
 
 if (keyboard_check_pressed(ord("X"))) {

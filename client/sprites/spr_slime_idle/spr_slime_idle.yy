@@ -26,8 +26,8 @@
   "nineSlice":null,
   "origin":4,
   "parent":{
-    "name":"enemies",
-    "path":"folders/Sprites/dungeon/enemies.yy",
+    "name":"slime",
+    "path":"folders/Sprites/dungeon/enemies/slime.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

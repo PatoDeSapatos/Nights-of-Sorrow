@@ -1,10 +1,17 @@
-function Enemy(_status, _idle_spr, _walking_spr, _init_state, _movement, _actions, _battle_script) constructor {
+function Enemy(_status, _idle_spr, _walking_spr, _attack_spr, _hurt_spr, _init_state, _movement, _actions, _attack_types, _weakness, _resistences, _battle_script) constructor {
 	status = _status;
-	idle_spr = _idle_spr;
-	walking_spr = _walking_spr;
+	sprites = {
+		idle: _idle_spr,
+		walking: _walking_spr,
+		attack: _attack_spr,
+		hurt: _hurt_spr
+	}
 	init_state = _init_state;
 	movement = _movement;
 	actions = _actions;
+	attack_types = _attack_types;
+	weakness = _weakness;
+	resistences = _resistences;
 	battle_script = _battle_script;
 }
 
@@ -32,9 +39,14 @@ function init_enemies() {
 		new Status(10, 3, 5, 2, 0, 2, 0),
 		spr_slime_idle,
 		spr_slime_idle,
+		spr_slime_attack,
+		spr_slime_hurt,
 		enemy_chase_idle,
 		6,
 		[global.actions.attack],
+		[MOVE_TYPES.BLUDGEONING],
+		[MOVE_TYPES.FIRE],
+		[MOVE_TYPES.SLASHING],
 		global.enemy_ui.simple
 	));
 }
