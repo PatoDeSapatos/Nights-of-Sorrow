@@ -1,4 +1,4 @@
-package com.patodesapatos.dungeons.domain.dungeon;
+package com.patodesapatos.dungeons.domain.dungeon.dto;
 
 import java.util.List;
 

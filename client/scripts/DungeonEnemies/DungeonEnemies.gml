@@ -27,6 +27,7 @@ function instantiate_enemy(_x, _y, _id) {
 	var _enemy = get_enemy(_id);
 	
 	if (!is_undefined(_enemy)) {
+        
 		instance_create_layer(_x, _y, "Instances", obj_dungeon_enemy, {
 			dungeon_stats: _enemy
 		});

@@ -29,7 +29,7 @@ function assure() {
 	}
 
 	var _spawn_rooms_length = array_length(spawn_rooms())
-	var _spawnables_length = array_length(map.dungeon_type_table.spawnables) + 2 //+ end and init rooms
+	var _spawnables_length = array_length(map.dungeon_table.spawnables) + 2 //+ end and init rooms
 
 	if (_spawn_rooms_length < _spawnables_length) {
 		var _nodes = get_nodes(["s"], true)
@@ -68,7 +68,7 @@ function generate_end_pos() {
 }
 
 function generate_spawnables() {
-	var _spawnables = map.dungeon_type_table.spawnables
+	var _spawnables = map.dungeon_table.spawnables
 	
 	for (var i = 0; i < array_length(_spawnables); ++i) {
 		var _spwnbl = _spawnables[i]

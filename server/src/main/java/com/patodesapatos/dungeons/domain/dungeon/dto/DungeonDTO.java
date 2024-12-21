@@ -1,9 +1,11 @@
-package com.patodesapatos.dungeons.domain.dungeon;
+package com.patodesapatos.dungeons.domain.dungeon.dto;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
 
 import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
+import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
+import com.patodesapatos.dungeons.domain.dungeon.Entity;
 
 public class DungeonDTO extends WebSocketDTO {
     private Dungeon dungeon;
@@ -17,14 +19,14 @@ public class DungeonDTO extends WebSocketDTO {
             level = reqEntity.getLevel();
         }
 
-        var parsedEntities = new ArrayList<Entity>();
+        var parsedEntities = new JSONArray();
         for (int i = 0; i < dungeon.getEntities().size(); i++) {
             var entity = dungeon.getEntities().get(i);
             var player = dungeon.getPlayerByUsername(entity.getUsername());
 
             if (player != null && player.isOnline()) {
                 if (level > -1 && entity.getLevel() != level) continue;
-                parsedEntities.add(entity.toDTO());
+                parsedEntities.put(entity.toDTO());
             }
         }
         getData().put("entities", parsedEntities);

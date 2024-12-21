@@ -76,6 +76,15 @@ switch(async_load[? "type"]){
 					obj_dungeon_manager.gen_tile_entity(_id)
 				}
 				break
+			case "INVENTORY":
+				var _id = struct_get(realData, "id");
+				
+				if (_data != undefined) {
+					obj_dungeon_manager.set_inventory(_id, _data)
+				} else {
+					obj_dungeon_manager.create_inventory(_id)
+				}
+				break
 		}
 		break
 	case network_type_disconnect:

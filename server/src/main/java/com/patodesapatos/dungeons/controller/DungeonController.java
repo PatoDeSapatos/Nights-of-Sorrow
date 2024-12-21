@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
-import com.patodesapatos.dungeons.domain.dungeon.PublicDTO;
-import com.patodesapatos.dungeons.domain.dungeon.PublicOffsetDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.PublicDTO;
+import com.patodesapatos.dungeons.domain.dungeon.dto.PublicOffsetDTO;
 
 import lombok.extern.slf4j.Slf4j;
 

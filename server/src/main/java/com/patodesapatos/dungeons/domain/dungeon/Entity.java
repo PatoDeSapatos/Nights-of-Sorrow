@@ -2,6 +2,7 @@ package com.patodesapatos.dungeons.domain.dungeon;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONPropertyIgnore;
 
 import lombok.Data;
 
@@ -21,15 +22,18 @@ public class Entity implements Cloneable {
         level = 1;
     }
 
-    public Entity toDTO() {
-        try {
-            var dto = (Entity) clone();
-            dto.setUserId(null);
-            dto.setInventory(null);
-            return dto;
-        } catch (Exception e) {
-            System.err.println("Entity clone not supported.");
-            return null;
-        }
+    public JSONObject toDTO() {
+        var dto = new JSONObject(this);
+        return dto;
+    }
+
+    @JSONPropertyIgnore
+    public String getUserId() {
+        return userId;
+    }
+
+    @JSONPropertyIgnore
+    public JSONArray getInventory() {
+        return inventory;
     }
 }

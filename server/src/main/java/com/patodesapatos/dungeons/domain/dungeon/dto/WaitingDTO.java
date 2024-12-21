@@ -1,9 +1,11 @@
-package com.patodesapatos.dungeons.domain.dungeon;
+package com.patodesapatos.dungeons.domain.dungeon.dto;
 
 import java.util.ArrayList;
 
 import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
+import com.patodesapatos.dungeons.domain.dungeon.Dungeon;
+import com.patodesapatos.dungeons.domain.dungeon.Player;
 
 import lombok.Getter;
 import lombok.Setter;

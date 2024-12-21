@@ -35,7 +35,7 @@ view_set_camera(0, camera);
 target_zoom = -1;
 zoom_rate = 0.5;
 
-global.res_scale = 1280/camera_w;
-window_set_size(RES_W * global.res_scale, RES_H * global.res_scale)
-surface_resize(application_surface, RES_W * global.res_scale, RES_H * global.res_scale);
-display_set_gui_size(RES_W * global.res_scale, RES_H * global.res_scale)
+GLOBAL_RES_SCALE = 1280/camera_w;
+window_set_size(RES_W * GLOBAL_RES_SCALE, RES_H * GLOBAL_RES_SCALE)
+surface_resize(application_surface, RES_W * GLOBAL_RES_SCALE, RES_H * GLOBAL_RES_SCALE);
+display_set_gui_size(RES_W * GLOBAL_RES_SCALE, RES_H * GLOBAL_RES_SCALE)

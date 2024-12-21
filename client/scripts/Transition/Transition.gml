@@ -55,8 +55,8 @@ function set_camera_default() {
 }
 
 function transition_circle_in() {
-	var _w = RES_W*global.res_scale;
-	var _h = RES_H*global.res_scale;
+	var _w = RES_W*GLOBAL_RES_SCALE;
+	var _h = RES_H*GLOBAL_RES_SCALE;
 	
 	if ( !surface_exists( transition_surface ) ) {
 		transition_surface = surface_create( _w, _h );	
@@ -79,8 +79,8 @@ function transition_circle_in() {
 }
 
 function transition_circle_out() {
-	var _w = RES_W*global.res_scale;
-	var _h = RES_H*global.res_scale;
+	var _w = RES_W*GLOBAL_RES_SCALE;
+	var _h = RES_H*GLOBAL_RES_SCALE;
 	
 	if ( !surface_exists( transition_surface ) ) {
 		transition_surface = surface_create( _w, _h );	
@@ -104,8 +104,8 @@ function transition_circle_out() {
 }
 
 function transition_fade_in() {
-	var _w = RES_W*global.res_scale;
-	var _h = RES_H*global.res_scale;
+	var _w = RES_W*GLOBAL_RES_SCALE;
+	var _h = RES_H*GLOBAL_RES_SCALE;
 	
 	draw_set_alpha(transition_progress);
 	draw_set_color(c_black);
@@ -119,8 +119,8 @@ function transition_fade_in() {
 }
 
 function transition_fade_out() {
-	var _w = RES_W*global.res_scale;
-	var _h = RES_H*global.res_scale;	
+	var _w = RES_W*GLOBAL_RES_SCALE;
+	var _h = RES_H*GLOBAL_RES_SCALE;	
 	
 	draw_set_alpha(1 - transition_progress);
 	draw_set_color(c_black);
@@ -134,8 +134,8 @@ function transition_fade_out() {
 }
 
 function transition_await() {
-	var _w = RES_W*global.res_scale;
-	var _h = RES_H*global.res_scale;
+	var _w = RES_W*GLOBAL_RES_SCALE;
+	var _h = RES_H*GLOBAL_RES_SCALE;
 	
 	draw_set_color(c_black);
 	draw_rectangle(0, 0, _w, _h, false);
