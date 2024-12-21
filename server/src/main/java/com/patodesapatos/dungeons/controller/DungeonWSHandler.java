@@ -24,7 +24,7 @@ public class DungeonWSHandler {
                 break;
             /**
              * data: {
-             *      invite,
+             *      invite
              * }
              * return: WaitingDTO to everyone if the dungeon isn't started | DungeonDTO to everyone if dungeon is started UNLESS the joining player
              */

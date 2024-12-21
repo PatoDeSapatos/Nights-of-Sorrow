@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.patodesapatos.dungeons.domain.battle.Battle;
+import com.patodesapatos.dungeons.domain.battle.dto.BattleStartDTO;
 import com.patodesapatos.dungeons.domain.dungeon.dto.DungeonDTO;
 import com.patodesapatos.dungeons.domain.dungeon.dto.WaitingDTO;
 
@@ -152,11 +154,24 @@ public class Dungeon {
         return null;
     }
 
-    public void createBattle(Entity[] entities) {
-        for (Entity entity : entities) {
-            if (entity.getBattleId() != -1) return;
+    public BattleStartDTO createBattle(JSONObject room, ArrayList<Player> players, JSONArray units, JSONArray eUnits) {
+        for (var player : players) {
+            if (player.getBattleId() != -1) return null;
         }
 
-        battles.add(new Battle(++battlesId, entities));
+        var battle = new Battle(++battlesId, room, players, units, eUnits);
+        battles.add(battle);
+        return battle.toStartDTO();
+    }
+
+    public void endBattle(int id) {
+        var battle = getBattleById(id);
+
+        var players = battle.getPlayers();
+        for (var player : players) {
+            player.setBattleId(-1);
+        }
+
+        battles.remove(battle);
     }
 }

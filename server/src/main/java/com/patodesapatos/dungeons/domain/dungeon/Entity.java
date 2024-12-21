@@ -14,19 +14,16 @@ public class Entity implements Cloneable {
     private int level;
     private JSONObject data;
     private JSONArray inventory;
-    private int battleId;
 
     public Entity(Player player, int dungeonEntitiesId) {
         id = dungeonEntitiesId;
         userId = player.getUserId();
         username = player.getUsername();
         level = 1;
-        battleId = -1;
     }
 
     public JSONObject toDTO() {
         var dto = new JSONObject(this);
-        if (battleId == -1) dto.remove("battleId");
         return dto;
     }
 
