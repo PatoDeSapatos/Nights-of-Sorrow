@@ -1,9 +1,10 @@
-package com.patodesapatos.dungeons.controller;
+package com.patodesapatos.dungeons.controller.websocket;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
 

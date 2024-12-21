@@ -1,4 +1,4 @@
-package com.patodesapatos.dungeons.controller;
+package com.patodesapatos.dungeons.controller.websocket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
 import com.patodesapatos.dungeons.domain.user.UserService;
+import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
 import com.patodesapatos.dungeons.domain.auth.TokenService;
 import com.patodesapatos.dungeons.domain.chat.ChatMessage;
