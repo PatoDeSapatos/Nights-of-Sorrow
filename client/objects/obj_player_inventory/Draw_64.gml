@@ -16,14 +16,14 @@ if (instance_number(obj_inventory) <= 1) {
 
 // Inventory Tabs
 if (has_tabs) {
-	var _tab_w = sprite_get_width(spr_inventory_tabs) * global.res_scale*2;
-	var _tab_h = sprite_get_height(spr_inventory_tabs) * global.res_scale*2;
+	var _tab_w = sprite_get_width(spr_inventory_tabs) * GLOBAL_RES_SCALE*2;
+	var _tab_h = sprite_get_height(spr_inventory_tabs) * GLOBAL_RES_SCALE*2;
 
 	for (var i = sprite_get_number(spr_inventory_tabs) - 1; i >= 0; --i) {
 		if ( i == selected_tab ) continue;
-		draw_sprite_ext(spr_inventory_tabs, i, tabs_x, tabs_y[i], global.res_scale*2, global.res_scale*2, 0, c_white, 1);
+		draw_sprite_ext(spr_inventory_tabs, i, tabs_x, tabs_y[i], GLOBAL_RES_SCALE*2, GLOBAL_RES_SCALE*2, 0, c_white, 1);
 	
-		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, tabs_y[i] + global.res_scale*6, tabs_x + _tab_w, tabs_y[i] + _tab_h - global.res_scale*3) ) {
+		if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && mouse_l && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, tabs_y[i] + GLOBAL_RES_SCALE*6, tabs_x + _tab_w, tabs_y[i] + _tab_h - GLOBAL_RES_SCALE*3) ) {
 			focus = FOCUS.LIST;
 			items_box_name_offset = 0;
 			selected_tab = i;
@@ -49,12 +49,12 @@ switch ( selected_tab ) {
 		break;
 }
 
-draw_sprite_stretched(spr_inventory_bg, 0, items_box_x, items_box_y, items_box_w + global.res_scale, items_box_h);
-if ( selected_tab == TABS.CRAFTING ) draw_sprite_stretched(spr_inventory_bg, 0, items_box_x - global.res_scale, ingredients_box_y - ingredients_border, items_box_w + global.res_scale, ingredients_box_h + ingredients_border);
+draw_sprite_stretched(spr_inventory_bg, 0, items_box_x, items_box_y, items_box_w + GLOBAL_RES_SCALE, items_box_h);
+if ( selected_tab == TABS.CRAFTING ) draw_sprite_stretched(spr_inventory_bg, 0, items_box_x - GLOBAL_RES_SCALE, ingredients_box_y - ingredients_border, items_box_w + GLOBAL_RES_SCALE, ingredients_box_h + ingredients_border);
 
 if (has_tabs) {
 	// Selected Tab
-	draw_sprite_ext(spr_inventory_tabs, selected_tab, tabs_x, tabs_y[selected_tab], global.res_scale*2, global.res_scale*2, 0, c_ltgray, 1);
+	draw_sprite_ext(spr_inventory_tabs, selected_tab, tabs_x, tabs_y[selected_tab], GLOBAL_RES_SCALE*2, GLOBAL_RES_SCALE*2, 0, c_ltgray, 1);
 }
 
 // Panels
@@ -75,7 +75,7 @@ if (has_equipment_box) {
 	draw_set_color(c_white);
 	draw_rectangle(equipment_box_x, equipment_box_y, equipment_box_x2, equipment_box_y2, false);
 	draw_set_color(c_black);
-	draw_line_width(equipment_box_x - global.res_scale, status_box_y - equipment_box_border, equipment_box_x2, status_box_y - equipment_box_border, 2);
+	draw_line_width(equipment_box_x - GLOBAL_RES_SCALE, status_box_y - equipment_box_border, equipment_box_x2, status_box_y - equipment_box_border, 2);
 	draw_sprite_stretched(spr_inventory_bg, 0, equipment_box_x, equipment_box_y, equipment_box_x2 - equipment_box_x, equipment_box_y2 - equipment_box_y);
 
 	var _current_x = equipment_box_x + equipment_box_border;

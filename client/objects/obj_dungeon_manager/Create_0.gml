@@ -17,7 +17,7 @@ global.server.send_websocket_message("DUNGEON_STATE", {invite: obj_server.dungeo
 // Camera
 //global.camera.camera_w = 640;
 //global.camera.camera_h = 360;
-//global.res_scale = 1280/global.camera.camera_w;
+//GLOBAL_RES_SCALE = 1280/global.camera.camera_w;
 
 // Dungeon Draw
 scale = 1
