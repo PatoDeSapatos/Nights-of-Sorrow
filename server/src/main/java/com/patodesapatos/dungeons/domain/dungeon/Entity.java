@@ -8,14 +8,14 @@ import lombok.Data;
 
 @Data
 public class Entity implements Cloneable {
-    private int id;
+    private String id;
     private String userId;
     private String username;
     private int level;
     private JSONObject data;
     private JSONArray inventory;
 
-    public Entity(Player player, int dungeonEntitiesId) {
+    public Entity(Player player, String dungeonEntitiesId) {
         id = dungeonEntitiesId;
         userId = player.getUserId();
         username = player.getUsername();
