@@ -96,7 +96,7 @@ public class DungeonWSHandler {
             case CHANGE_LEVEL:
                 dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
 
-                entity = dungeon.getEntityById(data.getInt("entityId"));
+                entity = dungeon.getEntityById(data.getString("entityId"));
                 entity.setLevel(data.getInt("level"));
 
                 dto = dungeon.toDTO(entity);

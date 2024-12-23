@@ -51,7 +51,7 @@ public class Dungeon {
 
     public void addPlayer(Player player) {
         players.add(player);
-        entities.add(new Entity(player, ++entitiesId));
+        entities.add(new Entity(player, String.valueOf(++entitiesId)));
     }
 
     public Player getPlayerByUsername(String username) {
@@ -87,10 +87,10 @@ public class Dungeon {
         return RandomStringUtils.randomAlphanumeric(4).toUpperCase();
     }
 
-    public Entity getEntityById(int id) {
+    public Entity getEntityById(String id) {
         for (int i = 0; i < entities.size(); i++) {
             var entity = entities.get(i);
-            if (entity.getId() == id) return entity;
+            if (entity.getId().equals(id)) return entity;
         }
         return null;
     }
@@ -108,7 +108,7 @@ public class Dungeon {
     }
 
     public Entity updateEntity(JSONObject data) {
-        var entity = getEntityById(data.getInt("entityId"));
+        var entity = getEntityById(data.getString("entityId"));
         entity.setData(data.getJSONObject("data"));
         return entity;
     }
