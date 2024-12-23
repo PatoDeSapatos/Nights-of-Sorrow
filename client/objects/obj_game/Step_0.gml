@@ -17,7 +17,15 @@ if (keyboard_check_pressed(ord("E")) && !instance_exists(obj_battle_manager)) {
 }
 
 if (keyboard_check_pressed(ord("Z"))) {
-	camera_zoom(30);
+	camera_zoom(25);
+}
+
+if (keyboard_check_pressed(ord("T"))) {
+	add_battle_text("Felpos has been poisoned.");
+	battle_text_set_color(c_purple, 3, 3);
+	
+	add_battle_text("Thugas has been paralyzed.");
+	battle_text_set_color(c_yellow, 3, 3);
 }
 
 if (keyboard_check_pressed(ord("X"))) {

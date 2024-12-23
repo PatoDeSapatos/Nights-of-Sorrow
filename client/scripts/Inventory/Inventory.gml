@@ -3,8 +3,8 @@ function Item_Stack( _item_id, _quantity ) constructor {
 	quantity = _quantity;
 }
 
-function Equipment_Stack(_item_id, _quantity, _status, _equipped) : Item_Stack(_item_id, _quantity) constructor {
-	status = _status;
+function Equipment_Stack(_item_id, _quantity, _stats, _equipped) : Item_Stack(_item_id, _quantity) constructor {
+	stats = _stats;
 	equipped = _equipped;
 }
 
@@ -92,22 +92,22 @@ function get_item_id_by_name(_item_name) {
 function draw_items(_inventory, _is_recipe) {
 	if (has_tabs) {
 		// Order Tab
-		draw_sprite_ext(spr_inventory_order, 0, tabs_x, items_box_title_y, GLOBAL_RES_SCALE*2, (items_box_title_h+GLOBAL_RES_SCALE) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
+		draw_sprite_ext(spr_inventory_order, 0, tabs_x, items_box_title_y, global.res_scale*2, (items_box_title_h+global.res_scale) / sprite_get_height(spr_inventory_order), 0, c_yellow, 1);
 	
 		// Order
 		if ( mouse_l ) {
-			if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, items_box_title_y, tabs_x + sprite_get_width(spr_inventory_order)*GLOBAL_RES_SCALE*2, items_box_title_y + items_box_title_h )) {
+			if ( (focus == FOCUS.LIST || focus == FOCUS.ITEM) && point_in_rectangle(mouse_gui_x, mouse_gui_y, tabs_x, items_box_title_y, tabs_x + sprite_get_width(spr_inventory_order)*global.res_scale*2, items_box_title_y + items_box_title_h )) {
 				focus = FOCUS.ORDER;
 			}
 		}
 	
 
 		// Items Categories
-		var _categories_space = sprite_get_width(spr_items_categories)*GLOBAL_RES_SCALE*2.5 + items_box_border/4
+		var _categories_space = sprite_get_width(spr_items_categories)*global.res_scale*2.5 + items_box_border/4
 		var _categories_w = items_box_border + _categories_space*ItemCategory.LENGTH;
 		for (var i = 0; i < ItemCategory.LENGTH; ++i) {
-			var _icon_w = sprite_get_width(spr_items_categories)*GLOBAL_RES_SCALE*2.5;
-			var _icon_h = sprite_get_height(spr_items_categories)*GLOBAL_RES_SCALE*2.5;
+			var _icon_w = sprite_get_width(spr_items_categories)*global.res_scale*2.5;
+			var _icon_h = sprite_get_height(spr_items_categories)*global.res_scale*2.5;
 			var _icon_x = items_box_x + items_box_w/2 - _categories_w/4 + _categories_space*i;
 			var _icon_y = (items_box_category_h + items_box_border)/2;
 	
@@ -116,7 +116,7 @@ function draw_items(_inventory, _is_recipe) {
 			}
 	
 			var _alpha = selected_category == i ? (1) : (.5);
-		    draw_sprite_ext(spr_items_categories, i, _icon_x, _icon_y, GLOBAL_RES_SCALE*2.5, GLOBAL_RES_SCALE*2.5, 0, c_white, _alpha);
+		    draw_sprite_ext(spr_items_categories, i, _icon_x, _icon_y, global.res_scale*2.5, global.res_scale*2.5, 0, c_white, _alpha);
 		}
 	}
 
@@ -229,7 +229,7 @@ function draw_items(_inventory, _is_recipe) {
 		}
 	
 		// Item Image
-		draw_sprite_ext( spr_items, _item.sprId, items_box_name_x - items_box_spr_size, _y, GLOBAL_RES_SCALE * 2, GLOBAL_RES_SCALE * 2, 0, c_white, 1 );
+		draw_sprite_ext( spr_items, _item.sprId, items_box_name_x - items_box_spr_size, _y, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1 );
 	
 		// Item Name
 		if ( _is_recipe ) {
@@ -241,7 +241,7 @@ function draw_items(_inventory, _is_recipe) {
 		draw_set_color(c_black);
 	
 		// Item Category
-		draw_sprite_ext( spr_items_categories, _item.category, items_box_category_x, _y, GLOBAL_RES_SCALE * 2, GLOBAL_RES_SCALE * 2, 0, c_white, 1 );
+		draw_sprite_ext( spr_items_categories, _item.category, items_box_category_x, _y, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1 );
 	
 		_current_y += items_box_name_h + items_box_border/2;
 	}
@@ -423,7 +423,7 @@ function equip_item(_item, _struct = equipments) {
 	}
 	
 	update_inventory();
-	inventory_update_status(inventory, _struct, player_equipment_status);
+	inventory_update_stats(inventory, _struct, player_equipment_stats);
 }
 
 function inventory_add_item( _inventory, _item_id, _quantity ) {
@@ -461,7 +461,7 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 			array_push(_inventory, new Equipment_Stack(
 				_item_id,
 				_excess > 0 ? (_excess) : (_quantity),
-				_item_data.status,
+				_item_data.stats,
 				false
 			));
 		} else {
@@ -495,7 +495,7 @@ function inventory_remove_item( _inventory, _item_id, _quantity ) {
 				if (is_instanceof(_inventory[i], Equipment_Stack) && _inventory[i].equipped) {
 					var _item_slot = get_item_by_id(_item_id).slot;
 					struct_set(equipments, _item_slot, noone);
-					inventory_update_status(_inventory, equipments, player_equipment_status);
+					inventory_update_stats(_inventory, equipments, player_equipment_stats);
 				}
 				array_delete( _inventory, i, 1 );
 			}
@@ -608,23 +608,23 @@ function update_inventory() {
 	}
 }
 
-function inventory_update_status(_inventory, _equipped_items, _status) {
+function inventory_update_stats(_inventory, _equipped_items, _stats) {
 	var _item_names = struct_get_names(_equipped_items);
-	var _status_names = struct_get_names(_status);
+	var _stats_names = struct_get_names(_stats);
 	
-	for (var i = 0; i < array_length(_status_names); ++i) {
-	    struct_set(_status, _status_names[i], 0);
+	for (var i = 0; i < array_length(_stats_names); ++i) {
+	    struct_set(_stats, _stats_names[i], 0);
 	}
 	
 	for (var i = 0; i < struct_names_count(_equipped_items); ++i) {
 		var _item = struct_get(_equipped_items, _item_names[i]);
 		if (!is_struct(_item)) continue;
 		
-	    for (var j = 0; j < struct_names_count(_item.status); ++j) {
-			var _item_status = struct_get(_item.status, _status_names[j]);
-			var _current_status = struct_get(_status, _status_names[j]);
+	    for (var j = 0; j < struct_names_count(_item.stats); ++j) {
+			var _item_stats = struct_get(_item.stats, _stats_names[j]);
+			var _current_stats = struct_get(_stats, _stats_names[j]);
 			
-		    struct_set(_status, _status_names[j], _current_status + _item_status);
+		    struct_set(_stats, _stats_names[j], _current_stats + _item_stats);
 		}
 	}
 }

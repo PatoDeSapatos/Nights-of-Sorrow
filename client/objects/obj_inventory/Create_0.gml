@@ -39,20 +39,20 @@ items_box_x = gui_w - border - items_box_w;
 items_box_y = 0;
 items_box_border = items_box_w div 10;
 
-items_box_spr_size = sprite_get_height(spr_items) * (GLOBAL_RES_SCALE * 2) + 5;
+items_box_spr_size = sprite_get_height(spr_items) * (global.res_scale * 2) + 5;
 
 items_box_category_y = 0; 
-items_box_category_h = sprite_get_height(spr_items_categories) * (GLOBAL_RES_SCALE*2.5) + 5;
+items_box_category_h = sprite_get_height(spr_items_categories) * (global.res_scale*2.5) + 5;
 
 items_box_title_y = items_box_y + items_box_category_y + items_box_category_h + items_box_border/2;
-items_box_title_h = sprite_get_height(spr_items) * GLOBAL_RES_SCALE*2 + 10;
+items_box_title_h = sprite_get_height(spr_items) * global.res_scale*2 + 10;
 
 items_box_name_x = items_box_border + items_box_spr_size;
 items_box_name_y = items_box_title_y + items_box_title_h;
 items_box_name_offset = 0;
 
 items_box_name_w = (items_box_w div 2) - items_box_border*2;
-items_box_name_h = sprite_get_height(spr_items) * (GLOBAL_RES_SCALE * 2) + 5;
+items_box_name_h = sprite_get_height(spr_items) * (global.res_scale * 2) + 5;
 
 items_box_category_x = items_box_w - items_box_border;
 items_box_quantity_x = items_box_category_x - items_box_spr_size - items_box_border;
@@ -94,7 +94,7 @@ var _current_tab_y = items_box_title_y + items_box_title_h + items_box_border/4;
 var _tab_h = sprite_get_height(spr_inventory_tabs);
 for (var i = 0; i < sprite_get_number(spr_inventory_tabs); ++i) {
     tabs_y[i] = _current_tab_y;
-	_current_tab_y += (_tab_h - 3) * GLOBAL_RES_SCALE*2;
+	_current_tab_y += (_tab_h - 3) * global.res_scale*2;
 }
 
 // Ingredients
@@ -104,9 +104,9 @@ ingredients_box_w = items_box_w;
 ingredients_box_h = gui_h - ingredients_box_y;
 
 ingredients_cols = 2;
-ingredients_border = 20 * GLOBAL_RES_SCALE;
+ingredients_border = 20 * global.res_scale;
 
-ingredient_scale = 1.5 * GLOBAL_RES_SCALE;
+ingredient_scale = 1.5 * global.res_scale;
 ingredient_w = (ingredients_box_w - ingredients_border*2) / 2;
 ingredient_h = sprite_get_height(spr_items) * ingredient_scale;
 
@@ -272,8 +272,8 @@ equipment_box_border = 10;
 equipment_box_w = (equipment_box_x2 - equipment_box_x) - equipment_box_border*2;
 equipment_box_h = (equipment_box_y2 - equipment_box_y) - equipment_box_border*4;
 
-status_box_x = equipment_box_x;
-status_box_y = equipment_box_y + equipment_box_border + (equipment_box_y2 - equipment_box_y)*0.60;
+stats_box_x = equipment_box_x;
+stats_box_y = equipment_box_y + equipment_box_border + (equipment_box_y2 - equipment_box_y)*0.60;
 
 equipments = new Equipment_Set();
 
@@ -281,12 +281,12 @@ equipment_rows = 4;
 equipment_slot_w = equipment_box_w/(ceil( struct_names_count(equipments)/equipment_rows ));
 equipment_slot_h = (equipment_box_h*0.60)/equipment_rows;
 
-player_base_status = new Status(5, 5, 5, 5, 5, 5);
-player_equipment_status = new Status(0, 0, 0, 0, 0, 0);
+player_base_stats = new Stats(5, 5, 5, 5, 5, 5);
+player_equipment_stats = new Stats(0, 0, 0, 0, 0, 0);
 
-status_rows = 4;
-status_w = equipment_box_w/(ceil( struct_names_count(player_equipment_status)/status_rows ));
-status_h = (equipment_box_h*0.40)/status_rows;
+stats_rows = 4;
+stats_w = equipment_box_w/(ceil( struct_names_count(player_equipment_stats)/stats_rows ));
+stats_h = (equipment_box_h*0.40)/stats_rows;
 
 // Item desc box
 inventory_add_recipe(recipes, 0);

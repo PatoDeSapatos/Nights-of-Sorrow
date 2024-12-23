@@ -58,7 +58,7 @@ extra_action = false;
 extra_turn_user = noone;
 extra_turn_given = false;
 
-waiting_frames = 30;
+waiting_frames = 90;
 current_waiting_frames = 0;
 
 depth = 1000;

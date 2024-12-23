@@ -4,7 +4,7 @@ if (box_delay <= 1) return;
 
 var _border = 10;
 var _current_y = items_box_title_y + items_box_title_h/2 + _border;
-var _x = items_box_x - (sprite_get_width(spr_inventory_order) * GLOBAL_RES_SCALE*2)/2;
+var _x = items_box_x - (sprite_get_width(spr_inventory_order) * global.res_scale*2)/2;
 
 draw_set_halign(fa_middle);
 

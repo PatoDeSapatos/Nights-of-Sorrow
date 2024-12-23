@@ -28,7 +28,7 @@ global.enemy_ui = {
 			// Attack random unit
 			with (_id) {
 				var _possible_targets = array_filter(obj_battle_manager.units, function(_unit) {
-					return (!_unit.unit.is_enemy && _unit.unit.status.hp > -1);
+					return (!_unit.unit.is_enemy && _unit.unit.hp > -1);
 				});
 		
 				if (array_length(_possible_targets) <= 0) {

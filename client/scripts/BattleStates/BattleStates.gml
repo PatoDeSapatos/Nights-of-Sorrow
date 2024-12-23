@@ -1,5 +1,5 @@
 function battle_sort_by_speed(_u1, _u2) {
-	return _u2.unit.status.spd - _u1.unit.status.spd;
+	return unit_get_stats(_u1, "spd") - unit_get_stats(_u2, "spd");
 }
 
 function battle_state_init() {
@@ -71,6 +71,10 @@ function battle_state_turn() {
 		if (check_attack()) {
 			unit_use_action(global.actions.attack, units[turns], [unit_hover]);
 			main_actions--;
+		}
+		
+		if (keyboard_check_pressed(ord("D"))) {
+			unit_use_action(global.actions.attackBoost, units[turns], [units[turns]]);
 		}
 	}
 	
@@ -194,20 +198,33 @@ function battle_state_waiting() {
 		units[turns].ready = true;	
 	}
 	
-	if (extra_action && extra_turn_user != noone && extra_turn_user.unit.player_username == global.server.username) {
-		state = battle_state_extra;	
-	} else if (units[turns].ready && !animating) {
-		state = battle_state_end_turn;
+	if (!animating) {
+		if (extra_action && extra_turn_user != noone && extra_turn_user.unit.player_username == global.server.username) {
+			state = battle_state_extra;	
+		} else if (units[turns].ready) {
+			state = battle_state_end_turn;
+		}
 	}
 }
 
 function battle_state_end_turn() {
+	with(units[turns]) {
+		if (unit.condition != noone && unit.condition.trigger == EFFECT_TRIGGERS.END_TURN_SELF) {
+			battle_activate_condition(self);
+		}
+	}
+	
 	units[turns].ready = false;
 	turns++;
 	extra_turn_given = false;
 	extra_action = false;
 	extra_turn_user = noone;
 	
+	with(obj_battle_unit) {
+		if (unit.condition != noone && unit.condition.trigger == EFFECT_TRIGGERS.END_TURN_ALL) {
+			battle_activate_condition(self);
+		}
+	}
 	
 	if (turns >= array_length(units)) {
 		array_sort(units, battle_sort_by_speed);

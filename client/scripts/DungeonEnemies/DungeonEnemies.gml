@@ -1,5 +1,6 @@
-function Enemy(_status, _idle_spr, _walking_spr, _attack_spr, _hurt_spr, _init_state, _movement, _actions, _attack_types, _weakness, _resistences, _battle_script) constructor {
-	status = _status;
+function Enemy(_display_name, _stats, _idle_spr, _walking_spr, _attack_spr, _hurt_spr, _init_state, _movement, _actions, _attack_types, _weakness, _resistences, _battle_script) constructor {
+	display_name = _display_name;
+	stats = _stats;
 	sprites = {
 		idle: _idle_spr,
 		walking: _walking_spr,
@@ -37,7 +38,8 @@ function instantiate_enemy(_x, _y, _id) {
 function init_enemies() {
 	// Slime
 	ds_map_add(global.enemies, "SLIME", new Enemy(
-		new Status(10, 3, 5, 2, 0, 2, 0),
+		"Slime",
+		new Stats(10, 3, 5, 2, 0, 2, 0),
 		spr_slime_idle,
 		spr_slime_idle,
 		spr_slime_attack,

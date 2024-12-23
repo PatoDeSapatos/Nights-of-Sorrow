@@ -1,5 +1,9 @@
-function BattleUnit(_status, _inventory, _position, _sprites, _movement, _weakness, _resistences, _attack_types, _player_username) constructor {
-	status = _status;
+function BattleUnit(_stats, _max_hp, _hp, _inventory, _position, _sprites, _movement, _weakness, _resistences, _attack_types, _player_username, _stat_changes=new Stats(), _condition=noone) constructor {
+	name = _player_username;
+	stats = _stats;
+	max_hp = _max_hp;
+	hp = _hp;
+	stat_changes = _stat_changes;
 	inventory = _inventory;
 	position = _position;
 	sprites = _sprites;
@@ -9,19 +13,25 @@ function BattleUnit(_status, _inventory, _position, _sprites, _movement, _weakne
 	attack_types = _attack_types ;
 	player_username = _player_username;
 	is_player = _player_username == global.server.username;
+	condition = _condition;
 	is_enemy = false;
 	focus = false;
 }
 
-function EnemyUnit(_position, _enemy_id) : BattleUnit(_position) constructor {
+function EnemyUnit(_position, _enemy_id, _stat_changes=new Stats(), _condition=noone) : BattleUnit(_position, _stat_changes, _condition) constructor {
 	enemy_info = get_enemy(_enemy_id);
+	name = enemy_info.display_name;
 	position = _position;
-	status = enemy_info.status;
+	stats = enemy_info.stats;
+	stat_changes = _stat_changes;
+	max_hp = enemy_info.stats.hp;
+	hp = max_hp;
 	sprites = enemy_info.sprites;
 	weakness = enemy_info.weakness;
 	resistences = enemy_info.resistences;
 	attack_types = enemy_info.attack_types;
 	movement = enemy_info.movement;
+	condition = _condition;
 	
 	is_player = false;
 	is_enemy = true;
@@ -32,12 +42,12 @@ function init_demo_battle(_grid_size) {
 	global.server.username = "battle_demo";
 	var _player_sprites = new SpriteSet(0, 0, 0, 0, 0);
 	
-	var _player_unit1 = new BattleUnit(new Status(10, 10, 10, 5, 5, 10, 0), [], {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit2 = new BattleUnit(new Status(10, 10, 10, 5, 5, 10, 0), [], {x: 0, y: 1}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit3 = new BattleUnit(new Status(10, 10, 10, 5, 5, 10, 0), [], {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit1 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit2 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 1}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit3 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
 	
-	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME");
-	var _enemy2 = new EnemyUnit({x: 1, y: 1}, "SLIME");
+	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME", new Stats());
+	var _enemy2 = new EnemyUnit({x: 1, y: 1}, "SLIME", new Stats());
 	
 	var _allies = [ _player_unit1, _player_unit2, _player_unit3 ];	
 	var _enemies = [ _enemy1, _enemy2 ];	
@@ -104,20 +114,14 @@ function unit_use_action(_action, _user, _targets) {
 		}
 		
 		var _cutscene = [cutscene_use_action,_user, _action, _targets];
-		if (!instance_exists(obj_cutscene)) {
-			animating = true;
-			instance_create_depth(0, 0, -1000, obj_cutscene, {
-				cutscene: [_cutscene]
-			})
-		} else {
-			array_push(obj_cutscene.cutscene, _cutscene);	
-		}
+		battle_create_cutscene([_cutscene])
 	}	
 }
 
 function unit_take_damage(_damage, _target, _types, _is_physical) {
 	with (_target) {
-		var _defense = (_is_physical) ? unit.status.defense : unit.status.magic_defense;
+		var _defense = (_is_physical) ? (unit_get_stats(_target, "defense")) : (unit_get_stats(_target, "magic_defense"));
+		
 		var _resistance_multiplier = 0;
 		for (var i = 0; i < array_length(_types); ++i) {
 		    if (array_contains(_target.unit.weakness, _types[i])) {
@@ -138,8 +142,7 @@ function unit_take_damage(_damage, _target, _types, _is_physical) {
 		
 		var _final_damage = round( (_damage - (_defense/(_defense + 100))));
 		_final_damage = round(_final_damage + _final_damage*_resistance_multiplier*.5);
-		if (_final_damage > 0) _target.unit.focus = false; 
-		
+		if (_final_damage > 0) _target.unit.focus = false;  
 		battle_change_hp(_target, -_final_damage);
 	}
 }
@@ -153,5 +156,92 @@ function battle_change_hp(_target, _amount) {
 		font: fnt_inventory_title
 	})
 	
-	unit.status.hp = max(0, unit.status.hp + _amount);
+	unit.hp = max(0, unit.hp + _amount);
+}
+
+function battle_inflict_condition(_target, _condition, _chance_percentage) {
+	if (_target.unit.condition == _condition) {
+		add_battle_text( string("{0} is already {1}", _target.unit.name, _condition.inflict_name) );
+		battle_text_set_color(_condition.col, 3, 3);
+		return;
+	}
+	
+	var _success = irandom_range(1, 100) <= _chance_percentage;
+	if (!_success) return;
+
+	var _cutscene = [];
+
+	if (!is_undefined(_condition.effect_spr)) {
+		array_push(_cutscene, [cutscene_instance_create_depth, _target.x, _target.y, _target.depth-1, obj_battle_effect, {sprite_index: _condition.effect_spr}])
+	}
+
+	if (struct_exists(_condition, "targetAnimation") && !is_undefined(_condition.targetAnimation) && struct_exists(_target.unit.sprites, _condition.targetAnimation)) {
+		array_push(_cutscene, [cutscene_animate_once, _target, _target.unit.sprites[$ _condition.targetAnimation]]);
+	}
+
+	add_battle_text( string("{0} has been {1}", _target.unit.name, _condition.inflict_name) );
+	battle_text_set_color(_condition.col, 3, 3);
+	
+	if (array_length(_cutscene) > 0) {
+		battle_create_cutscene(_cutscene);
+	}
+	
+	_target.unit.condition = _condition;
+}
+
+function battle_create_cutscene(_cutscene) {
+	with(obj_battle_manager) {
+		var _await = [cutscene_await, waiting_frames];
+		array_push(_cutscene, _await)
+		
+		if (!instance_exists(obj_cutscene)) {
+			animating = true;
+			instance_create_depth(0, 0, -1000, obj_cutscene, {
+				cutscene: _cutscene
+			})
+		} else {
+			for (var i = 0; i < array_length(_cutscene); ++i) {
+			    array_push(obj_cutscene.cutscene, _cutscene[i]);
+			}
+		}
+	}
+}
+
+function battle_activate_condition(_target) {
+	with(obj_battle_manager) {
+		var _cutscene = [cutscene_activate_condition, _target];
+		battle_create_cutscene([_cutscene]);
+	}
+}
+
+function unit_get_stats(_unit, _stats_name) {
+	if (is_undefined( _unit.unit.stats[$ _stats_name])) return undefined;
+	
+	var _stats = _unit.unit.stats[$ _stats_name];
+	var _level = _unit.unit.stat_changes[$ _stats_name];
+	var _rate = 4;
+	
+	return _stats * ((_rate + max(0, _level))/(_rate + min(0, _level)));
+}
+
+function battle_change_stats(_target, _stats_name, _amount) {
+	if (_amount == 0) return;
+	
+	var _current_changes = _target.unit.stat_changes[$ _stats_name];
+	
+	var _cap = 6;
+	
+	if (_current_changes > _cap) {
+		return;
+	} else if (_current_changes < -_cap) {
+		return;	
+	}
+	
+	var _spr = (_amount > 0) ? (spr_effect_raise_stats) : (spr_effect_lower_stats);
+	var _effect = instance_create_depth(_target.x, _target.y, -1000, obj_battle_effect, {
+		sprite_index: _spr
+	});
+	
+	_target.unit.stat_changes[$ _stats_name] += _amount;
+	_target.unit.stat_changes[$ _stats_name] = clamp(_target.unit.stat_changes[$ _stats_name], -_cap, _cap);
 }

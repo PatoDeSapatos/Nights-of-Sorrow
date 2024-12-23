@@ -11,6 +11,14 @@ function action_end() {
 	}
 }
 
+function cutscene_await(_await_frames) {
+	timer++;
+	
+	if (timer >= _await_frames) {
+		action_end();		
+	}
+}
+
 /// @param id
 /// @param x
 /// @param y
@@ -69,6 +77,11 @@ function cutscene_move_character(_id, _x, _y, _relative, _spd) {
 	}
 }
 
+function cutscene_instance_create_depth(_x, _y, _depth, _object, _struct={}) {
+	instance_create_depth(_x, _y, _depth, _object, _struct);
+	action_end();
+}
+
 function cutscene_use_action(_user, _action, _targets) {
 	if (!setup && !is_undefined(_action.userAnimation) && !is_undefined( _user.unit.sprites[$ _action.userAnimation] ) ) {
 		image = _user.sprite_index;
@@ -107,5 +120,35 @@ function cutscene_animate_once(_id, _sprite_index) {
 		_id.sprite_index = image;
 		action_end();
 	}
+}
+
+function cutscene_activate_condition(_target) {
+	var _condition = _target.unit.condition;
 	
+	if (!setup) {
+		if (!is_undefined(_condition.targetAnimation) && !is_undefined( _target.unit.sprites[$ _condition.targetAnimation] )) {
+			image = _target.sprite_index;
+			_target.sprite_index = _target.unit.sprites[$ _condition[$ "targetAnimation"]];
+			_target.image_index = 0;	
+		}
+
+		if (!is_undefined(_condition.effect_spr)) {
+			var _effect = instance_create_depth(_target.x, _target.y, _target.depth-1, obj_battle_effect);
+			_effect.sprite_index = _condition.effect_spr;
+		}
+		
+		add_battle_text( string("{0} suffers from {1}", _target.unit.name, _condition.name) );
+		battle_text_set_color(_condition.col, 3, 3);
+
+		setup = true;
+	}
+	
+	var _frames = (_target.object_index == obj_party_unit) ? _target.idle_frames-1 : sprite_get_number(_target.sprite_index)-1;
+	
+	if (_target.image_index >= _frames) {
+		_condition.func(_target);
+		_target.sprite_index = image;
+		_target.image_index = 0;
+		action_end();
+	}
 }
