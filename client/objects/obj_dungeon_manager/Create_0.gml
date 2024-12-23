@@ -63,7 +63,7 @@ update_entities = function (_data) {
 		
 		if ( ds_map_exists(entities, _entity_id) ) {
 			if (is_struct(struct_get(_entities[i], "data"))) {
-				ds_map_find_value(entities, _entity_id).update_entity_values( struct_get(_entities[i], "data"), struct_get(_entities[i], "username"), struct_get(_entities[i], "level") );
+				ds_map_find_value(entities, _entity_id).update_entity_values(struct_get(_entities[i], "data"), struct_get(_entities[i], "username"), struct_get(_entities[i], "level"));
 			}
 		} else {
 			if (struct_get(_entities[i], "level") != global.server.level) return;

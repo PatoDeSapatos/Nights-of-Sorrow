@@ -28,9 +28,11 @@ function instantiate_enemy(_x, _y, _id) {
 	
 	if (!is_undefined(_enemy)) {
         
-		instance_create_layer(_x, _y, "Instances", obj_dungeon_enemy, {
+		var instance = instance_create_layer(_x, _y, "Instances", obj_dungeon_enemy, {
 			dungeon_stats: _enemy
 		});
+        instance.set_uid(screenToTileX(_x, _y), screenToTileY(_x, _y))
+        ds_map_set(obj_dungeon_manager.entities, instance.uid, instance)
 	}
 }
 
