@@ -1,36 +1,51 @@
-global.enemy_ui = {
-	simple: function(_id) {
-		var _give_extra = false;
-		var _give_extra_chance = 50;
-		var _possible_gives = [];
-		
-		var _can_move = !obj_battle_manager.extra_action;
-
-		with(obj_battle_manager) {
-			if (!extra_turn_given && extra_action) {
-				if (irandom_range(1, 100) >= _give_extra_chance) {
-					_give_extra = true;
-				}
-			}
-			
-			if (_give_extra) {
-				var _filter = function(_unit) {
-					return _unit.unit.is_enemy && _unit != user.id;
-				}
-
-				_possible_gives = array_filter(units, method({user: _id}, _filter));
-			
-				if (array_length(_possible_gives) <= 0) {
-					_give_extra = false;
-				}	
+function enemy_give_turn(_id, _give_extra_chance) {
+	var _give_extra = false;
+	var _possible_gives = [];
+	
+	with(obj_battle_manager) {
+		if (!extra_turn_given && extra_action) {
+			if (irandom_range(1, 100) >= _give_extra_chance) {
+				_give_extra = true;
 			}
 		}
+			
+		if (_give_extra) {
+			var _filter = function(_unit) {
+				return _unit.unit.is_enemy && _unit != user.id;
+			}
+
+			_possible_gives = array_filter(units, method({user: _id}, _filter));
+			
+			if (array_length(_possible_gives) <= 0) {
+				_give_extra = false;
+			}	
+		}
+	}
+	
+	if (_give_extra) {
+		var _target = _possible_gives[irandom_range(0, array_length(_possible_gives)-1)];
+			
+		with (obj_battle_manager) {
+			main_actions = 1;
+			extra_turn_user.ready = true;
+			extra_turn_user = _target;
+			obj_camera.follow = _target;
+			extra_turn_given = true
+		}
+	}
+}
+
+global.enemy_ui = {
+	simple: function(_id) {
+		var _give_extra = enemy_give_turn(_id, 50);
+		
+		var _can_move = !obj_battle_manager.extra_action;
 
 		if (!_give_extra) {
 			// Attack random unit
 			with (_id) {
 				var _possible_targets = array_filter(obj_battle_manager.units, function(_unit) {
-					return (!_unit.unit.is_enemy && _unit.unit.hp > -1);
+					return (!_unit.unit.is_enemy && !_unit.is_dead);
 				});
 		
 				if (array_length(_possible_targets) <= 0) {
@@ -81,16 +96,6 @@ global.enemy_ui = {
 				unit_use_action(unit.enemy_info.actions[0], _id, [_target]);
 				obj_battle_manager.main_actions--;
 				obj_battle_manager.extra_action = false;
-			}
-		} else {
-			var _target = _possible_gives[irandom_range(0, array_length(_possible_gives)-1)];
-			
-			with (obj_battle_manager) {
-				main_actions = 1;
-				extra_turn_user.ready = true;
-				extra_turn_user = _target;
-				obj_camera.follow = _target;
-				extra_turn_given = true
 			}
 		}
 	}

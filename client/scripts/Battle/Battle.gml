@@ -242,6 +242,34 @@ function battle_change_stats(_target, _stats_name, _amount) {
 	_target.unit.stat_changes[$ _stats_name] = clamp(_target.unit.stat_changes[$ _stats_name], -_cap, _cap);
 }
 
+function create_unit_corpse(_unit) {
+	var _corpse = instance_create_depth(_unit.x, _unit.y, _unit.depth, obj_entity_corpse);
+	
+	if (_unit.unit.is_enemy) {
+		with(_corpse) { 
+			for (var i = 0; i < array_length(_unit.unit.enemy_info.drops); ++i) {
+				var _drop = _unit.unit.enemy_info.drops[i];
+			
+			    repeat(_drop.quantity) {
+					if (irandom_range(1, 100) <= _drop.drop_chance) {
+						inventory_add_item(inventory, _drop.item_id, 1);
+					}
+				}
+			}
+			
+			if (array_length(inventory) <= 0) {
+				vanish = true;	
+			}
+		}
+	}
+	
+	
+	
+	_corpse.sprite_index = _unit.sprite_index;
+	_corpse.image_index = _unit.image_index;
+}
+
 function calc_unit_distance(_unit1, _unit2) {
 	return floor(sqrt(sqr(_unit1.unit.position.x - _unit2.unit.position.x) + sqr(_unit1.unit.position.y - _unit2.unit.position.y)));
 }
+

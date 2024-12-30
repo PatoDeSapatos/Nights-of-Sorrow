@@ -4,21 +4,23 @@ function battle_sort_by_speed(_u1, _u2) {
 
 function battle_state_init() {
 	current_waiting_frames++;
-	global.loading_screen = true;
 	
 	if (current_waiting_frames >= waiting_frames) {
 		array_sort(units, battle_sort_by_speed);
-		global.loading_screen = false;
 		state = battle_state_start_turn;
 	}
 }
 
 function battle_state_start_turn() {
+	if (battle_check_animating()) return;
+	
 	movement_actions = 1;
 	main_actions = 1;
 	
 	with(obj_battle_unit) {
-		obj_battle_manager.grid[unit.position.x, unit.position.y].coll = true;
+		if (!is_dead) {
+			obj_battle_manager.grid[unit.position.x, unit.position.y].coll = true;
+		}
 	}
 	
 	current_waiting_frames = 0;	
@@ -54,14 +56,16 @@ function battle_state_start_turn() {
 		}
 	}
 	
-	if (units[turns].unit.is_player) {			
+	if (units[turns].unit.hp <= 0) {
+		add_battle_text( string("{0} is fainted.", units[turns].unit.name) );
+		units[turns].ready = true;
+		state = battle_state_waiting;
+	} else if (units[turns].unit.is_player) {			
 		state = battle_state_turn;
+	} else if ( battle_host == obj_server.username && units[turns].unit.is_enemy ) {
+		state = battle_state_enemy_turn;
 	} else {
-		if ( battle_host == obj_server.username && units[turns].unit.is_enemy ) {
-			state = battle_state_enemy_turn;
-		} else {
-			state = battle_state_waiting;
-		}
+		state = battle_state_waiting;
 	}
 }
 
@@ -124,7 +128,7 @@ function battle_state_extra() {
 	// Give Extra Turn
 	if (!extra_turn_given && keyboard_check_pressed(ord("G"))) {
 		extra_units = array_filter(units, function(_unit) {
-			return !_unit.unit.is_enemy && _unit != obj_battle_manager.extra_turn_user;
+			return !_unit.unit.is_enemy && _unit != obj_battle_manager.extra_turn_user && !_unit.is_dead;
 		});
 		current_extra_unit = 0;
 		
@@ -195,6 +199,25 @@ function battle_state_waiting() {
 		units[turns].ready = true;	
 	}
 	
+	// Animate death (brutal)
+	with (obj_battle_unit) {
+		if (unit.hp <= 0 && !is_dead) {
+			var _cutscene = [];
+			unit.condition = noone;
+			is_dead = true;
+			
+			if ( struct_exists(unit.sprites, "dying") ) {
+				array_push(_cutscene, [cutscene_animate_once, self, unit.sprites.dying]);	
+			}
+			
+			if ( struct_exists(unit.sprites, "dead") ) {
+				array_push(_cutscene, [cutscene_change_sprite, self, unit.sprites.dead]);	
+			}
+			
+			battle_create_cutscene(_cutscene);
+		}
+	}
+	
 	if (!animating) {
 		
 		if (extra_action && extra_turn_user != noone) {
@@ -215,6 +238,8 @@ function battle_state_waiting() {
 			
 			current_waiting_frames = 0;
 		}
+		
+		battle_check_over();
 	}
 }
 
@@ -237,7 +262,7 @@ function battle_state_end_turn() {
 	if (animating) { 
 		return;
 	}
-	
+
 	var _unit = units[turns];
 	
 	with(_unit) {
@@ -252,7 +277,8 @@ function battle_state_end_turn() {
 	extra_action = false;
 	extra_turn_user = noone;
 	
-	with(obj_battle_unit) {
+	with(obj_battle_unit) {		
+		// Trigger effect
 		if (unit.condition != noone && unit.condition.trigger == EFFECT_TRIGGERS.END_TURN_ALL) {
 			battle_activate_condition(self);
 		}
@@ -269,11 +295,12 @@ function battle_state_end_turn() {
 	
 	}
 
+	battle_check_over();
 	state = battle_state_start_turn;
 }
 
 function check_attack() {
-	return (l_click && unit_hover != noone && unit_hover.object_index == obj_enemy_unit)
+	return (l_click && unit_hover != noone && unit_hover.object_index == obj_enemy_unit && !unit_hover.is_dead);
 }
 
 function battle_check_over() {
@@ -294,17 +321,27 @@ function battle_check_over() {
 		}
 	}
 	
-	for (var i = 0; i < array_length(units); ++i) {
-	    if (units[i].unit.hp <= 0) {
-			array_delete(units, i, 1);
-		}
+	if ( _allies_win || _enemies_win ) {
+		current_waiting_frames = 0;
+		state = end_battle;
 	}
-	
-	return _allies_win || _enemies_win;
 }
 
 function end_battle() {
-	instance_destroy(obj_battle_unit);
-	instance_destroy(obj_battle_effect);
-	instance_destroy(obj_battle_manager);
+	current_waiting_frames++;
+	
+	if (current_waiting_frames >= waiting_frames) {
+		for (var i = 0; i < array_length(units); ++i) {
+		    var _unit = units[i];
+			
+			if (_unit.is_dead) {
+				create_unit_corpse(_unit);	
+			}
+		}
+		
+		show_message("Cabou!")
+		instance_destroy(obj_battle_unit);
+		instance_destroy(obj_battle_effect);
+		instance_destroy(obj_battle_manager);
+	}
 }

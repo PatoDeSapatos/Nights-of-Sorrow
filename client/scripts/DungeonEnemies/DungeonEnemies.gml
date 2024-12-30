@@ -1,19 +1,22 @@
-function Enemy(_display_name, _stats, _idle_spr, _walking_spr, _attack_spr, _hurt_spr, _init_state, _movement, _actions, _attack_types, _weakness, _resistences, _battle_script) constructor {
+function Enemy(_display_name, _stats, _sprites, _init_state, _movement, _actions, _attack_types, _weakness, _resistences, _immunities, _drops, _battle_script) constructor {
 	display_name = _display_name;
 	stats = _stats;
-	sprites = {
-		idle: _idle_spr,
-		walking: _walking_spr,
-		attack: _attack_spr,
-		hurt: _hurt_spr
-	}
+	sprites = _sprites;
 	init_state = _init_state;
 	movement = _movement;
 	actions = _actions;
 	attack_types = _attack_types;
 	weakness = _weakness;
 	resistences = _resistences;
+	immunities = _immunities;
+	drops = _drops;
 	battle_script = _battle_script;
+}
+
+function Drop(_item_id, _quantity, _drop_chance) constructor {
+	item_id = _item_id;
+	quantity = _quantity;
+	drop_chance = _drop_chance;
 }
 
 function get_enemy(_id) {
@@ -42,16 +45,22 @@ function init_enemies() {
 	ds_map_add(global.enemies, "SLIME", new Enemy(
 		"Slime",
 		new Stats(10, 3, 5, 2, 0, 2, 0),
-		spr_slime_idle,
-		spr_slime_idle,
-		spr_slime_attack,
-		spr_slime_hurt,
+		{
+			idle: spr_slime_idle,
+			walking: spr_slime_idle,
+			attack: spr_slime_attack,
+			hurt: spr_slime_hurt,
+			dying: spr_slime_dying,
+			dead: spr_slime_dead
+		},
 		enemy_chase_idle,
 		6,
 		[global.actions.attack],
 		[MOVE_TYPES.BLUDGEONING],
 		[MOVE_TYPES.FIRE],
 		[MOVE_TYPES.SLASHING],
+		[],
+		[new Drop(0, 3, 33)],
 		global.enemy_ui.simple
 	));
 }

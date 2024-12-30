@@ -184,3 +184,12 @@ function cutscene_activate_condition(_target) {
 		battle_action_end(_target);
 	}
 }
+
+function cutscene_change_sprite(_id, _sprite) {
+	with (_id) {
+		sprite_index = _sprite;
+		image_index = 0;
+	}
+	
+	battle_action_end(_id);
+}
