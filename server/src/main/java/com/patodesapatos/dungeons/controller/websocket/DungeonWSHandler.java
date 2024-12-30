@@ -1,16 +1,12 @@
 package com.patodesapatos.dungeons.controller.websocket;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
-import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
 
 public class DungeonWSHandler {
-    @Autowired
-    private static DungeonService dungeonService;
     
     public static void handle(WebSocketController wsc, WebSocketSession session, String username, MessageType type, JSONObject data) throws Exception {
         WebSocketDTO dto;
@@ -20,7 +16,7 @@ public class DungeonWSHandler {
              * return: WaitingDTO
              */
             case CREATE_DUNGEON:
-                dto = dungeonService.createDungeon(username, session);
+                dto = wsc.dungeonService.createDungeon(username, session);
                 wsc.sendDTO(dto, session);
                 break;
             /**
@@ -30,7 +26,7 @@ public class DungeonWSHandler {
              * return: WaitingDTO to everyone if the dungeon isn't started | DungeonDTO to everyone if dungeon is started UNLESS the joining player
              */
             case JOIN_DUNGEON:
-                var dungeon = dungeonService.joinDungeon(data.getString("invite"), username, session);
+                var dungeon = wsc.dungeonService.joinDungeon(data.getString("invite"), username, session);
                 if (!dungeon.isStarted()) {
                     wsc.sendDTOtoAllPlayers(dungeon.toWaitingDTO(), data);
                 } else {
@@ -45,7 +41,7 @@ public class DungeonWSHandler {
              * return: DungeonDTO
              */
             case DUNGEON_STATE:
-                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+                dungeon = wsc.dungeonService.getDungeonByInvite(data.getString("invite"));
                 var entity = dungeon.getEntityByUsername(username);
 
                 dto = dungeon.toDTO(entity);
@@ -62,7 +58,7 @@ public class DungeonWSHandler {
              * return: DungeonDTO
              */
             case UPDATE_ENTITY:
-                dto = dungeonService.updateEntity(data);
+                dto = wsc.dungeonService.updateEntity(data);
                 wsc.sendDTO(dto, session);
                 break;
             /**
@@ -83,7 +79,7 @@ public class DungeonWSHandler {
              * }
              */
             case SET_PLAYER_READY:
-                dto = dungeonService.setPlayerReady(data.getString("invite"), username);
+                dto = wsc.dungeonService.setPlayerReady(data.getString("invite"), username);
                 wsc.sendDTOtoAllPlayers(dto, data);
                 break;
             /**
@@ -94,7 +90,7 @@ public class DungeonWSHandler {
              * }
              */
             case CHANGE_LEVEL:
-                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+                dungeon = wsc.dungeonService.getDungeonByInvite(data.getString("invite"));
 
                 entity = dungeon.getEntityById(data.getString("entityId"));
                 entity.setLevel(data.getInt("level"));
@@ -103,15 +99,15 @@ public class DungeonWSHandler {
                 wsc.sendDTO(dto, session);
                 break;
             case GET_WAITING_STATE:
-                dto = dungeonService.getDungeonByInvite(data.getString("invite")).toWaitingDTO();
+                dto = wsc.dungeonService.getDungeonByInvite(data.getString("invite")).toWaitingDTO();
                 wsc.sendDTO(dto, session);
                 break;
             case CHANGE_DUNGEON_PRIVACY:
-                dto = dungeonService.changeDungeonPrivacy(data.getString("invite"), username);
+                dto = wsc.dungeonService.changeDungeonPrivacy(data.getString("invite"), username);
                 wsc.sendDTOtoAllPlayers(dto, data);
                 break;
             case LEAVE_DUNGEON:
-                dto = dungeonService.leaveDungeon(data.getString("invite"), username);
+                dto = wsc.dungeonService.leaveDungeon(data.getString("invite"), username);
                 if (dto != null) wsc.sendDTOtoAllPlayers(dto, data);
                 break;
             /**
@@ -122,7 +118,7 @@ public class DungeonWSHandler {
              * return TileEntityDTO
              */
             case GET_TILE_ENTITY:
-                dto = dungeonService.getTileEntity(data);
+                dto = wsc.dungeonService.getTileEntity(data);
                 wsc.sendDTO(dto, session);
                 break;
             /**
@@ -133,7 +129,7 @@ public class DungeonWSHandler {
              * }
              */
             case ADD_TILE_ENTITY:
-                dungeonService.addTileEntity(data);
+                wsc.dungeonService.addTileEntity(data);
                 break;
             /**
              * data: {
@@ -143,7 +139,7 @@ public class DungeonWSHandler {
              * }
              */
             case UPDATE_INVENTORY:
-                dungeonService.updateInventory(data);
+                wsc.dungeonService.updateInventory(data);
                 break;
             /**
              * data: {
@@ -153,7 +149,7 @@ public class DungeonWSHandler {
              * return: InventoryDTO
              */
             case GET_INVENTORY:
-                dto = dungeonService.getInventory(data);
+                dto = wsc.dungeonService.getInventory(data);
                 wsc.sendDTO(dto, session);
                 break;
             default:

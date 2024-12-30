@@ -28,7 +28,7 @@ public class WebSocketController extends TextWebSocketHandler {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private DungeonService dungeonService;
+    public DungeonService dungeonService;
     @Autowired
     private UserService userService;
     private Map<String, WebSocketSession> activeSessions = new HashMap<>();

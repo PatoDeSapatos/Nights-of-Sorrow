@@ -3,19 +3,15 @@ package com.patodesapatos.dungeons.controller.websocket;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.patodesapatos.dungeons.controller.MessageType;
 import com.patodesapatos.dungeons.domain.WebSocketDTO;
 import com.patodesapatos.dungeons.domain.battle.dto.TurnActionDTO;
 import com.patodesapatos.dungeons.domain.battle.dto.UnitReadyDTO;
-import com.patodesapatos.dungeons.domain.dungeon.DungeonService;
 import com.patodesapatos.dungeons.domain.dungeon.Player;
 
 public class BattleWSHandler {
-    @Autowired
-    private static DungeonService dungeonService;
     
     public static void handle(WebSocketController wsc, WebSocketSession session, String username, MessageType type, JSONObject data) throws Exception {
         WebSocketDTO dto;
@@ -33,7 +29,7 @@ public class BattleWSHandler {
              * }
              */
             case BATTLE_START:
-                var dungeon = dungeonService.getAll().get(0); //TODO: by invite
+                var dungeon = wsc.dungeonService.getAll().get(0); //TODO: by invite
 
                 var players = new ArrayList<Player>();
                 var units = data.getJSONArray("units");
@@ -55,7 +51,7 @@ public class BattleWSHandler {
              * }
              */
             case JOIN_BATTLE:
-                dungeon = dungeonService.getAll().get(0); //TODO: by invite
+                dungeon = wsc.dungeonService.getAll().get(0); //TODO: by invite
                 var player = dungeon.getPlayerByUsername(username);
 
                 var battle = dungeon.getBattles().get(0); //TODO: by id
@@ -95,7 +91,7 @@ public class BattleWSHandler {
              * }
              */
             case BATTLE_END:
-                dungeon = dungeonService.getDungeonByInvite(data.getString("invite"));
+                dungeon = wsc.dungeonService.getDungeonByInvite(data.getString("invite"));
                 dungeon.endBattle(data.getInt("battleId"));
                 break;
             default:
