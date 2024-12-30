@@ -21,11 +21,15 @@ function add_battle_text(_text) {
 		
 		if (array_length(texts) <= 0) {
 			curr_x = -(_width + padding);
+		} else {
+			page++;	
 		}
 		
 		array_push(texts, _array);
 		array_push(text_width, _width);
 		array_push(text_height, _height);
+		
+		timer = 0;
 	}
 }
 

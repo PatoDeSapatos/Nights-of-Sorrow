@@ -5,10 +5,39 @@ function action_end() {
 		image = 0;
 		setup = false;
 		if (action >= array_length(cutscene)) {
-			if (instance_exists(obj_battle_manager)) obj_battle_manager.animating = false;
 			instance_destroy();
 		}
 	}
+}
+
+function battle_action_start(_targets) {
+	if (is_array(_targets)) {
+		for (var i = 0; i < array_length(_targets); ++i) {
+		    var _target = _targets[i];
+			with(_target) {
+				animating = true;
+			}	
+		}
+	} else with(_targets) {
+		animating = true;	
+	}
+}
+
+function battle_action_end(_targets) {
+	with (obj_cutscene) {
+		if (is_array(_targets)) {
+			for (var i = 0; i < array_length(_targets); ++i) {
+				var _target = _targets[i];
+				with(_target) {
+					animating = false;	
+				}
+			}
+		} else with(_targets) {
+			animating = false;	
+		}
+	}
+	
+	action_end();
 }
 
 function cutscene_await(_await_frames) {
@@ -72,7 +101,7 @@ function cutscene_move_character(_id, _x, _y, _relative, _spd) {
 				facing_up = false;
 			}
 			
-			action_end();
+			battle_action_end(_id);
 		}	
 	}
 }
@@ -87,6 +116,7 @@ function cutscene_use_action(_user, _action, _targets) {
 		image = _user.sprite_index;
 		_user.sprite_index = _user.unit.sprites[$ _action[$ "userAnimation"]];
 		_user.image_index = 0;
+		battle_action_start(_targets);
 		setup = true;
 	}
 	
@@ -104,7 +134,7 @@ function cutscene_use_action(_user, _action, _targets) {
 		_action.func(_user, _targets);
 		_user.sprite_index = image;
 		_user.image_index = 0;
-		action_end();
+		battle_action_end(_targets);
 	}
 }
 
@@ -113,12 +143,13 @@ function cutscene_animate_once(_id, _sprite_index) {
 		image = _id.sprite_index;
 		_id.sprite_index = _sprite_index;
 		_id.image_index = 0;
+		battle_action_start(_id);
 		setup = true;
 	}
 	
 	if (_id.image_index >= sprite_get_number(_sprite_index)-1) {
 		_id.sprite_index = image;
-		action_end();
+		battle_action_end(_id);
 	}
 }
 
@@ -140,6 +171,7 @@ function cutscene_activate_condition(_target) {
 		add_battle_text( string("{0} suffers from {1}", _target.unit.name, _condition.name) );
 		battle_text_set_color(_condition.col, 3, 3);
 
+		battle_action_start(_target)
 		setup = true;
 	}
 	
@@ -149,6 +181,6 @@ function cutscene_activate_condition(_target) {
 		_condition.func(_target);
 		_target.sprite_index = image;
 		_target.image_index = 0;
-		action_end();
+		battle_action_end(_target);
 	}
 }

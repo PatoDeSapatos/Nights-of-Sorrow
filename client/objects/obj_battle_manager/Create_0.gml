@@ -5,6 +5,8 @@
 // allies = []
 // enemies = []
 
+global.loading_screen = true;
+
 depth = 10;
 
 if (!is_array(allies) || !is_array(enemies) || !is_array(grid)) {
@@ -13,9 +15,9 @@ if (!is_array(allies) || !is_array(enemies) || !is_array(grid)) {
 }
 
 // Visual Variables
+animating = false;
 scale = 2;
 cursor_in_range = false;
-animating = false;
 path = [];
 mouse_hover = {
 	x: -1,
@@ -92,3 +94,5 @@ for (var i = 0; i < array_length(enemies); ++i) {
 	});
 	array_push(units, _unit);
 }
+
+global.loading_screen = false;

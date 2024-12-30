@@ -28,7 +28,7 @@ global.actions = {
 			}
 			
 			battle_inflict_condition(_targets[0], global.conditions.poison, 100);
-			unit_take_damage(_damage, _targets[0], _types, true);
+			unit_take_damage(_damage, _user, _targets[0], _types, true);
 		}	
 	},
 	attackBoost: {

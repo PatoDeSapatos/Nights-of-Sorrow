@@ -3,12 +3,17 @@ function battle_sort_by_speed(_u1, _u2) {
 }
 
 function battle_state_init() {
-	array_sort(units, battle_sort_by_speed);
-	state = battle_state_start_turn;
+	current_waiting_frames++;
+	global.loading_screen = true;
+	
+	if (current_waiting_frames >= waiting_frames) {
+		array_sort(units, battle_sort_by_speed);
+		global.loading_screen = false;
+		state = battle_state_start_turn;
+	}
 }
 
 function battle_state_start_turn() {
-	current_waiting_frames++;	
 	movement_actions = 1;
 	main_actions = 1;
 	
@@ -16,48 +21,46 @@ function battle_state_start_turn() {
 		obj_battle_manager.grid[unit.position.x, unit.position.y].coll = true;
 	}
 	
-	if (current_waiting_frames >= waiting_frames) {
-		current_waiting_frames = 0;	
-		obj_camera.follow = units[turns];
-		units[turns].is_broken = false;
+	current_waiting_frames = 0;	
+	obj_camera.follow = units[turns];
+	units[turns].is_broken = false;
 		
-		targeted_tiles = [];
-		var _lenght = array_length(obj_battle_manager.grid);
-		var _movement = units[turns].unit.movement;
-		var _player_x = units[turns].unit.position.x;
-		var _player_y = units[turns].unit.position.y;
+	targeted_tiles = [];
+	var _lenght = array_length(obj_battle_manager.grid);
+	var _movement = units[turns].unit.movement;
+	var _player_x = units[turns].unit.position.x;
+	var _player_y = units[turns].unit.position.y;
 		
-		//for (var _y = _player_y-_movement; _y < _player_y+_movement; ++_y) {
-		//	if (_y < 0 || _y >= _lenght) continue;
+	//for (var _y = _player_y-_movement; _y < _player_y+_movement; ++_y) {
+	//	if (_y < 0 || _y >= _lenght) continue;
 			  
-		//	for (var _x = _player_x-_movement; _x < _player_x+_movement; ++_x) {
-		//		if (_x < 0 || _x >= _lenght) continue;	   
-		//		if (_x + _y <= _movement) {
-		//			array_push(targeted_tiles, [_x, _y]);
-		//		}
-		//	}
-		//}
+	//	for (var _x = _player_x-_movement; _x < _player_x+_movement; ++_x) {
+	//		if (_x < 0 || _x >= _lenght) continue;	   
+	//		if (_x + _y <= _movement) {
+	//			array_push(targeted_tiles, [_x, _y]);
+	//		}
+	//	}
+	//}
 			
-		for (var _yy = -(_movement+1); _yy < _movement+1; ++_yy) {
-			for (var _xx = -(_movement+1); _xx < _movement+1; ++_xx) {
-				var _new_x = _player_x + _xx;
-				var _new_y = _player_y + _yy;
+	for (var _yy = -(_movement+1); _yy < _movement+1; ++_yy) {
+		for (var _xx = -(_movement+1); _xx < _movement+1; ++_xx) {
+			var _new_x = _player_x + _xx;
+			var _new_y = _player_y + _yy;
 					
-				if (abs(_xx) + abs(_yy) <= _movement) {
-					if((_new_x < 0 || _new_x >= _lenght) || (_new_y < 0 || _new_y >= _lenght)) continue;
-					array_push(targeted_tiles, [_new_x, _new_y]);
-				}
+			if (abs(_xx) + abs(_yy) <= _movement) {
+				if((_new_x < 0 || _new_x >= _lenght) || (_new_y < 0 || _new_y >= _lenght)) continue;
+				array_push(targeted_tiles, [_new_x, _new_y]);
 			}
 		}
+	}
 	
-		if (units[turns].unit.is_player) {			
-			state = battle_state_turn;
+	if (units[turns].unit.is_player) {			
+		state = battle_state_turn;
+	} else {
+		if ( battle_host == obj_server.username && units[turns].unit.is_enemy ) {
+			state = battle_state_enemy_turn;
 		} else {
-			if ( battle_host == obj_server.username && units[turns].unit.is_enemy ) {
-				state = battle_state_enemy_turn;
-			} else {
-				state = battle_state_waiting;
-			}
+			state = battle_state_waiting;
 		}
 	}
 }
@@ -105,14 +108,9 @@ function battle_state_turn() {
 	
 	// End State
 	if (!animating && (main_actions <= 0 && special_actions <= 0) || units[turns].ready) {
-		if (extra_action) {
-			extra_turn_user = units[turns];
-			state = battle_state_extra;
-		} else {
-			units[turns].ready = true;
-			player_turn = false;
-			state = battle_state_waiting;			
-		}
+		units[turns].ready = true;
+		player_turn = false;
+		state = battle_state_waiting;			
 	}
 }
 
@@ -185,11 +183,10 @@ function battle_state_enemy_turn() {
 			with (_user) {
 				unit.enemy_info.battle_script(self);
 			}
+			if (!extra_turn_given) extra_action = false;
 		}
-		
-		if (!animating && !extra_action) {
-			state = battle_state_waiting;
-		}
+
+		state = battle_state_waiting;
 	}	
 }
 
@@ -199,16 +196,51 @@ function battle_state_waiting() {
 	}
 	
 	if (!animating) {
-		if (extra_action && extra_turn_user != noone && extra_turn_user.unit.player_username == global.server.username) {
-			state = battle_state_extra;	
-		} else if (units[turns].ready) {
-			state = battle_state_end_turn;
+		
+		if (extra_action && extra_turn_user != noone) {
+			if(extra_turn_user.unit.player_username == global.server.username) {
+				extra_turn_user.ready = false;
+				state = battle_state_extra;	
+			} else if (battle_host == global.server.username && extra_turn_user.is_enemy) {
+				state = battle_state_enemy_turn;
+			}
+		}
+		
+		current_waiting_frames++;
+		
+		if (current_waiting_frames >= waiting_frames) {
+			if (units[turns].ready || extra_turn_user.ready) {
+				state = battle_state_end_turn;
+			}
+			
+			current_waiting_frames = 0;
 		}
 	}
 }
 
+function battle_check_animating() {
+	var _animating = instance_exists(obj_cutscene) || instance_exists(obj_battle_effect);
+	
+	if (!_animating) {
+		for (var i = 0; i < array_length(units); ++i) {
+		    if (units[i].animating) {
+				_animating = true;
+				break;
+			}
+		}
+	}
+	
+	return _animating;
+}
+
 function battle_state_end_turn() {
-	with(units[turns]) {
+	if (animating) { 
+		return;
+	}
+	
+	var _unit = units[turns];
+	
+	with(_unit) {
 		if (unit.condition != noone && unit.condition.trigger == EFFECT_TRIGGERS.END_TURN_SELF) {
 			battle_activate_condition(self);
 		}
@@ -242,4 +274,37 @@ function battle_state_end_turn() {
 
 function check_attack() {
 	return (l_click && unit_hover != noone && unit_hover.object_index == obj_enemy_unit)
+}
+
+function battle_check_over() {
+	var _allies_win = true;
+	var _enemies_win = true;
+	
+	for (var i = 0; i < array_length(allies); ++i) {
+	    if (allies[i].hp > 0) {
+			_enemies_win = false;
+			break;
+		}
+	}
+	
+	for (var i = 0; i < array_length(enemies); ++i) {
+	    if (enemies[i].hp > 0) {
+			_allies_win = false;
+			break;
+		}
+	}
+	
+	for (var i = 0; i < array_length(units); ++i) {
+	    if (units[i].unit.hp <= 0) {
+			array_delete(units, i, 1);
+		}
+	}
+	
+	return _allies_win || _enemies_win;
+}
+
+function end_battle() {
+	instance_destroy(obj_battle_unit);
+	instance_destroy(obj_battle_effect);
+	instance_destroy(obj_battle_manager);
 }

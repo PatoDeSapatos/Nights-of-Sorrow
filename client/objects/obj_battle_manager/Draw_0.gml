@@ -12,7 +12,7 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 		var _in_path = false;
 		var _in_mov_range = false;
 		
-		if (!animating && _mouse_tile_x == _x && _mouse_tile_y == _y) {
+		if (_mouse_tile_x == _x && _mouse_tile_y == _y) {
 			mouse_hover.x = _x;
 			mouse_hover.y = _y;
 		}
@@ -35,7 +35,7 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 			}
 		}
 				
-		if (!animating && cursor_in_range && _in_path) {
+		if (cursor_in_range && _in_path) {
 			draw_sprite_ext(spr_dungeon_tileset, 5, _xx, _yy, scale, scale, 0, c_white, 1);
 		} else draw_sprite_ext(spr_dungeon_tileset, grid[_y][_x].spr, _xx, _yy, scale, scale, 0, c_white, 1);
 	    

@@ -43,13 +43,12 @@ function init_demo_battle(_grid_size) {
 	var _player_sprites = new SpriteSet(0, 0, 0, 0, 0);
 	
 	var _player_unit1 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit2 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 1}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit3 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit2 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
 	
 	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME", new Stats());
-	var _enemy2 = new EnemyUnit({x: 1, y: 1}, "SLIME", new Stats());
+	var _enemy2 = new EnemyUnit({x: 2, y: 1}, "SLIME", new Stats());
 	
-	var _allies = [ _player_unit1, _player_unit2, _player_unit3 ];	
+	var _allies = [ _player_unit1, _player_unit2 ];	
 	var _enemies = [ _enemy1, _enemy2 ];	
 	
 	var _grid = [];
@@ -77,8 +76,6 @@ function init_battle(_grid, _allies, _enemies, _battle_host) {
 function move_unit_path(_id, _path) {
 	if (!instance_exists(obj_cutscene) && array_length(_path) > 0) {
 		with (obj_battle_manager) {
-			animating = true;
-			
 			grid[_id.unit.position.x, _id.unit.position.y].coll = false;
 
 			var _cutscene = [];
@@ -107,8 +104,7 @@ function move_unit_path(_id, _path) {
 function unit_use_action(_action, _user, _targets) {
 	with (obj_battle_manager) {
 		if (_action.range != -1) {
-			var _path = get_shortest_path_array(grid, _user.unit.position.x, _user.unit.position.y, _targets[0].unit.position.x, _targets[0].unit.position.y);
-			if (array_length(_path) > _action.range) {
+			if (calc_unit_distance(_user, _targets[0]) > _action.range) {
 				return;	
 			}
 		}
@@ -118,7 +114,7 @@ function unit_use_action(_action, _user, _targets) {
 	}	
 }
 
-function unit_take_damage(_damage, _target, _types, _is_physical) {
+function unit_take_damage(_damage, _user, _target, _types, _is_physical) {
 	with (_target) {
 		var _defense = (_is_physical) ? (unit_get_stats(_target, "defense")) : (unit_get_stats(_target, "magic_defense"));
 		
@@ -136,7 +132,8 @@ function unit_take_damage(_damage, _target, _types, _is_physical) {
 			if (!_target.is_broken && _resistance_multiplier > 0) {
 				_target.is_broken = true;
 				extra_turn_given = false;
-				extra_action = true;	
+				extra_action = true;
+				extra_turn_user = _user;
 			}
 		}
 		
@@ -195,7 +192,6 @@ function battle_create_cutscene(_cutscene) {
 		array_push(_cutscene, _await)
 		
 		if (!instance_exists(obj_cutscene)) {
-			animating = true;
 			instance_create_depth(0, 0, -1000, obj_cutscene, {
 				cutscene: _cutscene
 			})
@@ -244,4 +240,8 @@ function battle_change_stats(_target, _stats_name, _amount) {
 	
 	_target.unit.stat_changes[$ _stats_name] += _amount;
 	_target.unit.stat_changes[$ _stats_name] = clamp(_target.unit.stat_changes[$ _stats_name], -_cap, _cap);
+}
+
+function calc_unit_distance(_unit1, _unit2) {
+	return floor(sqrt(sqr(_unit1.unit.position.x - _unit2.unit.position.x) + sqr(_unit1.unit.position.y - _unit2.unit.position.y)));
 }

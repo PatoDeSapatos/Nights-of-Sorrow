@@ -1,8 +1,4 @@
 /// @description Inserir descrição aqui
-with(obj_battle_manager) {
-	animating = true;	
-}
-
 var _current_action = cutscene[action];
 var _arg_length = array_length(_current_action) - 1;
 

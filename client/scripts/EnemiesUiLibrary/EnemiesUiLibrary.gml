@@ -5,7 +5,7 @@ global.enemy_ui = {
 		var _possible_gives = [];
 		
 		var _can_move = !obj_battle_manager.extra_action;
-		
+
 		with(obj_battle_manager) {
 			if (!extra_turn_given && extra_action) {
 				if (irandom_range(1, 100) >= _give_extra_chance) {
@@ -14,12 +14,14 @@ global.enemy_ui = {
 			}
 			
 			if (_give_extra) {
-				_possible_gives = array_filter(units, function(_unit) {
-					return _unit.unit.is_enemy && _unit != obj_battle_manager.extra_turn_user;
-				});
+				var _filter = function(_unit) {
+					return _unit.unit.is_enemy && _unit != user.id;
+				}
+
+				_possible_gives = array_filter(units, method({user: _id}, _filter));
 			
 				if (array_length(_possible_gives) <= 0) {
-					_give_extra = false;	
+					_give_extra = false;
 				}	
 			}
 		}
@@ -32,7 +34,7 @@ global.enemy_ui = {
 				});
 		
 				if (array_length(_possible_targets) <= 0) {
-					ready = true;	
+					ready = true;
 					return;
 				}
 		
@@ -43,7 +45,7 @@ global.enemy_ui = {
 				for (var i = 0; i < array_length(_possible_targets); ++i) {
 					var _target = _possible_targets[i];
 			
-					var _distance = abs(unit.position.x - _target.unit.position.x) + abs(unit.position.y - _target.unit.position.y);
+					var _distance = calc_unit_distance(_id, _target);
 					array_push(_distances, [_distance, _target])
 				}
 		
@@ -53,10 +55,10 @@ global.enemy_ui = {
 			
 				_target = _distances[0, 1];
 		
-				if (array_length(_possible_targets) > 1) { 
-					if ( (_distances[0, 0] - _distances[1, 0]) <= 5 && _distances[1,0] < unit.movement ) {
-						_target = _distances[irandom_range(0, 1), 1];
-					}
+				if (array_length(_possible_targets) > 1) {
+					var _in_range = _can_move ? (_distances[1,0] < unit.enemy_info.movement) : (_distances[1,0] < unit.enemy_info.actions[0].range);
+						
+					_target = _distances[irandom_range(0, 1), 1];
 				}
 		
 				if (_can_move) {
@@ -83,12 +85,12 @@ global.enemy_ui = {
 		} else {
 			var _target = _possible_gives[irandom_range(0, array_length(_possible_gives)-1)];
 			
-			obj_camera.follow = _target;
 			with (obj_battle_manager) {
-				extra_action = true;
 				main_actions = 1;
+				extra_turn_user.ready = true;
 				extra_turn_user = _target;
-				extra_turn_given = true;
+				obj_camera.follow = _target;
+				extra_turn_given = true
 			}
 		}
 	}

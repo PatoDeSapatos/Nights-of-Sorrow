@@ -3,6 +3,8 @@ unit_hover = noone;
 var _mouse_x = mouse_hover.x;
 var _mouse_y = mouse_hover.y;
 
+animating = battle_check_animating();
+
 with(obj_battle_unit) {	
 	var _x = screenToTileXG(x, y, other.tile_size, other.init_x, other.init_y);
 	var _y = screenToTileYG(x, y, other.tile_size, other.init_x, other.init_y);

@@ -3,6 +3,7 @@ global.camera = instance_create_layer(0, 0, "Instances", obj_camera);
 global.server = instance_create_layer(0, 0, "Instances", obj_server);
 global.pause = false;
 global.loading = false;
+global.loading_screen = false;
 global.can_zoom = false;
 global.enemies = ds_map_create();
 global.items = {};

@@ -1,5 +1,4 @@
 /// @description
-obj_battle_manager.animating = true;
 timer++;
 
 curr_x = lerp(curr_x, target_x, rate);
@@ -23,7 +22,6 @@ if (timer >= waiting_time) {
 	timer = 0;	
 
 	if (page >= array_length(texts)-1) {
-		obj_battle_manager.animating = false;
 		vanish = true;
 		target_x = -(text_width[page] + padding*2);
 		page = array_length(texts)-1;
