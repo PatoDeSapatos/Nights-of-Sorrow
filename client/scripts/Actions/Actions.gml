@@ -42,6 +42,17 @@ global.actions = {
 		func: function (_user) {
 			battle_change_stats(_user, "attack", 2);
 		}
+	},
+	useItem: {
+		name: "Use Item",
+		description: "Use a item from your inventory.",
+		targetRequired: false,
+		range: -1,
+		
+		func: function (_user, _item_stack) {
+			var _item_info = get_item_by_id(_item_stack.id);
+			_item_info.battle_script(_user);
+		}
 	}
 	
 }

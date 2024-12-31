@@ -112,7 +112,7 @@ function cutscene_instance_create_depth(_x, _y, _depth, _object, _struct={}) {
 }
 
 function cutscene_use_action(_user, _action, _targets) {
-	if (!setup && !is_undefined(_action.userAnimation) && !is_undefined( _user.unit.sprites[$ _action.userAnimation] ) ) {
+	if (!setup && struct_exists(_action, "userAnimation") && !is_undefined(_action.userAnimation) && !is_undefined( _user.unit.sprites[$ _action.userAnimation] ) ) {
 		image = _user.sprite_index;
 		_user.sprite_index = _user.unit.sprites[$ _action[$ "userAnimation"]];
 		_user.image_index = 0;
@@ -123,7 +123,7 @@ function cutscene_use_action(_user, _action, _targets) {
 	var _frames = (_user.object_index == obj_party_unit) ? _user.idle_frames-1 : sprite_get_number(_user.sprite_index)-1;
 	
 	if (_user.image_index >= _frames) {
-		if (!is_undefined(_action.hit_effect)) {
+		if (struct_exists(_action, "hit_effect") && !is_undefined(_action.hit_effect)) {
 			for (var i = 0; i < array_length(_targets); ++i) {
 			    var _target = _targets[i];
 				var _effect = instance_create_depth(_target.x, _target.y, _target.depth-1, obj_battle_effect);

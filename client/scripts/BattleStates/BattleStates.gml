@@ -1,5 +1,5 @@
 function battle_sort_by_speed(_u1, _u2) {
-	return unit_get_stats(_u1, "spd") - unit_get_stats(_u2, "spd");
+	return unit_get_stats(_u2, "spd") - unit_get_stats(_u1, "spd");
 }
 
 function battle_state_init() {
@@ -82,6 +82,12 @@ function battle_state_turn() {
 		
 		if (keyboard_check_pressed(ord("D"))) {
 			unit_use_action(global.actions.attackBoost, units[turns], [units[turns]]);
+			main_actions--;
+		}
+		
+		if (array_length(units[turns].unit.inventory) > 0 && keyboard_check_pressed(ord("I"))) {
+			unit_use_action(global.actions.useItem, units[turns], units[turns].unit.inventory[0]);
+			main_actions--;
 		}
 	}
 	

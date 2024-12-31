@@ -2,6 +2,7 @@ enum ItemCategory {
 	DEFAULT,
 	MATERIAL,
 	WEAPON,
+	POTION,
 	LENGTH	
 }
 
@@ -25,8 +26,8 @@ function Equipment_Item(_name, _display_name, _sprId, _category, _stats, _slot, 
 	stats = _stats;
 }
 
-function Consumable_Item(_name, _display_name, _sprId, _category, _effect, _max_stack) : Item() constructor {
-	effect = _effect;	
+function Consumable_Item(_name, _display_name, _sprId, _category, _battle_script, _max_stack) : Item(_name, _display_name, _sprId, _category, _max_stack) constructor {
+	battle_script = _battle_script;
 }
 
 function Stats(_hp = 0, _defense = 0, _magic_defense = 0, _attack = 0, _magic_attack = 0, _spd = 0, _luck = 0) constructor {
@@ -47,8 +48,8 @@ function add_equipment_item( _name, _display_name, _sprId, _category, _stats, _s
 	struct_set( global.items, struct_names_count(global.items), new Equipment_Item(_name, _display_name, _sprId, _category, _stats, _slot, _max_stack) );
 }
 
-function add_consumable_item( _name, _display_name, _sprId, _category, _effect, _max_stack = 999 ) {
-	struct_set( global.items, struct_names_count(global.items), new Consumable_Item(_name, _display_name, _sprId, _category, _effect, _max_stack) );
+function add_consumable_item( _name, _display_name, _sprId, _category, _battle_script, _max_stack = 999 ) {
+	struct_set( global.items, struct_names_count(global.items), new Consumable_Item(_name, _display_name, _sprId, _category, _battle_script, _max_stack) );
 }
 
 function init_items() {
@@ -59,4 +60,11 @@ function init_items() {
 	// With Stats
 	add_equipment_item( "MAD_HAMMER", "Martelo Maluco", 2, ItemCategory.WEAPON, new Stats(0, 0, 0, 5, 0, 0), bothHandsSlot, 1 );
 	add_equipment_item( "STICKY_HAMMER", "Martelo Grudento", 3, ItemCategory.WEAPON, new Stats(0, 0, 0, 10, 0, 0), Hand1Slot, 1 );
+	
+	// Comsumables
+	add_consumable_item("S_HEALTH_POTION", "Small Health Potion", 4, ItemCategory.POTION, function (_target) {
+		var _id = get_item_id_by_name("S_HEALTH_POTION");
+		battle_change_hp(_target, 20);
+		inventory_remove_item(_target.unit.inventory, _id, 1);
+	}, 10);
 }

@@ -44,7 +44,7 @@ function init_enemies() {
 	// Slime
 	ds_map_add(global.enemies, "SLIME", new Enemy(
 		"Slime",
-		new Stats(10, 3, 5, 2, 0, 2, 0),
+		new Stats(10, 3, 5, 2, 0, 0, 0),
 		{
 			idle: spr_slime_idle,
 			walking: spr_slime_idle,

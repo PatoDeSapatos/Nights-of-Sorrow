@@ -42,8 +42,14 @@ function init_demo_battle(_grid_size) {
 	global.server.username = "battle_demo";
 	var _player_sprites = new SpriteSet(0, 0, 0, 0, 0);
 	
-	var _player_unit1 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit2 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 10, 0), 10, 10, [], {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _inventory1 = [];
+	inventory_add_item(_inventory1, 4, 5);
+	
+	var _inventory2 = [];
+	inventory_add_item(_inventory2, 4, 5);
+	
+	var _player_unit1 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 100, 0), 10, 10, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit2 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 100, 0), 10, 10, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
 	
 	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME", new Stats());
 	var _enemy2 = new EnemyUnit({x: 2, y: 1}, "SLIME", new Stats());
@@ -147,13 +153,15 @@ function unit_take_damage(_damage, _user, _target, _types, _is_physical) {
 function battle_change_hp(_target, _amount) {
 	var _col = (_amount > 0) ? (c_green) : (c_red);
 
-	instance_create_depth(_target.x + random_range(-20, 20), _target.y + random_range(-20, 20), _target.depth-1000, obj_battle_floating_text, {
-		text: _amount,
-		col: _col,
-		font: fnt_inventory_title
-	})
+	with(_target) {
+		instance_create_depth(x + random_range(-20, 20), y + random_range(-20, 20), depth-1000, obj_battle_floating_text, {
+			text: _amount,
+			col: _col,
+			font: fnt_inventory_title
+		})
 	
-	unit.hp = max(0, unit.hp + _amount);
+		unit.hp = clamp(unit.hp + _amount, 0, unit.stats.hp);
+	}
 }
 
 function battle_inflict_condition(_target, _condition, _chance_percentage) {
@@ -262,8 +270,6 @@ function create_unit_corpse(_unit) {
 			}
 		}
 	}
-	
-	
 	
 	_corpse.sprite_index = _unit.sprite_index;
 	_corpse.image_index = _unit.image_index;

@@ -422,7 +422,7 @@ function equip_item(_item, _struct = equipments) {
 		}
 	}
 	
-	update_inventory();
+	update_inventory(inventory);
 	inventory_update_stats(inventory, _struct, player_equipment_stats);
 }
 
@@ -473,7 +473,7 @@ function inventory_add_item( _inventory, _item_id, _quantity ) {
 	}
 
 	if (global.player_inventory == self) create_inventory_operation(_item_id, _quantity, "Added");
-	update_inventory();
+	update_inventory(_inventory);
 }
 
 function inventory_remove_item( _inventory, _item_id, _quantity ) {
@@ -504,7 +504,7 @@ function inventory_remove_item( _inventory, _item_id, _quantity ) {
 		}
 	}
 	
-	update_inventory();
+	update_inventory(_inventory);
 }
 
 function inventory_merge_items(_inventory) {
@@ -561,7 +561,7 @@ function get_item_quantity_in_inventory(_inventory, _item_id) {
 
 function inventory_add_recipe(_recipes_index, _recipe_id) {
 	array_push(_recipes_index, new Recipe_Stack( _recipe_id ));
-	update_inventory();
+	update_inventory(inventory);
 }
 
 function inventory_craft_recipe(_recipes_index, _recipe) {
@@ -582,7 +582,7 @@ function inventory_craft_recipe_all(_recipes_index, _recipe) {
 	}
 }
 
-function update_inventory() {
+function update_inventory(_inventory) {
 	if (variable_instance_exists(self, "recipes")) {
 		array_foreach(recipes, function(_value, _index) {
 			var _recipe = get_recipe_by_id(_value.id);
@@ -596,7 +596,7 @@ function update_inventory() {
 		}
 	}
 	
-	inventory_merge_items(inventory);
+	inventory_merge_items(_inventory);
 
 	if (self == global.player_inventory) {
 		var _data = {
