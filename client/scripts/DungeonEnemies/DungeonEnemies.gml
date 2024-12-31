@@ -59,7 +59,7 @@ function init_enemies() {
 		[MOVE_TYPES.BLUDGEONING],
 		[MOVE_TYPES.FIRE],
 		[MOVE_TYPES.SLASHING],
-		[],
+		[MOVE_TYPES.POISON],
 		[new Drop(0, 3, 33)],
 		global.enemy_ui.simple
 	));

@@ -1,5 +1,5 @@
-function action_end() {
-	with(obj_cutscene) {
+function action_end(_id) {
+	with(_id) {
 		action++;
 		timer = 0;
 		image = 0;
@@ -23,8 +23,8 @@ function battle_action_start(_targets) {
 	}
 }
 
-function battle_action_end(_targets) {
-	with (obj_cutscene) {
+function battle_action_end(_id, _targets) {
+	with (_id) {
 		if (is_array(_targets)) {
 			for (var i = 0; i < array_length(_targets); ++i) {
 				var _target = _targets[i];
@@ -37,14 +37,14 @@ function battle_action_end(_targets) {
 		}
 	}
 	
-	action_end();
+	action_end(_id);
 }
 
 function cutscene_await(_await_frames) {
 	timer++;
 	
 	if (timer >= _await_frames) {
-		action_end();		
+		action_end(self);		
 	}
 }
 
@@ -101,14 +101,14 @@ function cutscene_move_character(_id, _x, _y, _relative, _spd) {
 				facing_up = false;
 			}
 			
-			battle_action_end(_id);
+			battle_action_end(other, _id);
 		}	
 	}
 }
 
 function cutscene_instance_create_depth(_x, _y, _depth, _object, _struct={}) {
 	instance_create_depth(_x, _y, _depth, _object, _struct);
-	action_end();
+	action_end(self);
 }
 
 function cutscene_use_action(_user, _action, _targets) {
@@ -134,7 +134,7 @@ function cutscene_use_action(_user, _action, _targets) {
 		_action.func(_user, _targets);
 		_user.sprite_index = image;
 		_user.image_index = 0;
-		battle_action_end(_targets);
+		battle_action_end(self, _targets);
 	}
 }
 
@@ -147,9 +147,9 @@ function cutscene_animate_once(_id, _sprite_index) {
 		setup = true;
 	}
 	
-	if (_id.image_index >= sprite_get_number(_sprite_index)-2) {
+	if (_id.image_index >= sprite_get_number(_id.sprite_index)-1.1) {
 		_id.sprite_index = image;
-		battle_action_end(_id);
+		battle_action_end(self, _id);
 	}
 }
 
@@ -181,7 +181,7 @@ function cutscene_activate_condition(_target) {
 		_condition.func(_target);
 		_target.sprite_index = image;
 		_target.image_index = 0;
-		battle_action_end(_target);
+		battle_action_end(self, _target);
 	}
 }
 
@@ -191,5 +191,5 @@ function cutscene_change_sprite(_id, _sprite) {
 		image_index = 0;
 	}
 	
-	battle_action_end(_id);
+	battle_action_end(self, _id);
 }

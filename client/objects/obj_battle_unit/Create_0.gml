@@ -19,6 +19,7 @@ clothing = 0;
 
 is_broken = false;
 is_dead = false;
+in_target = false;
 animating = false;
 
 ready = false;

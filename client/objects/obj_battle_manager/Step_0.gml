@@ -1,4 +1,12 @@
 /// @description
+using_mouse = false;
+if (mouse_sx != device_mouse_x_to_gui(0) || mouse_sy != device_mouse_y_to_gui(0)) {
+	using_mouse = true;	
+}
+
+mouse_sx = device_mouse_x_to_gui(0);
+mouse_sy = device_mouse_y_to_gui(0);
+
 unit_hover = noone;
 var _mouse_x = mouse_hover.x;
 var _mouse_y = mouse_hover.y;
@@ -31,6 +39,9 @@ left_input = keyboard_check_pressed(vk_left) || keyboard_check_pressed(ord("A"))
 
 r_click = mouse_check_button_pressed(mb_right);
 right_input = keyboard_check_pressed(vk_right) || keyboard_check_pressed(ord("D"));
+
+up_input = keyboard_check_pressed(ord("W")) || keyboard_check_pressed(vk_up);
+down_input = keyboard_check_pressed(ord("S")) || keyboard_check_pressed(vk_down);
 
 confirm_input = keyboard_check_pressed(vk_enter);
 cancel_input = keyboard_check_pressed(vk_escape) || keyboard_check_pressed(vk_backspace);

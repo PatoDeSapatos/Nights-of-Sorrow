@@ -3,7 +3,13 @@ enum MOVE_TYPES {
 	BLUDGEONING,
 	PIERCING,
 	FIRE,
-	LIGHT
+	LIGHT,
+	POISON
+}
+
+enum MOVE_SHAPES {
+	CIRCLE,
+	SQUARE
 }
 
 function end_charging_action(_user) {
@@ -31,13 +37,6 @@ global.actions = {
 			
 			var _damage = ceil(_user_attack + random_range(-_user_attack * .25, _user_attack * .25));
 			var _types = _user.unit.attack_types;
-			
-			if(is_struct(_targets[0].unit.sprites) && !is_undefined(_targets[0].unit.sprites[$ "hurt"]) ) {
-				var _cutscene = [cutscene_animate_once, _targets[0], _targets[0].unit.sprites.hurt];
-				instance_create_depth(0, 0, -1000, obj_cutscene, {
-					cutscene: [_cutscene, _cutscene]
-				});
-			}
 			
 			unit_take_damage(_damage, _user, _targets[0], _types, true);
 		}	
@@ -98,6 +97,50 @@ global.actions = {
 			
 			}
  		}
+	},
+	fireBall: {
+		name: "Fire Ball",
+		description: "Casts a powerfull fireball that give damage to a area.",
+		targetRequired: true,
+		targetCount: -1,
+		targetSelf: true,
+		prioritizeEnemies: true,
+		charge: false,
+		range: 6,
+		areaTarget: true,
+		originInPlayer: false,
+		shape: MOVE_SHAPES.CIRCLE,
+		shapeSize: 3,
+		
+		func: function (_user, _targets) {
+			for (var i = 0; i < array_length(_targets); ++i) {
+				var _attack = unit_get_stats(_user, "magic_attack");
+				var _damage = ceil(_attack*2.5 + irandom(_attack));
+			    unit_take_damage(_damage, _user, _targets[i], [MOVE_TYPES.FIRE], false);
+			}
+		}
+	},
+	poisonMist: {
+		name: "Poison Mist",
+		description: "Spreads a poison mist around the caster that gives damage and has a chance to poison.",
+		targetRequired: true,
+		targetCount: -1,
+		targetSelf: false,
+		prioritizeEnemies: true,
+		charge: false,
+		range: 3,
+		areaTarget: true,
+		originInPlayer: true,
+		shape: MOVE_SHAPES.CIRCLE,
+		
+		func: function (_user, _targets) {
+			for (var i = 0; i < array_length(_targets); ++i) {
+				var _attack = unit_get_stats(_user, "magic_attack");
+				var _damage = ceil(_attack + irandom(_attack div 4));
+			    unit_take_damage(_damage, _user, _targets[i], [MOVE_TYPES.POISON], false);
+				battle_inflict_condition(_targets[i], global.conditions.poison, 33);
+			}
+		}
 	}
 	
 }

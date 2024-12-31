@@ -23,6 +23,8 @@ mouse_hover = {
 	x: -1,
 	y: -1
 }
+mouse_sx = -1;
+mouse_sy = -1;
 
 // Grid Variables
 tile_size = sprite_get_width(spr_dungeon_tileset) * scale;
@@ -32,10 +34,13 @@ init_x = obj_camera.camera_x + obj_camera.camera_w/2;
 init_y = obj_camera.camera_y + obj_camera.camera_h/2 - grid_h/2;
 
 // inputs
+using_mouse = false;
 r_click = false;
 l_click = false;
 left_input = false;
 right_input = false;
+up_input = false;
+down_input = false;
 confirm_input = false;
 cancel_input = false;
 
@@ -50,6 +55,11 @@ action_possible_targets = [];
 selected_action = noone;
 current_target = 0;
 target_indicator = noone;
+action_area = [];
+action_origin = {
+	x: 0,
+	y: 0
+}
 
 player_turn = false;
 units = [];
@@ -71,7 +81,7 @@ extra_action = false;
 extra_turn_user = noone;
 extra_turn_given = false;
 
-waiting_frames = FRAME_RATE;
+waiting_frames = FRAME_RATE div 2;
 current_waiting_frames = 0;
 
 depth = 1000;

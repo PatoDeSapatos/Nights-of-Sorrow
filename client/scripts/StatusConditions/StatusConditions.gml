@@ -13,6 +13,7 @@ global.conditions = {
 		trigger: EFFECT_TRIGGERS.END_TURN_SELF,
 		targetAnimation: "hurt",
 		col: c_purple,
+		type: MOVE_TYPES.POISON,
 		func: function(_target) {
 			with(_target) {
 				var _damage = max(round(_target.unit.max_hp/8), 0);

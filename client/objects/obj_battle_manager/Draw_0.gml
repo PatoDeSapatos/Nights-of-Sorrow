@@ -12,8 +12,9 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 		var _in_path = false;
 		var _in_mov_range = false;
 		var _in_action_range = false;
+		var _in_action_area = false;
 		
-		if (_mouse_tile_x == _x && _mouse_tile_y == _y) {
+		if (_mouse_tile_x == _x && _mouse_tile_y == _y) {			
 			mouse_hover.x = _x;
 			mouse_hover.y = _y;
 		}
@@ -36,6 +37,15 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 			}
 		}
 
+		if (array_length(action_area) > 0 && state == battle_state_targeting) {
+			for (var k = 0; k < array_length(action_area); ++k) {
+			    if ( action_area[k, 0] == _x && action_area[k, 1] == _y) {
+					_in_action_area = true;
+					break;
+				}
+			}
+		}
+
 		if ((array_length(path) > 0) && ((cursor_in_range && unit_hover == noone) || (state == battle_state_targeting))) {
 			for (var k = 0; k < array_length(path); ++k) {
 			    if ( path[k, 0] == _x && path[k, 1] == _y) {
@@ -45,7 +55,7 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 			}
 		}
 				
-		if (_in_path) {
+		if (_in_path || _in_action_area) {
 			draw_sprite_ext(spr_dungeon_tileset, 5, _xx, _yy, scale, scale, 0, c_white, 1);
 		} else draw_sprite_ext(spr_dungeon_tileset, grid[_y][_x].spr, _xx, _yy, scale, scale, 0, c_white, 1);
 	    

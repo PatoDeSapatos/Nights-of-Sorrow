@@ -177,9 +177,14 @@ function set_state_targeting(_action) {
 			});
 		}
 		
-		var _first_target = action_possible_targets[0];
-		target_indicator = instance_create_depth(_first_target.x, _first_target.y, _first_target.depth - 10, obj_target_indicator);
-		target_indicator.target = _first_target;
+		if (!struct_exists(selected_action, "areaTarget") || !selected_action.areaTarget) {
+			var _first_target = action_possible_targets[0];
+			target_indicator = instance_create_depth(_first_target.x, _first_target.y, _first_target.depth - 10, obj_target_indicator);
+			target_indicator.target = _first_target;
+		} else {
+			action_origin.x = _user.unit.position.x;
+			action_origin.y = _user.unit.position.y;
+		}
 	}
 	
 	state = battle_state_targeting;
@@ -201,7 +206,7 @@ function battle_state_targeting() {
 		end_state_targeting();
 	}
 	
-	if (struct_exists(selected_action, "targetCount")) {
+	if (struct_exists(selected_action, "targetCount") && selected_action.targetCount > 0) {
 		var _offset = right_input - left_input;
 		
 		current_target = clamp(current_target + _offset, 0, array_length(action_possible_targets)-1);
@@ -232,18 +237,88 @@ function battle_state_targeting() {
 			end_state_targeting();
 		}
 	}
+	
+	if (struct_exists(selected_action, "areaTarget") && selected_action.areaTarget) {
+		var _range = selected_action.originInPlayer ? selected_action.range : selected_action.shapeSize;
+		
+		if (selected_action.originInPlayer) {
+			action_origin.x = _user.unit.position.x
+			action_origin.y = _user.unit.position.y
+		} else {
+			if (using_mouse && mouse_hover.x != -1 && mouse_hover.y != -1) {
+				action_origin.x = mouse_hover.x;
+				action_origin.y = mouse_hover.y;
+			}
+			
+			action_origin.x = clamp(action_origin.x + (right_input - left_input), max(0, _user.unit.position.x - _range*2), min(array_length(grid[0])-1, _user.unit.position.x + _range*2));
+			action_origin.y = clamp(action_origin.y + (down_input - up_input), max(0, _user.unit.position.y - _range*2), min(array_length(grid)-1, _user.unit.position.y + _range*2));
+		}
+		
+		action_area = [[action_origin.x, action_origin.y]];
+		for (var _y = -_range; _y <= _range; ++_y) {
+		    for (var _x = -_range; _x <= _range; ++_x) {
+			    var _xx = action_origin.x + _x;
+			    var _yy = action_origin.y + _y;
+				
+				if (_xx >= 0 && _yy >= 0 && calc_in_shape_range(action_origin.x, action_origin.y, _xx, _yy, selected_action.shape)) {
+					array_push(action_area, [_xx, _yy]);	
+				}
+			}
+		}
+		
+		var _lenght = array_length(action_area);
+		
+		action_targets = [];
+
+		with (obj_battle_unit) {
+			if ((!struct_exists(other.selected_action, "targetSelf") || !other.selected_action.targetSelf) && _user.id == self.id) {
+				break;	
+			}
+			
+			in_target = false;
+			for (var i = 0; i < _lenght; ++i) {
+				if (unit.position.x == other.action_area[i, 0] && unit.position.y == other.action_area[i, 1]) {
+					array_push(other.action_targets, self);
+					in_target = true;
+					break;
+				}
+			}
+		}
+
+		if(array_length(action_targets) > 0 && (confirm_input || l_click)) {
+			unit_use_action(selected_action, _user, action_targets);
+			main_actions--;
+			extra_action = false;
+			end_state_targeting();	
+		}
+	}
 }
 
 function end_state_targeting() {
 	selected_action = noone;
 	action_targets = [];
 	action_possible_targets = [];
+	action_area = [];
+	action_origin.x = -1;
+	action_origin.y = -1;
 	
 	if (instance_exists(target_indicator)) instance_destroy(target_indicator);
+	with(obj_battle_unit) {
+		in_target = false;	
+	}
 	
 	global.camera.follow = extra_turn_user != noone ? extra_turn_user : units[turns];
 	state = prev_state;
 	prev_state = noone;
+}
+
+function calc_in_shape_range(_x1, _y1, _x2, _y2, _shape) {
+	switch(_shape) {
+		case MOVE_SHAPES.CIRCLE:
+			return floor( sqrt(sqr(_x1 - _x2) + sqr(_y1 - _y2)) );
+		default:
+			return false;
+	}
 }
 
 function battle_state_extra() {
@@ -454,8 +529,16 @@ function check_attack() {
 		set_state_targeting(global.actions.lightRay);
 	}
 		
-	if (keyboard_check_pressed(ord("D"))) {
+	if (keyboard_check_pressed(ord("W"))) {
 		set_state_targeting(global.actions.attackBoost);
+	}
+	
+	if (keyboard_check_pressed(ord("E"))) {
+		set_state_targeting(global.actions.fireBall);
+	}
+	
+	if (keyboard_check_pressed(ord("T"))) {
+		set_state_targeting(global.actions.poisonMist);
 	}
 		
 	if (array_length(units[turns].unit.inventory) > 0 && keyboard_check_pressed(ord("I"))) {
