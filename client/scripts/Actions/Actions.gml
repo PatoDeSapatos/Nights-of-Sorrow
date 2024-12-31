@@ -2,7 +2,16 @@ enum MOVE_TYPES {
 	SLASHING,
 	BLUDGEONING,
 	PIERCING,
-	FIRE
+	FIRE,
+	LIGHT
+}
+
+function end_charging_action(_user) {
+	with (_user) {
+		charging_turns = 0;
+		charging_action = noone;
+		charging_targets = noone;
+	}
 }
 
 global.actions = {
@@ -27,7 +36,6 @@ global.actions = {
 				});
 			}
 			
-			battle_inflict_condition(_targets[0], global.conditions.poison, 100);
 			unit_take_damage(_damage, _user, _targets[0], _types, true);
 		}	
 	},
@@ -53,6 +61,35 @@ global.actions = {
 			var _item_info = get_item_by_id(_item_stack.id);
 			_item_info.battle_script(_user);
 		}
+	},
+	lightRay: {
+		name: "Light Ray",
+		description: "Charges for three turns, heals on the second and blasts a powerful bean into a enemy.",
+		targetRequired: true,
+		range: 8,
+		
+		func: function (_user, _targets) {
+			with(_user) { 
+				switch(_user.charging_turns) {
+					case 0:
+						charging_action = global.actions.lightRay;
+						charging_turns++;
+						break;
+					case 1: 
+						battle_change_hp(_user, ceil(_user.unit.stats.hp/16));
+						charging_turns++;
+						break;
+					case 2:
+						var _attack = unit_get_stats(_user, "magic_attack");
+						var _damage = ceil(_attack * 1.5 + irandom(_attack/4));
+					
+						unit_take_damage(_damage, _user, _targets[0], MOVE_TYPES.LIGHT, false);
+						end_charging_action(self);
+						break;
+				}
+			
+			}
+ 		}
 	}
 	
 }

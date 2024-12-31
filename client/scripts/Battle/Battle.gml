@@ -48,8 +48,8 @@ function init_demo_battle(_grid_size) {
 	var _inventory2 = [];
 	inventory_add_item(_inventory2, 4, 5);
 	
-	var _player_unit1 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 100, 0), 10, 10, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit2 = new BattleUnit(new Stats(10, 10, 10, 5, 5, 100, 0), 10, 10, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit1 = new BattleUnit(new Stats(100, 10, 10, 5, 5, 100, 0), 100, 100, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit2 = new BattleUnit(new Stats(100, 10, 10, 5, 5, 100, 0), 100, 100, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [MOVE_TYPES.FIRE], global.server.username);
 	
 	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME", new Stats());
 	var _enemy2 = new EnemyUnit({x: 2, y: 1}, "SLIME", new Stats());
@@ -109,7 +109,8 @@ function move_unit_path(_id, _path) {
 
 function unit_use_action(_action, _user, _targets) {
 	with (obj_battle_manager) {
-		if (_action.range != -1) {
+		if (_action.range != -1 || _targets == noone) {
+			show_debug_message(_targets)
 			if (calc_unit_distance(_user, _targets[0]) > _action.range) {
 				return;	
 			}

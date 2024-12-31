@@ -72,11 +72,18 @@ function battle_state_start_turn() {
 function battle_state_turn() {
 			
 	player_turn = true;
-			
+	
+	if (units[turns].charging_action != noone) {
+		unit_use_action(units[turns].charging_action, units[turns], units[turns].charging_targets);
+		main_actions--;
+		movement_actions--;
+	}
+	
 	// Main Action
 	if (main_actions > 0) {
 		if (check_attack()) {
-			unit_use_action(global.actions.attack, units[turns], [unit_hover]);
+			unit_use_action(global.actions.lightRay, units[turns], [unit_hover]);
+			units[turns].charging_targets = [unit_hover];
 			main_actions--;
 		}
 		
@@ -125,8 +132,14 @@ function battle_state_turn() {
 }
 
 function battle_state_extra() {
+	// Charging turn
+	if (extra_turn_user.charging_action != noone) {
+		unit_use_action(extra_turn_user.charging_action, extra_turn_user, extra_turn_user.charging_targets);
+		extra_action--;	
+	}
+	
 	// Main Action
-	if (check_attack()) {
+	if (extra_action && check_attack()) {
 		unit_use_action(global.actions.attack, extra_turn_user, [unit_hover] );
 		extra_action = false;
 	}

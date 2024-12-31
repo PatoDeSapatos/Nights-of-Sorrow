@@ -22,5 +22,9 @@ is_dead = false;
 animating = false;
 
 ready = false;
+charging_turns = 0;
+charging_action = noone;
+charging_targets = noone;
+focusing = false;
 
 z = obj_battle_manager.tile_size/4;
