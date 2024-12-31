@@ -108,14 +108,7 @@ function move_unit_path(_id, _path) {
 }
 
 function unit_use_action(_action, _user, _targets) {
-	with (obj_battle_manager) {
-		if (_action.range != -1 || _targets == noone) {
-			show_debug_message(_targets)
-			if (calc_unit_distance(_user, _targets[0]) > _action.range) {
-				return;	
-			}
-		}
-		
+	with (obj_battle_manager) {		
 		var _cutscene = [cutscene_use_action,_user, _action, _targets];
 		battle_create_cutscene([_cutscene])
 	}	

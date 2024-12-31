@@ -29,6 +29,7 @@ function add_battle_text(_text) {
 		array_push(text_width, _width);
 		array_push(text_height, _height);
 		
+		vanish = false;
 		timer = 0;
 	}
 }

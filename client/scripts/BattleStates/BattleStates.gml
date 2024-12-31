@@ -73,29 +73,11 @@ function battle_state_turn() {
 			
 	player_turn = true;
 	
-	if (units[turns].charging_action != noone) {
-		unit_use_action(units[turns].charging_action, units[turns], units[turns].charging_targets);
-		main_actions--;
-		movement_actions--;
-	}
+	check_charging();
 	
 	// Main Action
 	if (main_actions > 0) {
-		if (check_attack()) {
-			unit_use_action(global.actions.lightRay, units[turns], [unit_hover]);
-			units[turns].charging_targets = [unit_hover];
-			main_actions--;
-		}
-		
-		if (keyboard_check_pressed(ord("D"))) {
-			unit_use_action(global.actions.attackBoost, units[turns], [units[turns]]);
-			main_actions--;
-		}
-		
-		if (array_length(units[turns].unit.inventory) > 0 && keyboard_check_pressed(ord("I"))) {
-			unit_use_action(global.actions.useItem, units[turns], units[turns].unit.inventory[0]);
-			main_actions--;
-		}
+		check_attack();
 	}
 	
 	// Movement player
@@ -131,17 +113,145 @@ function battle_state_turn() {
 	}
 }
 
-function battle_state_extra() {
-	// Charging turn
-	if (extra_turn_user.charging_action != noone) {
-		unit_use_action(extra_turn_user.charging_action, extra_turn_user, extra_turn_user.charging_targets);
-		extra_action--;	
+function set_state_targeting(_action) {
+	var _user = extra_action ? extra_turn_user : units[turns];
+	selected_action = _action;
+	action_targets = [];
+	current_target = 0;
+	prev_state = state;
+	
+	if (selected_action.range != -1) {
+		var _range = selected_action.range;
+		
+		action_tiles = [];
+		for (var _y = -_range; _y <= _range; ++_y) {
+			for (var _x = -_range; _x <= _range; ++_x) {
+				var _xx = _user.unit.position.x + _x;
+				var _yy = _user.unit.position.y + _y;
+			   
+				var _value = floor(sqrt(sqr(_user.unit.position.x - _xx) + sqr(_user.unit.position.y - _yy)));
+
+				if (_value <= _range && _xx >= 0 && _yy >= 0 && _xx <= array_length(grid[0]) && _yy <= array_length(grid)) {
+					array_push(action_tiles, [_xx, _yy]);   
+				}
+			}
+		}	
 	}
 	
+	// Filter possible targets
+	if (selected_action.targetRequired) {		
+		action_possible_targets = array_filter(units, function(_unit) {
+			var _user = extra_action ? extra_turn_user : units[turns];
+			var _select = true;
+			
+			if (!struct_exists(selected_action, "targetDead") || !selected_action.targetDead) {
+				_select = _select && _unit.unit.hp > 0;	
+			}
+			
+			if (!struct_exists(selected_action, "targetSelf") || !selected_action.targetSelf) {
+				_select = _select && _unit != _user;	
+			}
+			
+			if (selected_action.range != -1) {
+				_select = _select && calc_unit_distance(_user, _unit) <= selected_action.range;
+			}
+			
+			return _select;
+		});
+		
+		if (array_length(action_possible_targets) <= 0) {
+			state = battle_state_turn;
+			add_battle_text("No possible targets.");
+			return;
+		}
+		
+		if (struct_exists(selected_action, "prioritizeEnemies")) {
+			array_sort(action_possible_targets, function (_unit) {
+				return obj_battle_manager.selected_action.prioritizeEnemies ? !_unit.unit.is_enemy : _unit.unit.is_enemy;
+			});	
+		}
+		
+		if (instance_exists(unit_hover)) {
+			array_sort(action_possible_targets, function (_unit) {
+				return _unit == obj_battle_manager.unit_hover;
+			});
+		}
+		
+		var _first_target = action_possible_targets[0];
+		target_indicator = instance_create_depth(_first_target.x, _first_target.y, _first_target.depth - 10, obj_target_indicator);
+		target_indicator.target = _first_target;
+	}
+	
+	state = battle_state_targeting;
+}
+
+function battle_state_targeting() {
+	var _user = extra_action ? extra_turn_user : units[turns];
+	
+	// No target action
+	if (!selected_action.targetRequired) {
+		unit_use_action( selected_action, _user, noone );
+		main_actions--;
+		end_state_targeting();
+		return;
+	}
+
+	// Cancel targeting
+	if (cancel_input) {
+		end_state_targeting();
+	}
+	
+	if (struct_exists(selected_action, "targetCount")) {
+		var _offset = right_input - left_input;
+		
+		current_target = clamp(current_target + _offset, 0, array_length(action_possible_targets)-1);
+		if (instance_exists(action_possible_targets[current_target])) {
+			var _target = action_possible_targets[current_target];
+			global.camera.follow = _target;
+			target_indicator.target = _target;
+			
+			if (confirm_input) {
+				array_push(action_targets, _target);	
+			}
+		}
+
+		// End targeting	
+		if (array_length(action_targets) >= selected_action.targetCount) {
+			if (struct_exists(selected_action, "charge") && selected_action.charge) {
+				with (_user) {
+					charging_targets = other.action_targets;
+					charging_action = other.selected_action;
+				}
+				end_state_targeting();
+				return;
+			}
+			
+			unit_use_action(selected_action, _user, action_targets);			
+			main_actions--;
+			extra_action = false;
+			end_state_targeting();
+		}
+	}
+}
+
+function end_state_targeting() {
+	selected_action = noone;
+	action_targets = [];
+	action_possible_targets = [];
+	
+	if (instance_exists(target_indicator)) instance_destroy(target_indicator);
+	
+	global.camera.follow = extra_turn_user != noone ? extra_turn_user : units[turns];
+	state = prev_state;
+	prev_state = noone;
+}
+
+function battle_state_extra() {
+	check_charging();
+	
 	// Main Action
-	if (extra_action && check_attack()) {
-		unit_use_action(global.actions.attack, extra_turn_user, [unit_hover] );
-		extra_action = false;
+	if (extra_action) {
+		check_attack();
 	}
 	
 	// Give Extra Turn
@@ -296,7 +406,7 @@ function battle_state_end_turn() {
 	extra_action = false;
 	extra_turn_user = noone;
 	
-	with(obj_battle_unit) {		
+	with(obj_battle_unit) {
 		// Trigger effect
 		if (unit.condition != noone && unit.condition.trigger == EFFECT_TRIGGERS.END_TURN_ALL) {
 			battle_activate_condition(self);
@@ -318,8 +428,46 @@ function battle_state_end_turn() {
 	state = battle_state_start_turn;
 }
 
-function check_attack() {
-	return (l_click && unit_hover != noone && unit_hover.object_index == obj_enemy_unit && !unit_hover.is_dead);
+function check_charging() {
+	var _user = extra_action ? extra_turn_user : units[turns];
+	
+	if ((main_actions > 0 || extra_action) && _user.charging_action != noone && _user.charging_targets != noone) {
+		if (_user.charging_turns >=_user.charging_action.chargingTurns-1) {
+			add_battle_text( string("{0} move has charged!", _user.unit.name));
+		} else {
+			add_battle_text( string("{0} is charging!", _user.unit.name));
+		}
+		
+		unit_use_action(_user.charging_action, _user, _user.charging_targets);
+		main_actions = 0;
+		movement_actions = 0;
+		extra_action = false;
+	}
+}
+
+function check_attack() {	
+	if (keyboard_check_pressed(ord("A")) || (l_click && unit_hover != noone && !unit_hover.is_dead)) {
+		set_state_targeting(global.actions.attack);
+	}
+		
+	if (keyboard_check_pressed(ord("Q"))) {
+		set_state_targeting(global.actions.lightRay);
+	}
+		
+	if (keyboard_check_pressed(ord("D"))) {
+		set_state_targeting(global.actions.attackBoost);
+	}
+		
+	if (array_length(units[turns].unit.inventory) > 0 && keyboard_check_pressed(ord("I"))) {
+		unit_use_action(global.actions.useItem, units[turns], units[turns].unit.inventory[0]);
+		main_actions--;
+	}
+	
+	if (keyboard_check_pressed(ord("R"))) {
+		main_actions--;
+		movement_actions--;
+		extra_action = false;
+	}
 }
 
 function battle_check_over() {

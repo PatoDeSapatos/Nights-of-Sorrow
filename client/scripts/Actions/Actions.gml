@@ -21,6 +21,9 @@ global.actions = {
 		userAnimation: "attack",
 		hit_effect: spr_effect_hit,
 		targetRequired: true,
+		prioritizeEnemies: true,
+		targetCount: 1,
+		targetSelf: false,
 		range: 1,
 		
 		func: function(_user, _targets) {
@@ -66,6 +69,11 @@ global.actions = {
 		name: "Light Ray",
 		description: "Charges for three turns, heals on the second and blasts a powerful bean into a enemy.",
 		targetRequired: true,
+		targetCount: 1,
+		targetSelf: false,
+		prioritizeEnemies: true,
+		charge: true,
+		chargingTurns: 3,
 		range: 8,
 		
 		func: function (_user, _targets) {

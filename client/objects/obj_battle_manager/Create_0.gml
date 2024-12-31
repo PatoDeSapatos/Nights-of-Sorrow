@@ -34,12 +34,23 @@ init_y = obj_camera.camera_y + obj_camera.camera_h/2 - grid_h/2;
 // inputs
 r_click = false;
 l_click = false;
+left_input = false;
+right_input = false;
 confirm_input = false;
+cancel_input = false;
 
 // Combat Variables
 state = battle_state_init;
+prev_state = noone;
 
+action_tiles = [];
 action_done = false;
+action_targets = [];
+action_possible_targets = [];
+selected_action = noone;
+current_target = 0;
+target_indicator = noone;
+
 player_turn = false;
 units = [];
 player_units = [];
@@ -60,7 +71,7 @@ extra_action = false;
 extra_turn_user = noone;
 extra_turn_given = false;
 
-waiting_frames = 90;
+waiting_frames = FRAME_RATE;
 current_waiting_frames = 0;
 
 depth = 1000;

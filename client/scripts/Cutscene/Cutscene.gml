@@ -147,7 +147,7 @@ function cutscene_animate_once(_id, _sprite_index) {
 		setup = true;
 	}
 	
-	if (_id.image_index >= sprite_get_number(_sprite_index)-1) {
+	if (_id.image_index >= sprite_get_number(_sprite_index)-2) {
 		_id.sprite_index = image;
 		battle_action_end(_id);
 	}

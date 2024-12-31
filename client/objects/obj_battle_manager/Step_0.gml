@@ -27,7 +27,12 @@ if (player_turn && movement_actions > 0) {
 }
 
 l_click = mouse_check_button_pressed(mb_left);
+left_input = keyboard_check_pressed(vk_left) || keyboard_check_pressed(ord("A"));
+
 r_click = mouse_check_button_pressed(mb_right);
+right_input = keyboard_check_pressed(vk_right) || keyboard_check_pressed(ord("D"));
+
 confirm_input = keyboard_check_pressed(vk_enter);
+cancel_input = keyboard_check_pressed(vk_escape) || keyboard_check_pressed(vk_backspace);
 
 state();
