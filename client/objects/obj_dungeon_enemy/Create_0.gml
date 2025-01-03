@@ -1,5 +1,4 @@
-/// @description
-//dungeon_stats = {};
+event_inherited()
 
 path = [];
 

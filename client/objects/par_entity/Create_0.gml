@@ -1,7 +1,7 @@
 _x = x
 _y = y
 
-set_uid = function(_x, _y) {
+function set_uid(_x, _y) {
 	uid = string_concat(global.server.level, "|", _x, "|", _y)
 }
 
