@@ -28,4 +28,7 @@ charging_action = noone;
 charging_targets = noone;
 focusing = false;
 
+effect = noone;
+effect_image = 0;
+
 z = obj_battle_manager.tile_size/4;

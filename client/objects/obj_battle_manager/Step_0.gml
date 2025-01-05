@@ -21,7 +21,7 @@ with(obj_battle_unit) {
 		obj_battle_manager.unit_hover = self;
 	}
 
-	depth = -(tileToScreenYG(_x - 1, _y - 1, other.tile_size, other.init_y));
+	depth = -(tileToScreenYExt(_x - 1, _y - 1, other.tile_size, other.init_y));
 }
 
 if (player_turn && movement_actions > 0) {
@@ -45,5 +45,7 @@ down_input = keyboard_check_pressed(ord("S")) || keyboard_check_pressed(vk_down)
 
 confirm_input = keyboard_check_pressed(vk_enter);
 cancel_input = keyboard_check_pressed(vk_escape) || keyboard_check_pressed(vk_backspace);
+
+battle_execute_cutscene();
 
 state();

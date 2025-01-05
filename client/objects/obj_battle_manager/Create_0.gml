@@ -7,15 +7,29 @@
 
 global.loading_screen = true;
 
-depth = 10;
 
 if (!is_array(allies) || !is_array(enemies) || !is_array(grid)) {
 	instance_destroy();
 	return;
 }
 
+// Cutscene variables
+setup = false;
+
+action = 0;
+timer = 0;
+x_dest = noone;
+y_dest = noone;
+
+image = 0;
+cutscene_end = -1;
+cutscene_skip = false;
+cutscene_skip_percentage = 0;
+cutscene_skip_rate = .02;
+
 // Visual Variables
 animating = false;
+cutscene = [];
 scale = 2;
 cursor_in_range = false;
 path = [];
@@ -25,6 +39,23 @@ mouse_hover = {
 }
 mouse_sx = -1;
 mouse_sy = -1;
+
+// UI
+function battle_option(_name, _state, _input_name, _keyboard_key, _console_key) constructor {
+	name = _name;	
+	state = _state;
+	input_name = _input_name;
+	keyboard_key = _keyboard_key;
+	console_key = _console_key;
+}
+
+options = [
+	new battle_option("Attack", battle_state_attack, "attack_input", ord("Q"), noone),
+	new battle_option("Item", battle_state_item, "item_input", ord("W"), noone),
+	new battle_option("Move", battle_state_move, "move_input", ord("E"), noone)
+];
+
+option_border = 10;
 
 // Grid Variables
 tile_size = sprite_get_width(spr_dungeon_tileset) * scale;
@@ -43,6 +74,10 @@ up_input = false;
 down_input = false;
 confirm_input = false;
 cancel_input = false;
+
+attack_input = false;
+item_input = false;
+move_input = false;
 
 // Combat Variables
 state = battle_state_init;
@@ -89,8 +124,8 @@ depth = 1000;
 // Instantiate Party
 for (var i = 0; i < array_length(allies); ++i) {
 	var _allie = allies[i];
-	var _x = tileToScreenXG(_allie.position.x, _allie.position.y, tile_size, init_x);
-	var _y = tileToScreenYG(_allie.position.x, _allie.position.y, tile_size, init_y);
+	var _x = tileToScreenXExt(_allie.position.x, _allie.position.y, tile_size, init_x);
+	var _y = tileToScreenYExt(_allie.position.x, _allie.position.y, tile_size, init_y);
 	
     var _unit = instance_create_depth(_x, _y, depth-10, obj_party_unit, {
 		unit: _allie,
@@ -106,8 +141,8 @@ for (var i = 0; i < array_length(allies); ++i) {
 // Instantiate Enemies
 for (var i = 0; i < array_length(enemies); ++i) {
 	var _enemy = enemies[i];
-	var _x = tileToScreenXG(_enemy.position.x, _enemy.position.y, tile_size, init_x);
-	var _y = tileToScreenYG(_enemy.position.x, _enemy.position.y, tile_size, init_y);
+	var _x = tileToScreenXExt(_enemy.position.x, _enemy.position.y, tile_size, init_x);
+	var _y = tileToScreenYExt(_enemy.position.x, _enemy.position.y, tile_size, init_y);
 	
     var _unit = instance_create_depth(_x, _y, depth-10, obj_enemy_unit, {
 		unit: _enemy,

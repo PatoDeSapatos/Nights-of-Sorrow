@@ -7,8 +7,8 @@ mouse_hover.y = -1;
 
 for (var _y = 0; _y < array_length(grid); ++_y) {
     for (var _x = 0; _x < array_length(grid[0]); ++_x) {
-		var _xx = tileToScreenXG(_x, _y, tile_size, init_x);
-		var _yy = tileToScreenYG(_x, _y, tile_size, init_y);
+		var _xx = tileToScreenXExt(_x, _y, tile_size, init_x);
+		var _yy = tileToScreenYExt(_x, _y, tile_size, init_y);
 		var _in_path = false;
 		var _in_mov_range = false;
 		var _in_action_range = false;
@@ -65,6 +65,7 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 		}
 	}
 }
+
 
 if (mouse_hover.x == -1 || mouse_hover.y == -1) {
 	path = [];	

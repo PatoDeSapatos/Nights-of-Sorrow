@@ -12,6 +12,12 @@ enum MOVE_SHAPES {
 	SQUARE
 }
 
+enum CONDITIONS {
+	NEVER,
+	ONLY,
+	ALWAYS
+}
+
 function end_charging_action(_user) {
 	with (_user) {
 		charging_turns = 0;
@@ -107,6 +113,9 @@ global.actions = {
 		prioritizeEnemies: true,
 		charge: false,
 		range: 6,
+		projectile: spr_fire_ball_projectile,
+		onUserEffect: spr_effect_fire_ball_casting,
+		landingSpr: spr_effect_fire_ball_landing,
 		areaTarget: true,
 		originInPlayer: false,
 		shape: MOVE_SHAPES.CIRCLE,

@@ -1,16 +1,16 @@
 {
   "$GMObject":"",
-  "%Name":"obj_cutscene",
+  "%Name":"obj_projectile_trail",
   "eventList":[
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_cutscene",
+  "name":"obj_projectile_trail",
   "overriddenProperties":[],
   "parent":{
-    "name":"battle",
-    "path":"folders/Objetos/dungeon/battle.yy",
+    "name":"projectile",
+    "path":"folders/Objetos/dungeon/battle/projectile.yy",
   },
   "parentObjectId":null,
   "persistent":false,

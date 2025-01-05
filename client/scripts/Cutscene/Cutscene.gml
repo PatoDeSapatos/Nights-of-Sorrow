@@ -1,11 +1,45 @@
-function action_end(_id) {
-	with(_id) {
+function battle_execute_cutscene() {
+	if (array_length(cutscene) <= 0) return;
+	
+	var _current_action = cutscene[action];
+	var _arg_length = array_length(_current_action) - 1;
+
+	cutscene_skip_percentage = clamp(cutscene_skip_percentage, 0, 1);
+
+	switch (_arg_length) {
+		case 1:
+			script_execute(_current_action[0], _current_action[1]);
+			break;
+		case 2:
+			script_execute(_current_action[0], _current_action[1], _current_action[2]);
+			break;
+		case 3:
+			script_execute(_current_action[0], _current_action[1], _current_action[2], _current_action[3]);
+			break;
+		case 4:
+			script_execute(_current_action[0], _current_action[1], _current_action[2], _current_action[3], _current_action[4]);
+			break;
+		case 5:
+			script_execute(_current_action[0], _current_action[1], _current_action[2], _current_action[3], _current_action[4], _current_action[5]);
+			break;
+		case 6:
+			script_execute(_current_action[0], _current_action[1], _current_action[2], _current_action[3], _current_action[4], _current_action[5], _current_action[6]);
+			break;
+		default:
+			script_execute(_current_action[0]);
+			break;
+	}
+}
+
+function action_end() {
+	with(obj_battle_manager) {
 		action++;
 		timer = 0;
 		image = 0;
 		setup = false;
 		if (action >= array_length(cutscene)) {
-			instance_destroy();
+			cutscene = [];
+			action = 0;
 		}
 	}
 }
@@ -23,8 +57,8 @@ function battle_action_start(_targets) {
 	}
 }
 
-function battle_action_end(_id, _targets) {
-	with (_id) {
+function battle_action_end(_targets) {
+	with (obj_battle_manager) {
 		if (is_array(_targets)) {
 			for (var i = 0; i < array_length(_targets); ++i) {
 				var _target = _targets[i];
@@ -37,7 +71,7 @@ function battle_action_end(_id, _targets) {
 		}
 	}
 	
-	action_end(_id);
+	action_end();
 }
 
 function cutscene_await(_await_frames) {
@@ -101,22 +135,31 @@ function cutscene_move_character(_id, _x, _y, _relative, _spd) {
 				facing_up = false;
 			}
 			
-			battle_action_end(other, _id);
+			battle_action_end(_id);
 		}	
 	}
 }
 
 function cutscene_instance_create_depth(_x, _y, _depth, _object, _struct={}) {
 	instance_create_depth(_x, _y, _depth, _object, _struct);
-	action_end(self);
+	action_end();
 }
 
-function cutscene_use_action(_user, _action, _targets) {
-	if (!setup && struct_exists(_action, "userAnimation") && !is_undefined(_action.userAnimation) && !is_undefined( _user.unit.sprites[$ _action.userAnimation] ) ) {
+function cutscene_use_action(_user, _action, _targets, _origin_point, _area) {
+	if (!setup) {
 		image = _user.sprite_index;
-		_user.sprite_index = _user.unit.sprites[$ _action[$ "userAnimation"]];
-		_user.image_index = 0;
+		_user.image_index = 0;	
+		
+		if (struct_exists(_action, "userAnimation") && !is_undefined(_action.userAnimation) && !is_undefined( _user.unit.sprites[$ _action.userAnimation])) {
+			_user.sprite_index = _user.unit.sprites[$ _action[$ "userAnimation"]];	
+		}
+		
 		battle_action_start(_targets);
+		
+		if (struct_exists(_action, "onUserEffect") && _action.onUserEffect != noone) {
+			_user.effect = _action.onUserEffect;
+		}
+		
 		setup = true;
 	}
 	
@@ -131,10 +174,31 @@ function cutscene_use_action(_user, _action, _targets) {
 			}
 		}
 
-		_action.func(_user, _targets);
+
+		if (struct_exists(_action, "projectile") && _action.projectile != noone) {
+			var _projectile = instance_create_depth(_user.x, _user.y, -1000, obj_projectile);
+			var _areaScale = ((_action.shapeSize * obj_battle_manager.tile_size)/sprite_get_width(_action.projectile))*2;
+			
+			_projectile.sprite_index = _action.projectile;
+			_projectile.action_origin = _origin_point;
+			_projectile.func = _action.func;
+			_projectile.user = _user;
+			_projectile.targets = _targets;
+			_projectile.scale = obj_battle_manager.scale;
+			
+			if(struct_exists(_action, "landingSpr") && _action.landingSpr != noone) {
+				_projectile.landing_spr = _action.landingSpr;
+			}
+			
+			_projectile.areaScale = _areaScale;
+		} else {
+			_action.func(_user, _targets);
+		}
+		
+		_user.effect = noone;
 		_user.sprite_index = image;
 		_user.image_index = 0;
-		battle_action_end(self, _targets);
+		battle_action_end(_targets);
 	}
 }
 
@@ -147,9 +211,9 @@ function cutscene_animate_once(_id, _sprite_index) {
 		setup = true;
 	}
 	
-	if (_id.image_index >= sprite_get_number(_id.sprite_index)-1.1) {
+	if (_id.image_index >= sprite_get_number(_id.sprite_index)-1) {
 		_id.sprite_index = image;
-		battle_action_end(self, _id);
+		battle_action_end(_id);
 	}
 }
 
@@ -181,7 +245,7 @@ function cutscene_activate_condition(_target) {
 		_condition.func(_target);
 		_target.sprite_index = image;
 		_target.image_index = 0;
-		battle_action_end(self, _target);
+		battle_action_end(_target);
 	}
 }
 
@@ -191,5 +255,5 @@ function cutscene_change_sprite(_id, _sprite) {
 		image_index = 0;
 	}
 	
-	battle_action_end(self, _id);
+	battle_action_end(_id);
 }

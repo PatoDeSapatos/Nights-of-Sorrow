@@ -35,6 +35,15 @@ view_set_camera(0, camera);
 target_zoom = -1;
 zoom_rate = 0.5;
 
+// Buffer
+x_buffer = 0;
+x_buffer_rate = 0;
+x_buffer_target = 0;
+
+y_buffer = 0;
+y_buffer_rate = 0;
+y_buffer_target = 0;
+
 global.res_scale = 1280/camera_w;
 window_set_size(RES_W * global.res_scale, RES_H * global.res_scale)
 surface_resize(application_surface, RES_W * global.res_scale, RES_H * global.res_scale);

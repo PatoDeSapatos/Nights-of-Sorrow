@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"src_battle_state_ui",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"src_battle_state_ui",
+  "parent":{
+    "name":"battle",
+    "path":"folders/Scripts/Dungeon/battle.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

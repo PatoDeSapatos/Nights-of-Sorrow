@@ -72,6 +72,7 @@ function battle_state_start_turn() {
 function battle_state_turn() {
 			
 	player_turn = true;
+	battle_check_dead_units();
 	
 	check_charging();
 	
@@ -201,6 +202,9 @@ function battle_state_targeting() {
 		return;
 	}
 
+	camera_reset_buffer();
+	camera_zoom_reset();
+
 	// Cancel targeting
 	if (cancel_input) {
 		end_state_targeting();
@@ -221,7 +225,7 @@ function battle_state_targeting() {
 		}
 
 		// End targeting	
-		if (array_length(action_targets) >= selected_action.targetCount) {
+		if (array_length(action_targets) >= selected_action.targetCount || array_length(action_targets) >= array_length(action_possible_targets)) {
 			if (struct_exists(selected_action, "charge") && selected_action.charge) {
 				with (_user) {
 					charging_targets = other.action_targets;
@@ -231,7 +235,7 @@ function battle_state_targeting() {
 				return;
 			}
 			
-			unit_use_action(selected_action, _user, action_targets);			
+			unit_use_action(selected_action, _user, action_targets, action_origin, action_area);			
 			main_actions--;
 			extra_action = false;
 			end_state_targeting();
@@ -254,6 +258,11 @@ function battle_state_targeting() {
 			action_origin.y = clamp(action_origin.y + (down_input - up_input), max(0, _user.unit.position.y - _range*2), min(array_length(grid)-1, _user.unit.position.y + _range*2));
 		}
 		
+		obj_camera.follow = {
+			x: tileToScreenXExt(action_origin.x, action_origin.y, tile_size, init_x),	
+			y: tileToScreenYExt(action_origin.x, action_origin.y, tile_size, init_y),	
+		};
+		
 		action_area = [[action_origin.x, action_origin.y]];
 		for (var _y = -_range; _y <= _range; ++_y) {
 		    for (var _x = -_range; _x <= _range; ++_x) {
@@ -271,7 +280,11 @@ function battle_state_targeting() {
 		action_targets = [];
 
 		with (obj_battle_unit) {
-			if ((!struct_exists(other.selected_action, "targetSelf") || !other.selected_action.targetSelf) && _user.id == self.id) {
+			if (
+				(!struct_exists(other.selected_action, "targetSelf"))
+				|| ((!other.selected_action.targetSelf) && _user.id == self.id)
+				|| (unit.hp <= 0 && (!struct_exists(other.selected_action, "targetDead") || other.selected_action.targetDead == CONDITIONS.NEVER))
+			) {
 				break;	
 			}
 			
@@ -285,8 +298,8 @@ function battle_state_targeting() {
 			}
 		}
 
-		if(array_length(action_targets) > 0 && (confirm_input || l_click)) {
-			unit_use_action(selected_action, _user, action_targets);
+		if (confirm_input || l_click) {
+			unit_use_action(selected_action, _user, action_targets, action_origin, action_area);
 			main_actions--;
 			extra_action = false;
 			end_state_targeting();	
@@ -299,8 +312,6 @@ function end_state_targeting() {
 	action_targets = [];
 	action_possible_targets = [];
 	action_area = [];
-	action_origin.x = -1;
-	action_origin.y = -1;
 	
 	if (instance_exists(target_indicator)) instance_destroy(target_indicator);
 	with(obj_battle_unit) {
@@ -315,6 +326,8 @@ function end_state_targeting() {
 function calc_in_shape_range(_x1, _y1, _x2, _y2, _shape) {
 	switch(_shape) {
 		case MOVE_SHAPES.CIRCLE:
+			return sqrt(sqr(_x1 - _x2) + sqr(_y1 - _y2));
+		case MOVE_SHAPES.SQUARE:
 			return floor( sqrt(sqr(_x1 - _x2) + sqr(_y1 - _y2)) );
 		default:
 			return false;
@@ -403,6 +416,38 @@ function battle_state_waiting() {
 		units[turns].ready = true;	
 	}
 	
+	battle_check_dead_units();
+	camera_zoom_reset();
+	
+	if (!animating) {
+		
+		if (extra_action && extra_turn_user != noone) {
+			if(extra_turn_user.unit.player_username == global.server.username) {
+				extra_turn_user.ready = false;
+				state = battle_state_extra;	
+			} else if (battle_host == global.server.username && extra_turn_user.is_enemy) {
+				state = battle_state_enemy_turn;
+			}
+		}
+		
+		current_waiting_frames++;
+		
+		if (current_waiting_frames >= waiting_frames) {
+			camera_reset_bar();
+			camera_reset_buffer();
+			
+			if (units[turns].ready || extra_turn_user.ready) {
+				state = battle_state_end_turn;
+			}
+			
+			current_waiting_frames = 0;
+		}
+		
+		battle_check_over();
+	}
+}
+
+function battle_check_dead_units() {
 	// Animate death (brutal)
 	with (obj_battle_unit) {
 		if (unit.hp <= 0 && !is_dead) {
@@ -420,35 +465,11 @@ function battle_state_waiting() {
 			
 			battle_create_cutscene(_cutscene);
 		}
-	}
-	
-	if (!animating) {
-		
-		if (extra_action && extra_turn_user != noone) {
-			if(extra_turn_user.unit.player_username == global.server.username) {
-				extra_turn_user.ready = false;
-				state = battle_state_extra;	
-			} else if (battle_host == global.server.username && extra_turn_user.is_enemy) {
-				state = battle_state_enemy_turn;
-			}
-		}
-		
-		current_waiting_frames++;
-		
-		if (current_waiting_frames >= waiting_frames) {
-			if (units[turns].ready || extra_turn_user.ready) {
-				state = battle_state_end_turn;
-			}
-			
-			current_waiting_frames = 0;
-		}
-		
-		battle_check_over();
-	}
+	}	
 }
 
 function battle_check_animating() {
-	var _animating = instance_exists(obj_cutscene) || instance_exists(obj_battle_effect);
+	var _animating = array_length(obj_battle_manager.cutscene) > 0 || instance_exists(obj_battle_effect) || instance_exists(obj_projectile);
 	
 	if (!_animating) {
 		for (var i = 0; i < array_length(units); ++i) {
@@ -466,6 +487,8 @@ function battle_state_end_turn() {
 	if (animating) { 
 		return;
 	}
+	
+	camera_reset_buffer();
 
 	var _unit = units[turns];
 	
@@ -521,6 +544,17 @@ function check_charging() {
 }
 
 function check_attack() {	
+	with(global.camera) {
+		var _buffer_x = clamp((mouse_x - camera_x - camera_w/2)/300, -100, 100);
+		var _buffer_y = clamp((mouse_y - camera_y - camera_h/2)/300, -100, 100);
+		
+		camera_set_x_buffer(_buffer_x, .2);
+		camera_set_y_buffer(_buffer_y, .2);
+	}
+	
+	camera_zoom(30, true, .25);
+	camera_set_bar(40, .15);
+	
 	if (keyboard_check_pressed(ord("A")) || (l_click && unit_hover != noone && !unit_hover.is_dead)) {
 		set_state_targeting(global.actions.attack);
 	}
@@ -578,7 +612,7 @@ function battle_check_over() {
 }
 
 function end_battle() {
-	current_waiting_frames++;
+	if (!animating) current_waiting_frames++;
 	
 	if (current_waiting_frames >= waiting_frames) {
 		for (var i = 0; i < array_length(units); ++i) {

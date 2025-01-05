@@ -82,20 +82,18 @@ function init_battle(_grid, _allies, _enemies, _battle_host) {
 
 
 function move_unit_path(_id, _path) {
-	if (!instance_exists(obj_cutscene) && array_length(_path) > 0) {
+	if (!obj_battle_manager.animating && array_length(_path) > 0) {
 		with (obj_battle_manager) {
 			grid[_id.unit.position.x, _id.unit.position.y].coll = false;
 
 			var _cutscene = [];
 			for (var i = 0; i < array_length(_path); ++i) {
-				var _xx = tileToScreenXG(_path[i, 0], _path[i, 1], tile_size, init_x);
-				var _yy = tileToScreenYG(_path[i, 0], _path[i, 1], tile_size, init_y);
+				var _xx = tileToScreenXExt(_path[i, 0], _path[i, 1], tile_size, init_x);
+				var _yy = tileToScreenYExt(_path[i, 0], _path[i, 1], tile_size, init_y);
 			    array_push(_cutscene, [cutscene_move_character, _id, _xx, _yy, false, 2]);
 			}
-		
-			instance_create_depth(0, 0, -1000, obj_cutscene, {
-				cutscene: _cutscene	
-			});
+
+			battle_create_cutscene(_cutscene);
 		
 			var _x = _path[max(0, array_length(_path) - 1), 0];
 			var _y = _path[max(0, array_length(_path) - 1), 1];
@@ -109,9 +107,9 @@ function move_unit_path(_id, _path) {
 	
 }
 
-function unit_use_action(_action, _user, _targets) {
+function unit_use_action(_action, _user, _targets, _origion_point, _area) {
 	with (obj_battle_manager) {		
-		var _cutscene = [cutscene_use_action,_user, _action, _targets];
+		var _cutscene = [cutscene_use_action,_user, _action, _targets, _origion_point, _area];
 		battle_create_cutscene([_cutscene])
 	}	
 }
@@ -213,14 +211,8 @@ function battle_create_cutscene(_cutscene) {
 		var _await = [cutscene_await, waiting_frames];
 		array_push(_cutscene, _await)
 		
-		if (!instance_exists(obj_cutscene)) {
-			instance_create_depth(0, 0, -1000, obj_cutscene, {
-				cutscene: _cutscene
-			})
-		} else {
-			for (var i = 0; i < array_length(_cutscene); ++i) {
-			    array_push(obj_cutscene.cutscene, _cutscene[i]);
-			}
+		for (var i = 0; i < array_length(_cutscene); ++i) {
+			array_push(cutscene, _cutscene[i]);
 		}
 	}
 }
