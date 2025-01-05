@@ -17,3 +17,7 @@ if ( global.server.admin_username == global.server.username ) {
 	enter_dungeon_button.button_text = "Ready";	
 	enter_dungeon_button.can_click = true;
 }
+
+if ( keyboard_check_pressed(ord("P")) ) {
+    ready_button_callback()
+}
