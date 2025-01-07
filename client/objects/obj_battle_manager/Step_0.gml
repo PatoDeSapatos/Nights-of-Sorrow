@@ -46,6 +46,10 @@ down_input = keyboard_check_pressed(ord("S")) || keyboard_check_pressed(vk_down)
 confirm_input = keyboard_check_pressed(vk_enter);
 cancel_input = keyboard_check_pressed(vk_escape) || keyboard_check_pressed(vk_backspace);
 
+attack_input = keyboard_check_pressed(ord("Q"));
+item_input = keyboard_check_pressed(ord("W"));
+move_input = keyboard_check_pressed(ord("E"));
+
 battle_execute_cutscene();
 
 state();

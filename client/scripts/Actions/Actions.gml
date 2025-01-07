@@ -1,10 +1,17 @@
 enum MOVE_TYPES {
+	NORMAL,
 	SLASHING,
 	BLUDGEONING,
 	PIERCING,
 	FIRE,
 	LIGHT,
 	POISON
+}
+
+enum MOVE_CATEGORY {
+	PHYSICAL,
+	MAGICAL,
+	STATUS
 }
 
 enum MOVE_SHAPES {
@@ -18,6 +25,27 @@ enum CONDITIONS {
 	ALWAYS
 }
 
+function get_type_color(_type) {
+	switch(_type) {
+		case MOVE_TYPES.NORMAL:
+			return make_color_rgb(57, 74, 80);
+		case MOVE_TYPES.SLASHING:
+			return make_color_rgb(165, 48, 48);
+		case MOVE_TYPES.BLUDGEONING:
+			return make_color_rgb(165, 48, 48);
+		case MOVE_TYPES.PIERCING:
+			return make_color_rgb(165, 48, 48);
+		case MOVE_TYPES.POISON:
+			return make_color_rgb(30, 29, 57);
+		case MOVE_TYPES.FIRE:
+			return make_color_rgb(218, 134, 62);
+		case MOVE_TYPES.LIGHT:
+			return make_color_rgb(190, 119, 43);
+		default:
+			return c_white;
+	}
+}
+
 function end_charging_action(_user) {
 	with (_user) {
 		charging_turns = 0;
@@ -28,8 +56,10 @@ function end_charging_action(_user) {
 
 global.actions = {
 	attack: {
-		name: "attack",
+		name: "Attack",
 		description: "a melee attack!",
+		types: [MOVE_TYPES.SLASHING],
+		moveCategory: MOVE_CATEGORY.PHYSICAL,
 		userAnimation: "attack",
 		hit_effect: spr_effect_hit,
 		targetRequired: true,
@@ -50,6 +80,8 @@ global.actions = {
 	attackBoost: {
 		name: "Attack Boost",
 		description: "Strongly raises the user attack stat.",
+		moveCategory: MOVE_CATEGORY.STATUS,
+		types: [MOVE_TYPES.NORMAL],
 		userAnimation: "idle",
 		hit_effect: noone,
 		targetRequired: false,
@@ -73,6 +105,8 @@ global.actions = {
 	lightRay: {
 		name: "Light Ray",
 		description: "Charges for three turns, heals on the second and blasts a powerful bean into a enemy.",
+		types: [MOVE_TYPES.LIGHT],
+		moveCategory: MOVE_CATEGORY.MAGICAL,
 		targetRequired: true,
 		targetCount: 1,
 		targetSelf: false,
@@ -107,6 +141,8 @@ global.actions = {
 	fireBall: {
 		name: "Fire Ball",
 		description: "Casts a powerfull fireball that give damage to a area.",
+		types: [MOVE_TYPES.FIRE],
+		moveCategory: MOVE_CATEGORY.MAGICAL,
 		targetRequired: true,
 		targetCount: -1,
 		targetSelf: true,
@@ -132,6 +168,8 @@ global.actions = {
 	poisonMist: {
 		name: "Poison Mist",
 		description: "Spreads a poison mist around the caster that gives damage and has a chance to poison.",
+		types: [MOVE_TYPES.POISON],
+		moveCategory: MOVE_CATEGORY.MAGICAL,
 		targetRequired: true,
 		targetCount: -1,
 		targetSelf: false,

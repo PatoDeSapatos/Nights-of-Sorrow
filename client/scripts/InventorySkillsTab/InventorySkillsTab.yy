@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"src_battle_state_ui",
+  "%Name":"InventorySkillsTab",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"src_battle_state_ui",
+  "name":"InventorySkillsTab",
   "parent":{
-    "name":"battle",
-    "path":"folders/Scripts/Dungeon/battle.yy",
+    "name":"Inventory",
+    "path":"folders/Scripts/Dungeon/Inventory.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

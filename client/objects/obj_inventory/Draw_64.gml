@@ -25,7 +25,8 @@ if (has_tabs) {
 	}
 }
 
-draw_set_color(c_white);
+draw_set_color(c_black);
+draw_set_alpha(.8);
 draw_rectangle( 
 	items_box_x,
 	items_box_y,
@@ -33,6 +34,8 @@ draw_rectangle(
 	items_box_y + items_box_h,
 	false
 );
+draw_set_alpha(1);
+draw_set_color(c_white);
 
 switch ( selected_tab ) {
 	case TABS.ITEMS:
@@ -40,6 +43,9 @@ switch ( selected_tab ) {
 		break;
 	case TABS.CRAFTING:
 		inventory_draw_recipes();
+		break;
+	case TABS.SKILLS:
+		inventory_draw_skills();
 		break;
 }
 

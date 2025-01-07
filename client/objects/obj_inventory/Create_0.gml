@@ -3,7 +3,7 @@
 enum TABS {
 	ITEMS,
 	CRAFTING,
-	HABILITYS,
+	SKILLS,
 	LENGTH
 }
 
@@ -258,6 +258,7 @@ typing_bar = false;
 
 inventory = [];
 recipes = [];
+skills = [];
 recipe_ingredients = [];
 
 // Equipment Box

@@ -26,35 +26,6 @@ function battle_state_start_turn() {
 	current_waiting_frames = 0;	
 	obj_camera.follow = units[turns];
 	units[turns].is_broken = false;
-		
-	targeted_tiles = [];
-	var _lenght = array_length(obj_battle_manager.grid);
-	var _movement = units[turns].unit.movement;
-	var _player_x = units[turns].unit.position.x;
-	var _player_y = units[turns].unit.position.y;
-		
-	//for (var _y = _player_y-_movement; _y < _player_y+_movement; ++_y) {
-	//	if (_y < 0 || _y >= _lenght) continue;
-			  
-	//	for (var _x = _player_x-_movement; _x < _player_x+_movement; ++_x) {
-	//		if (_x < 0 || _x >= _lenght) continue;	   
-	//		if (_x + _y <= _movement) {
-	//			array_push(targeted_tiles, [_x, _y]);
-	//		}
-	//	}
-	//}
-			
-	for (var _yy = -(_movement+1); _yy < _movement+1; ++_yy) {
-		for (var _xx = -(_movement+1); _xx < _movement+1; ++_xx) {
-			var _new_x = _player_x + _xx;
-			var _new_y = _player_y + _yy;
-					
-			if (abs(_xx) + abs(_yy) <= _movement) {
-				if((_new_x < 0 || _new_x >= _lenght) || (_new_y < 0 || _new_y >= _lenght)) continue;
-				array_push(targeted_tiles, [_new_x, _new_y]);
-			}
-		}
-	}
 	
 	if (units[turns].unit.hp <= 0) {
 		add_battle_text( string("{0} is fainted.", units[turns].unit.name) );
@@ -81,36 +52,11 @@ function battle_state_turn() {
 		check_attack();
 	}
 	
-	// Movement player
-	if (movement_actions > 0 && unit_hover == noone && !animating && mouse_hover.x != -1 && mouse_hover.y != -1) {
-		// Path
-		path = get_shortest_path_array(
-			grid, 
-			units[turns].unit.position.x, 
-			units[turns].unit.position.y,
-			mouse_hover.x,
-			mouse_hover.y,
-			true
-		);
-		array_insert(path, 0, [units[turns].unit.position.x, units[turns].unit.position.y]);
-		if (array_length(path) > units[turns].unit.movement + 1) {
-			var _diff = array_length(path) - units[turns].unit.movement+1;
-			array_delete(path, units[turns].unit.movement+1, _diff);
-		}
-	
-		if (mouse_check_button_pressed(mb_left)) {
-			move_unit_path(units[turns], path);
-			path = [];
-
-			movement_actions--;
-		}	
-	}
-	
 	// End State
-	if (!animating && (main_actions <= 0 && special_actions <= 0) || units[turns].ready) {
+	if (!animating && (movement_actions <= 0 && main_actions <= 0 && special_actions <= 0) || units[turns].ready || extra_action) {
 		units[turns].ready = true;
 		player_turn = false;
-		state = battle_state_waiting;			
+		exit_state_turn(battle_state_waiting);			
 	}
 }
 
@@ -198,6 +144,7 @@ function battle_state_targeting() {
 	if (!selected_action.targetRequired) {
 		unit_use_action( selected_action, _user, noone );
 		main_actions--;
+		extra_action = false;
 		end_state_targeting();
 		return;
 	}
@@ -319,7 +266,7 @@ function end_state_targeting() {
 	}
 	
 	global.camera.follow = extra_turn_user != noone ? extra_turn_user : units[turns];
-	state = prev_state;
+	state = battle_state_turn;
 	prev_state = noone;
 }
 
@@ -336,6 +283,7 @@ function calc_in_shape_range(_x1, _y1, _x2, _y2, _shape) {
 
 function battle_state_extra() {
 	check_charging();
+	movement_actions = 0;
 	
 	// Main Action
 	if (extra_action) {
@@ -469,18 +417,20 @@ function battle_check_dead_units() {
 }
 
 function battle_check_animating() {
-	var _animating = array_length(obj_battle_manager.cutscene) > 0 || instance_exists(obj_battle_effect) || instance_exists(obj_projectile);
+	with (obj_battle_manager) {
+		var _animating = array_length(obj_battle_manager.cutscene) > 0 || instance_exists(obj_battle_effect) || instance_exists(obj_projectile);
 	
-	if (!_animating) {
-		for (var i = 0; i < array_length(units); ++i) {
-		    if (units[i].animating) {
-				_animating = true;
-				break;
+		if (!_animating) {
+			for (var i = 0; i < array_length(units); ++i) {
+			    if (units[i].animating) {
+					_animating = true;
+					break;
+				}
 			}
 		}
-	}
 	
-	return _animating;
+		return _animating;
+	}
 }
 
 function battle_state_end_turn() {
@@ -543,48 +493,43 @@ function check_charging() {
 	}
 }
 
+function exit_state_turn(_new_state) {
+	with(obj_battle_manager) {
+		prev_state = state;
+		state = _new_state;
+		movement_tile.x = units[turns].x;
+		movement_tile.y = units[turns].y;
+		camera_reset_buffer();
+		camera_zoom_reset();
+	}
+}
+
 function check_attack() {	
-	with(global.camera) {
-		var _buffer_x = clamp((mouse_x - camera_x - camera_w/2)/300, -100, 100);
-		var _buffer_y = clamp((mouse_y - camera_y - camera_h/2)/300, -100, 100);
+	//if (keyboard_check_pressed(ord("A")) || (l_click && unit_hover != noone && !unit_hover.is_dead)) {
+	//	set_state_targeting(global.actions.attack);
+	//}
 		
-		camera_set_x_buffer(_buffer_x, .2);
-		camera_set_y_buffer(_buffer_y, .2);
-	}
-	
-	camera_zoom(30, true, .25);
-	camera_set_bar(40, .15);
-	
-	if (keyboard_check_pressed(ord("A")) || (l_click && unit_hover != noone && !unit_hover.is_dead)) {
-		set_state_targeting(global.actions.attack);
-	}
+	//if (keyboard_check_pressed(ord("Q"))) {
+	//	set_state_targeting(global.actions.lightRay);
+	//}
 		
-	if (keyboard_check_pressed(ord("Q"))) {
-		set_state_targeting(global.actions.lightRay);
-	}
+	//if (keyboard_check_pressed(ord("W"))) {
+	//	set_state_targeting(global.actions.attackBoost);
+	//}
+	
+	//if (keyboard_check_pressed(ord("E"))) {
+	//	set_state_targeting(global.actions.fireBall);
+	//}
+	
+	//if (keyboard_check_pressed(ord("T"))) {
+	//	set_state_targeting(global.actions.poisonMist);
+	//}
 		
-	if (keyboard_check_pressed(ord("W"))) {
-		set_state_targeting(global.actions.attackBoost);
-	}
-	
-	if (keyboard_check_pressed(ord("E"))) {
-		set_state_targeting(global.actions.fireBall);
-	}
-	
-	if (keyboard_check_pressed(ord("T"))) {
-		set_state_targeting(global.actions.poisonMist);
-	}
-		
-	if (array_length(units[turns].unit.inventory) > 0 && keyboard_check_pressed(ord("I"))) {
-		unit_use_action(global.actions.useItem, units[turns], units[turns].unit.inventory[0]);
-		main_actions--;
-	}
-	
-	if (keyboard_check_pressed(ord("R"))) {
-		main_actions--;
-		movement_actions--;
-		extra_action = false;
-	}
+	//if (array_length(units[turns].unit.inventory) > 0 && keyboard_check_pressed(ord("I"))) {
+	//	unit_use_action(global.actions.useItem, units[turns], units[turns].unit.inventory[0]);
+	//	main_actions--;
+	//}
+
 }
 
 function battle_check_over() {

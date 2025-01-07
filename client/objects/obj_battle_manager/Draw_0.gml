@@ -19,7 +19,7 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 			mouse_hover.y = _y;
 		}
 		
-		if (state == battle_state_turn && player_turn && movement_actions > 0 && array_length(targeted_tiles) > 0) {
+		if (state == battle_state_move && player_turn && movement_actions > 0 && array_length(targeted_tiles) > 0) {
 			for (var k = 0; k < array_length(targeted_tiles); ++k) {
 			    if ( targeted_tiles[k, 0] == _x && targeted_tiles[k, 1] == _y) {
 					_in_mov_range = true;
@@ -46,10 +46,10 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 			}
 		}
 
-		if ((array_length(path) > 0) && ((cursor_in_range && unit_hover == noone) || (state == battle_state_targeting))) {
+		if ((array_length(path) > 0) && ((cursor_in_range && unit_hover == noone) || (state == battle_state_move))) {
 			for (var k = 0; k < array_length(path); ++k) {
 			    if ( path[k, 0] == _x && path[k, 1] == _y) {
-					_in_path = state == battle_state_turn;
+					_in_path = state == battle_state_move;
 					break;
 				}
 			}
@@ -65,7 +65,6 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 		}
 	}
 }
-
 
 if (mouse_hover.x == -1 || mouse_hover.y == -1) {
 	path = [];	

@@ -41,21 +41,7 @@ mouse_sx = -1;
 mouse_sy = -1;
 
 // UI
-function battle_option(_name, _state, _input_name, _keyboard_key, _console_key) constructor {
-	name = _name;	
-	state = _state;
-	input_name = _input_name;
-	keyboard_key = _keyboard_key;
-	console_key = _console_key;
-}
-
-options = [
-	new battle_option("Attack", battle_state_attack, "attack_input", ord("Q"), noone),
-	new battle_option("Item", battle_state_item, "item_input", ord("W"), noone),
-	new battle_option("Move", battle_state_move, "move_input", ord("E"), noone)
-];
-
-option_border = 10;
+instance_create_depth(0, 0, -10000, obj_battle_ui);
 
 // Grid Variables
 tile_size = sprite_get_width(spr_dungeon_tileset) * scale;
@@ -92,6 +78,11 @@ current_target = 0;
 target_indicator = noone;
 action_area = [];
 action_origin = {
+	x: 0,
+	y: 0
+}
+
+movement_tile = {
 	x: 0,
 	y: 0
 }

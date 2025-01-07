@@ -285,3 +285,11 @@ function calc_unit_distance(_unit1, _unit2) {
 	return floor(sqrt(sqr(_unit1.unit.position.x - _unit2.unit.position.x) + sqr(_unit1.unit.position.y - _unit2.unit.position.y)));
 }
 
+function unit_in_tile(_tile_x, _tile_y) {
+	for (var i = 0; i < array_length(units); ++i) {		
+	    if (units[i].unit.position.x == _tile_x && units[i].unit.position.y == _tile_y) {
+			return true;
+		}
+	}
+	return false;
+}
