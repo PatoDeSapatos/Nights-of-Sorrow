@@ -1,6 +1,6 @@
 function battle_start_state_attack() {
 	inventory = instance_create_depth(0, 0, -1000, obj_skill_inventory);
-	inventory.skills = [global.actions.attack, global.actions.fireBall, global.actions.attackBoost];
+	inventory.skills = [global.actions.attack, global.actions.fireBall, global.actions.attackBoost, global.actions.lightRay, global.actions.poisonMist];
 	camera_set_x_buffer(5, .5);
 	camera_zoom(10, true);
 	state = battle_state_attack;

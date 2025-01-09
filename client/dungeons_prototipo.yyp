@@ -220,6 +220,7 @@
     {"id":{"name":"spr_move_type_icons","path":"sprites/spr_move_type_icons/spr_move_type_icons.yy",},},
     {"id":{"name":"spr_player","path":"sprites/spr_player/spr_player.yy",},},
     {"id":{"name":"spr_selected_item_border","path":"sprites/spr_selected_item_border/spr_selected_item_border.yy",},},
+    {"id":{"name":"spr_skill_selector","path":"sprites/spr_skill_selector/spr_skill_selector.yy",},},
     {"id":{"name":"spr_slime_attack","path":"sprites/spr_slime_attack/spr_slime_attack.yy",},},
     {"id":{"name":"spr_slime_dead","path":"sprites/spr_slime_dead/spr_slime_dead.yy",},},
     {"id":{"name":"spr_slime_dying","path":"sprites/spr_slime_dying/spr_slime_dying.yy",},},

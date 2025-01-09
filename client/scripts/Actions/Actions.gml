@@ -25,10 +25,16 @@ enum CONDITIONS {
 	ALWAYS
 }
 
+enum RESOURCES {
+	MANA,
+	LIFE,
+	ENERGY
+}
+
 function get_type_color(_type) {
 	switch(_type) {
 		case MOVE_TYPES.NORMAL:
-			return make_color_rgb(57, 74, 80);
+			return make_color_rgb(129, 151, 150);
 		case MOVE_TYPES.SLASHING:
 			return make_color_rgb(165, 48, 48);
 		case MOVE_TYPES.BLUDGEONING:
@@ -36,11 +42,37 @@ function get_type_color(_type) {
 		case MOVE_TYPES.PIERCING:
 			return make_color_rgb(165, 48, 48);
 		case MOVE_TYPES.POISON:
-			return make_color_rgb(30, 29, 57);
+			return make_color_rgb(122, 54, 123);
 		case MOVE_TYPES.FIRE:
 			return make_color_rgb(218, 134, 62);
 		case MOVE_TYPES.LIGHT:
-			return make_color_rgb(190, 119, 43);
+			return make_color_rgb(232, 193, 112);
+		default:
+			return c_white;
+	}
+}
+
+function get_resource_name(_resource) {
+	switch(_resource) {
+		case RESOURCES.MANA:
+			return "mp";
+		case RESOURCES.ENERGY:
+			return "ep";
+		case RESOURCES.LIFE:
+			return "hp";
+		default:
+			return "error";
+	}
+}
+
+function get_resource_color(_resource) {
+	switch(_resource) {
+		case RESOURCES.MANA:
+			return make_color_rgb(115, 190, 211);
+		case RESOURCES.ENERGY:
+			return make_color_rgb(222, 158, 65);
+		case RESOURCES.LIFE:
+			return make_color_rgb(165, 48, 48);
 		default:
 			return c_white;
 	}
@@ -58,8 +90,10 @@ global.actions = {
 	attack: {
 		name: "Attack",
 		description: "a melee attack!",
-		types: [MOVE_TYPES.SLASHING],
+		types: [MOVE_TYPES.SLASHING, MOVE_TYPES.BLUDGEONING, MOVE_TYPES.PIERCING],
 		moveCategory: MOVE_CATEGORY.PHYSICAL,
+		costValue: 2,
+		resource: RESOURCES.LIFE,
 		userAnimation: "attack",
 		hit_effect: spr_effect_hit,
 		targetRequired: true,
@@ -82,6 +116,8 @@ global.actions = {
 		description: "Strongly raises the user attack stat.",
 		moveCategory: MOVE_CATEGORY.STATUS,
 		types: [MOVE_TYPES.NORMAL],
+		costValue: 5,
+		resource: RESOURCES.ENERGY,
 		userAnimation: "idle",
 		hit_effect: noone,
 		targetRequired: false,
@@ -94,6 +130,8 @@ global.actions = {
 	useItem: {
 		name: "Use Item",
 		description: "Use a item from your inventory.",
+		costValue: 0,
+		resource: noone,
 		targetRequired: false,
 		range: -1,
 		
@@ -105,6 +143,8 @@ global.actions = {
 	lightRay: {
 		name: "Light Ray",
 		description: "Charges for three turns, heals on the second and blasts a powerful bean into a enemy.",
+		costValue: 2,
+		resource: RESOURCES.MANA,
 		types: [MOVE_TYPES.LIGHT],
 		moveCategory: MOVE_CATEGORY.MAGICAL,
 		targetRequired: true,
@@ -141,6 +181,8 @@ global.actions = {
 	fireBall: {
 		name: "Fire Ball",
 		description: "Casts a powerfull fireball that give damage to a area.",
+		costValue: 10,
+		resource: RESOURCES.MANA,
 		types: [MOVE_TYPES.FIRE],
 		moveCategory: MOVE_CATEGORY.MAGICAL,
 		targetRequired: true,
@@ -168,6 +210,8 @@ global.actions = {
 	poisonMist: {
 		name: "Poison Mist",
 		description: "Spreads a poison mist around the caster that gives damage and has a chance to poison.",
+		costValue: 5,
+		resource: RESOURCES.MANA,
 		types: [MOVE_TYPES.POISON],
 		moveCategory: MOVE_CATEGORY.MAGICAL,
 		targetRequired: true,

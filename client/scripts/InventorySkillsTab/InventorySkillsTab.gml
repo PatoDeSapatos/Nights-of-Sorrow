@@ -9,6 +9,9 @@ function inventory_draw_skills() {
 	draw_set_font(fnt_inventory)
 	draw_set_valign(fa_middle);
 	
+	selected_item = clamp(selected_item + (down_input - up_input), 0, array_length(skills)-1);
+	
+	selector_y = noone;
 	var _current_y = items_box_name_offset;
 	var _prev_selected_item = selected_item;
 	for (var i = 0; i < array_length(skills); ++i) {
@@ -26,6 +29,7 @@ function inventory_draw_skills() {
 		var _alpha = selected_item == i ? 1 : .7;
 	
 		if ( selected_item == i ) {
+			selector_y = _y;
 		}
 		
 		draw_set_alpha(_alpha);
@@ -45,17 +49,35 @@ function inventory_draw_skills() {
 		// Item Name
 		draw_set_color(c_white);
 		draw_set_halign(fa_left);
-		draw_text( items_box_name_x, _y, _item.name );
+		draw_text_color(items_box_name_x - 2, _y, _item.name, c_black, c_black, c_black, c_black, 1);
+		draw_text_color(items_box_name_x + 2, _y, _item.name, c_black, c_black, c_black, c_black, 1);
+		draw_text_color(items_box_name_x, _y - 2, _item.name, c_black, c_black, c_black, c_black, 1);
+		draw_text_color(items_box_name_x, _y + 2, _item.name, c_black, c_black, c_black, c_black, 1);
+		draw_text(items_box_name_x, _y, _item.name);
 	
-		// Item Category
-		draw_sprite_ext( spr_move_category_icons, _item.moveCategory, items_box_category_x, _y, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1 );
+		// Item Cost
+		var _string = string("{0}{1}", _item.costValue, get_resource_name(_item.resource));
+		var _string_w = items_box_w/5;
+		var _string_h = string_height(_string)/1.5;
+		_col = get_resource_color(_item.resource);
+		
+		draw_set_halign(fa_center);
+		draw_set_valign(fa_middle);
+		
+		draw_roundrect_color(items_box_w - _string_w - (items_box_name_h - _string_h), _y - _string_h, items_box_w - (items_box_name_h - _string_h), _y + _string_h, c_black, c_black, false);
+		draw_text_color(items_box_w - _string_w/2 - (items_box_name_h - _string_h), _y, _string, _col, _col, _col, _col, 1);
+		
+		//draw_set_halign(fa_right);
+		
+		//draw_text_color(items_box_w - (items_box_name_h - _string_h), _y, get_resource_name(_item.resource), _col, _col, _col, _col, 1);
+		
+		//draw_sprite_ext( spr_move_category_icons, _item.moveCategory, items_box_category_x, _y, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1 );
 	
 		_current_y += items_box_name_h + items_box_border/2;
 	}
 	
 	surface_reset_target();
 	draw_surface(items_box_list_surf, items_box_x, items_box_name_y);
-	
 	
 	// Skill desc
 	if (!is_struct(skills[selected_item])) return;
@@ -69,11 +91,41 @@ function inventory_draw_skills() {
 	draw_set_alpha(1);
 	draw_sprite_stretched(spr_inventory_bg, 0, equipment_box_x, equipment_box_y, equipment_box_w + global.res_scale, equipment_box_h);
 	
+	// Move name
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_top);
-	draw_text(equipment_box_x + equipment_box_w/2, equipment_box_y + equipment_box_border, _item.name)
+	var _col = get_type_color(_item.types[0]);
+	draw_text_color(equipment_box_x + equipment_box_w/2, equipment_box_y + equipment_box_border, _item.name, _col, _col, _col, _col, 1);
+	
+	// Move description
+	draw_set_valign(fa_top);
+	draw_text_ext(equipment_box_x + equipment_box_w/2,  equipment_box_y + equipment_box_border + string_height(_item.name), _item.description, string_height(_item.description), equipment_box_w);
+	
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_bottom);
+	
+	// Move Types
+	draw_text(equipment_box_x + equipment_box_border, equipment_box_y + equipment_box_h - equipment_box_border, "Types: ");
+	for (var i = 0; i < array_length(_item.types); ++i) {
+	    var _xx = equipment_box_x + equipment_box_border + string_width("Types:  ") + sprite_get_width(spr_move_type_icons)/2 + (sprite_get_width(spr_move_type_icons) * global.res_scale*2)*i;
+		var _yy = equipment_box_y + equipment_box_h - equipment_box_border - sprite_get_height(spr_move_type_icons)*global.res_scale/1.5;
+		draw_sprite_ext(spr_move_type_icons, _item.types[i], _xx, _yy, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1);
+	}
+	
+	// Move Category
+	draw_sprite_ext(
+		spr_move_category_icons,
+		_item.moveCategory,
+		equipment_box_x + equipment_box_w - equipment_box_border - sprite_get_width(spr_move_category_icons)*global.res_scale,
+		equipment_box_y + equipment_box_h - equipment_box_border - sprite_get_height(spr_move_category_icons)*global.res_scale/1.5,
+		global.res_scale*2, 
+		global.res_scale*2, 
+		0,
+		c_white,
+		1
+	);
 	
 	draw_set_font(_fnt);
-	draw_set_halign(fa_left)
+	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 }

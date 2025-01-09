@@ -53,7 +53,7 @@ function battle_state_turn() {
 	}
 	
 	// End State
-	if (!animating && (movement_actions <= 0 && main_actions <= 0 && special_actions <= 0) || units[turns].ready || extra_action) {
+	if (!animating && (movement_actions <= 0 && main_actions <= 0 && special_actions <= 0) || units[turns].ready) {
 		units[turns].ready = true;
 		player_turn = false;
 		exit_state_turn(battle_state_waiting);			

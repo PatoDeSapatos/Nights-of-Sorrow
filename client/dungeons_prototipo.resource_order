@@ -126,6 +126,7 @@
     {"name":"spr_menu_messagebox","order":1,"path":"sprites/spr_menu_messagebox/spr_menu_messagebox.yy",},
     {"name":"spr_move_category_icons","order":6,"path":"sprites/spr_move_category_icons/spr_move_category_icons.yy",},
     {"name":"spr_move_type_icons","order":5,"path":"sprites/spr_move_type_icons/spr_move_type_icons.yy",},
+    {"name":"spr_skill_selector","order":7,"path":"sprites/spr_skill_selector/spr_skill_selector.yy",},
     {"name":"spr_slime_dead","order":5,"path":"sprites/spr_slime_dead/spr_slime_dead.yy",},
     {"name":"spr_slime_dying","order":3,"path":"sprites/spr_slime_dying/spr_slime_dying.yy",},
     {"name":"spr_slime_hurt","order":2,"path":"sprites/spr_slime_hurt/spr_slime_hurt.yy",},

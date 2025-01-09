@@ -17,7 +17,6 @@ if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn |
 		}
 	}
 	
-	
 	with(global.camera) {
 		var _buffer_x = clamp((mouse_x - camera_x - camera_w/2)/300, -100, 100);
 		var _buffer_y = clamp((mouse_y - camera_y - camera_h/2)/300, -100, 100);
@@ -31,7 +30,9 @@ if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn |
 }
 	
 if (keyboard_check_pressed(ord("R"))) {
-	main_actions--;
-	movement_actions--;
-	extra_action = false;
+	with(obj_battle_manager) {
+		main_actions = 0;
+		movement_actions = 0;
+		extra_action = false;
+	}
 }
