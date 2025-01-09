@@ -99,7 +99,12 @@ function inventory_draw_skills() {
 	
 	// Move description
 	draw_set_valign(fa_top);
-	draw_text_ext(equipment_box_x + equipment_box_w/2,  equipment_box_y + equipment_box_border + string_height(_item.name), _item.description, string_height(_item.description), equipment_box_w);
+	draw_set_halign(fa_center);
+	var _desc = _item.description;
+	var _start_x = equipment_box_x;
+	var _start_y = equipment_box_y + equipment_box_border + string_height(_item.name);
+		
+	draw_desc_center(_start_x, _start_y, _desc, equipment_box_w, string_height(_desc));
 	
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_bottom);

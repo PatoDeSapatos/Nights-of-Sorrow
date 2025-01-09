@@ -101,6 +101,7 @@
     {"name":"Recipes","order":1,"path":"scripts/Recipes/Recipes.yy",},
     {"name":"SortFunctions","order":4,"path":"scripts/SortFunctions/SortFunctions.yy",},
     {"name":"StatusConditions","order":5,"path":"scripts/StatusConditions/StatusConditions.yy",},
+    {"name":"Text","order":9,"path":"scripts/Text/Text.yy",},
     {"name":"TileEntityId","order":5,"path":"scripts/TileEntityId/TileEntityId.yy",},
     {"name":"TilePixelConverter","order":3,"path":"scripts/TilePixelConverter/TilePixelConverter.yy",},
     {"name":"Util","order":6,"path":"scripts/Util/Util.yy",},

@@ -14,3 +14,5 @@ equipment_box_y = (display_get_gui_height() - equipment_box_h)/2;
 
 selector_y = noone;
 selector_image = 0;
+
+lixo = false;

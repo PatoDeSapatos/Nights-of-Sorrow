@@ -142,7 +142,7 @@ global.actions = {
 	},
 	lightRay: {
 		name: "Light Ray",
-		description: "Charges for three turns, heals on the second and blasts a powerful bean into a enemy.",
+		description: "Charges for three turns, heals on the second and blasts a powerful bean dealing damage to a enemy.",
 		costValue: 2,
 		resource: RESOURCES.MANA,
 		types: [MOVE_TYPES.LIGHT],
@@ -209,7 +209,7 @@ global.actions = {
 	},
 	poisonMist: {
 		name: "Poison Mist",
-		description: "Spreads a poison mist around the caster that gives damage and has a chance to poison.",
+		description: "Spreads a venomous mist around the caster that gives damage and has a chance to poison.",
 		costValue: 5,
 		resource: RESOURCES.MANA,
 		types: [MOVE_TYPES.POISON],

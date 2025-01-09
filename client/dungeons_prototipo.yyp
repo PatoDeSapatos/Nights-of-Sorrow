@@ -185,6 +185,7 @@
     {"id":{"name":"Recipes","path":"scripts/Recipes/Recipes.yy",},},
     {"id":{"name":"SortFunctions","path":"scripts/SortFunctions/SortFunctions.yy",},},
     {"id":{"name":"StatusConditions","path":"scripts/StatusConditions/StatusConditions.yy",},},
+    {"id":{"name":"Text","path":"scripts/Text/Text.yy",},},
     {"id":{"name":"TileEntityId","path":"scripts/TileEntityId/TileEntityId.yy",},},
     {"id":{"name":"TilePixelConverter","path":"scripts/TilePixelConverter/TilePixelConverter.yy",},},
     {"id":{"name":"Transition","path":"scripts/Transition/Transition.yy",},},
