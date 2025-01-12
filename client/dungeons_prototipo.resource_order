@@ -53,6 +53,7 @@
     {"name":"fnt_key_button","order":4,"path":"fonts/fnt_key_button/fnt_key_button.yy",},
     {"name":"obj_battle_effect","order":5,"path":"objects/obj_battle_effect/obj_battle_effect.yy",},
     {"name":"obj_battle_floating_text","order":6,"path":"objects/obj_battle_floating_text/obj_battle_floating_text.yy",},
+    {"name":"obj_battle_item_inventory","order":12,"path":"objects/obj_battle_item_inventory/obj_battle_item_inventory.yy",},
     {"name":"obj_battle_text","order":7,"path":"objects/obj_battle_text/obj_battle_text.yy",},
     {"name":"obj_battle_unit","order":1,"path":"objects/obj_battle_unit/obj_battle_unit.yy",},
     {"name":"obj_chest_inventory","order":9,"path":"objects/obj_chest_inventory/obj_chest_inventory.yy",},

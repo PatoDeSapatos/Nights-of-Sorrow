@@ -290,4 +290,5 @@ stats_w = equipment_box_w/(ceil( struct_names_count(player_equipment_stats)/stat
 stats_h = (equipment_box_h*0.40)/stats_rows;
 
 // Item desc box
+has_description = false;
 inventory_add_recipe(recipes, 0);

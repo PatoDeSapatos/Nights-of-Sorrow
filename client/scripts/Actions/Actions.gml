@@ -232,6 +232,22 @@ global.actions = {
 				battle_inflict_condition(_targets[i], global.conditions.poison, 33);
 			}
 		}
+	},
+	smallHealthPotion: {
+		name: "Use Small Health Potion",
+		description: "Recovers 10 hp.",
+		costValue: 0,
+		resource: noone,
+		targetRequired: false,
+		targetSelf: true,
+		range: -1,
+		
+		func: function (_user) {
+			var _item = get_item_id_by_name("S_HEALTH_POTION");
+			
+			battle_change_hp(_user, 10);
+			inventory_remove_item(_user.unit.inventory, _item, 1);
+		}
 	}
 	
 }

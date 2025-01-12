@@ -108,6 +108,7 @@
     {"id":{"name":"Network","path":"notes/Network/Network.yy",},},
     {"id":{"name":"obj_battle_effect","path":"objects/obj_battle_effect/obj_battle_effect.yy",},},
     {"id":{"name":"obj_battle_floating_text","path":"objects/obj_battle_floating_text/obj_battle_floating_text.yy",},},
+    {"id":{"name":"obj_battle_item_inventory","path":"objects/obj_battle_item_inventory/obj_battle_item_inventory.yy",},},
     {"id":{"name":"obj_battle_manager","path":"objects/obj_battle_manager/obj_battle_manager.yy",},},
     {"id":{"name":"obj_battle_text","path":"objects/obj_battle_text/obj_battle_text.yy",},},
     {"id":{"name":"obj_battle_ui","path":"objects/obj_battle_ui/obj_battle_ui.yy",},},

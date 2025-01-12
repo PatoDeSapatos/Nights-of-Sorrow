@@ -38,7 +38,7 @@ function draw_desc_center(_start_x, _start_y, _text, _width, _sep) {
 }
 
 function highlight_word_filter(_char) {
-	return string_pos(_char, "abcdefghijklmnopqrstuvwxyzç") > 0;
+	return string_pos(_char, "abcdefghijklmnopqrstuvwxyzç1234567890") > 0;
 }
 
 function highlight_word_reduce(_prev, _char) {
@@ -57,17 +57,33 @@ function get_word_highlight(_word, _default=c_white) {
 	
 	_parsed_word = array_reduce(_array, highlight_word_reduce, "");
 	
+	if (string_is_real(_parsed_word)) {
+		return make_color_rgb(199, 207, 204);
+	}	
+	
 	switch(_parsed_word) {
 		case "poison":
 			return get_type_color(MOVE_TYPES.POISON);
 		case "damage":
 			return get_type_color(MOVE_TYPES.SLASHING);
-		case "heal": case "heals":
+		case "heal": case "heals": case "health": case "hp":
 			return make_color_rgb(117, 167, 67);
 		case "raises": case "raise":
 			return make_color_rgb(79, 143, 186);
-		
 		default:
 			return _default;
 	}
+}
+
+function draw_text_border(_x, _y, _text, _border_color) {
+	var _text_col = draw_get_color();
+	
+	draw_set_color(_border_color);
+	draw_text(_x + 2, _y, _text);
+	draw_text(_x - 2, _y, _text);
+	draw_text(_x, _y + 2, _text);
+	draw_text(_x, _y - 2, _text);
+	
+	draw_set_color(_text_col);
+	draw_text(_x, _y, _text);
 }

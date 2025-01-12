@@ -31,7 +31,7 @@ if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn |
 		_option.able = true;
 		if (_option.name == "Move" && obj_battle_manager.movement_actions <= 0) {
 			_option.able = false;	
-		} else if (_option.name == "Attack" && obj_battle_manager.main_actions <= 0 && !obj_battle_manager.extra_action) {
+		} else if ((_option.name == "Attack" || _option.name == "Item") && obj_battle_manager.main_actions <= 0 && !obj_battle_manager.extra_action) {
 			_option.able = false;
 		}
 		
@@ -50,13 +50,13 @@ if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn |
 			hover_option = options[i];	
 		}
 		
-		var _alpha = _able ? 1 : .5;
+		var _alpha = _able ? 1 : .7;
 		draw_set_alpha(_alpha);
 		
 		draw_sprite_ext(spr_battle_option, _selected, _currx, _curry, _option_xscale, _option_yscale, 0, c_white, _alpha);
 		
 		// Key Icon
-		draw_sprite_ext(spr_key_button, 0, _currx, _curry, scale, scale, 0, c_white, _alpha);
+		draw_sprite_ext(spr_key_button, 0, _currx, _curry, scale, scale, 0, c_white, 1);
 		draw_set_font(fnt_key_button);
 		draw_set_halign(fa_center);
 		draw_text(_currx, _curry, chr(_option.key));

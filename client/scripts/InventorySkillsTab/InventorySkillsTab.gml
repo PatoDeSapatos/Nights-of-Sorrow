@@ -12,6 +12,7 @@ function inventory_draw_skills() {
 	selected_item = clamp(selected_item + (down_input - up_input), 0, array_length(skills)-1);
 	
 	selector_y = noone;
+	mouse_hover_option = false;
 	var _current_y = items_box_name_offset;
 	var _prev_selected_item = selected_item;
 	for (var i = 0; i < array_length(skills); ++i) {
@@ -21,9 +22,9 @@ function inventory_draw_skills() {
 		var _mouse_hover = mouse_navigation && point_in_rectangle(mouse_gui_x, mouse_gui_y, items_box_x, items_box_name_y + _y - items_box_name_h/2, items_box_x + items_box_w, items_box_name_y + _y + items_box_name_h/2);
 	
 		if (_mouse_hover) {
+			mouse_hover_option = true;
 			selected_item = i;
 		}
-	
 	
 		var _col = get_type_color(skills[i].types[0]);
 		var _alpha = selected_item == i ? 1 : .7;

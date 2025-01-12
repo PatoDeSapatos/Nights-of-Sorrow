@@ -1,6 +1,14 @@
 function battle_start_state_attack() {
+	var _skills = [global.actions.attack, global.actions.fireBall, global.actions.attackBoost, global.actions.lightRay, global.actions.poisonMist];
+	
+	if (array_length(_skills) <= 0) {
+		add_battle_text("You have no usable skills.");
+		state = prev_state;
+		return;
+	}
+	
 	inventory = instance_create_depth(0, 0, -1000, obj_skill_inventory);
-	inventory.skills = [global.actions.attack, global.actions.fireBall, global.actions.attackBoost, global.actions.lightRay, global.actions.poisonMist];
+	inventory.skills = _skills;
 	camera_set_x_buffer(5, .5);
 	camera_zoom(10, true);
 	state = battle_state_attack;
@@ -10,7 +18,7 @@ function battle_state_attack() {
 	if (instance_exists(inventory)) {
 		var _action = inventory.skills[inventory.selected_item];
 	
-		if (is_struct(_action) && (confirm_input || l_click)) {
+		if (is_struct(_action) && (confirm_input || (l_click && inventory.mouse_hover_option))) {
 			instance_destroy(inventory);
 			camera_reset_buffer();
 			set_state_targeting(_action);
@@ -24,9 +32,49 @@ function battle_state_attack() {
 	}
 }
 
+function battle_start_state_item() {
+	var _user = extra_action ? extra_turn_user : units[turns];
+	var _items = array_filter(_user.unit.inventory, function (_item) {
+		return struct_exists(get_item_by_id(_item.id), "action");	
+	});
+		
+	if (array_length(_items) <= 0) {
+		add_battle_text("You have no usable items.");
+		state = prev_state;
+		return;
+	}
+		
+	inventory = instance_create_depth(0, 0, -1000, obj_battle_item_inventory);
+	inventory.inventory = _items;
+	
+	camera_set_x_buffer(5, .5);
+	camera_zoom(10, true);
+	state = battle_state_item;
+}
+
 function battle_state_item() {
+	if (instance_exists(inventory) && (confirm_input || (l_click && inventory.mouse_hover_option)) && inventory.selected_item >= 0) {
+		var _action = noone;
+		
+		with(inventory) {
+			var _item = get_item_by_id(inventory[selected_item].id);
+			
+			if (is_struct(_item) && struct_exists(_item, "action")) {
+				_action = _item.action;	
+			}
+		}
+	
+		if (is_struct(_action)) {
+			instance_destroy(inventory);
+			camera_reset_buffer();
+			set_state_targeting(_action);
+		}
+	}
+	
 	
 	if (cancel_input) {
+		instance_destroy(inventory);
+		camera_reset_buffer();
 		state = prev_state;
 	}
 }
