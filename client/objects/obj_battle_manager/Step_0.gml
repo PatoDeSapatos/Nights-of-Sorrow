@@ -50,6 +50,9 @@ attack_input = keyboard_check_pressed(ord("Q"));
 item_input = keyboard_check_pressed(ord("W"));
 move_input = keyboard_check_pressed(ord("E"));
 
+move_camera_input = keyboard_check_pressed(ord("M"));
+skip_input = keyboard_check_pressed(ord("R"));
+
 battle_execute_cutscene();
 
 state();

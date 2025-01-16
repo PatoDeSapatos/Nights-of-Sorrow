@@ -1,7 +1,7 @@
 /// @description
 // Ui
 hover_option = noone;
-if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn || obj_battle_manager.state == battle_state_extra) {
+if (can_draw) {
 	var _xx = (global.camera.follow.x - sprite_get_xoffset(global.camera.follow.sprite_index)) + sprite_get_width(global.camera.follow.sprite_index)/2;
 	var _yy = (global.camera.follow.y - sprite_get_yoffset(global.camera.follow.sprite_index)) + sprite_get_height(global.camera.follow.sprite_index)/2;
 	

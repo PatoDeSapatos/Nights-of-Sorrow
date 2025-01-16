@@ -65,6 +65,9 @@ attack_input = false;
 item_input = false;
 move_input = false;
 
+move_camera_input = false;
+skip_input = false;
+
 // Combat Variables
 state = battle_state_init;
 prev_state = noone;

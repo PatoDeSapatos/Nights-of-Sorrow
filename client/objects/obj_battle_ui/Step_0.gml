@@ -4,8 +4,9 @@ if (!instance_exists(obj_battle_manager)) {
 	return;
 }
 
-if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn || obj_battle_manager.state == battle_state_extra) {
-	
+can_draw = !battle_check_animating() && obj_battle_manager.state == battle_state_turn || obj_battle_manager.state == battle_state_extra;
+
+if (can_draw) {
 	// Mouse
 	if (hover_option != noone && hover_option.able && variable_instance_get(obj_battle_manager, "l_click")) {
 		exit_state_turn(hover_option.state);
@@ -20,6 +21,15 @@ if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn |
 		}
 	}
 	
+	// Other controls
+	for (var i = 0; i < array_length(controls); ++i) {
+	    if (variable_instance_get(obj_battle_manager, controls[i].input_name)) {
+			controls[i].state();
+			break;
+		}
+	}
+	
+	// Camera
 	with(global.camera) {
 		var _buffer_x = clamp((mouse_x - camera_x - camera_w/2)/300, -100, 100);
 		var _buffer_y = clamp((mouse_y - camera_y - camera_h/2)/300, -100, 100);
@@ -29,13 +39,5 @@ if (!battle_check_animating() && obj_battle_manager.state == battle_state_turn |
 	}
 	
 	camera_zoom(25, true, .25);
-	camera_set_bar(40, .15);
-}
-	
-if (keyboard_check_pressed(ord("R"))) {
-	with(obj_battle_manager) {
-		main_actions = 0;
-		movement_actions = 0;
-		extra_action = false;
-	}
+	camera_set_bar(50, .15);
 }

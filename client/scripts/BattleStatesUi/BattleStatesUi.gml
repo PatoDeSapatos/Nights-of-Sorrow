@@ -84,7 +84,7 @@ function battle_start_state_move() {
 	movement_tile.x = _user.unit.position.x;
 	movement_tile.y = _user.unit.position.y;
 	
-	target_indicator = instance_create_depth(0, 0, -1000, obj_target_indicator);
+	target_indicator = instance_create_depth(0, 0, -10000, obj_target_indicator);
 	target_indicator.target = movement_tile;
 	
 	targeted_tiles = [];
@@ -179,4 +179,12 @@ function battle_end_state_move() {
 	if (!animating) {
 		state = prev_state;
 	}
+}
+
+function battle_skip_turn() {
+	with(obj_battle_manager) {
+		main_actions = 0;
+		movement_actions = 0;
+		extra_action = false;
+	}	
 }

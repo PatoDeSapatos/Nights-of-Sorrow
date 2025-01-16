@@ -126,7 +126,7 @@ function set_state_targeting(_action) {
 		
 		if (!struct_exists(selected_action, "areaTarget") || !selected_action.areaTarget) {
 			var _first_target = action_possible_targets[0];
-			target_indicator = instance_create_depth(_first_target.x, _first_target.y, _first_target.depth - 10, obj_target_indicator);
+			target_indicator = instance_create_depth(_first_target.x, _first_target.y, -10000, obj_target_indicator);
 			target_indicator.target = _first_target;
 		} else {
 			action_origin.x = _user.unit.position.x;

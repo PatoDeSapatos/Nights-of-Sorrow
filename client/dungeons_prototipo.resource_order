@@ -46,6 +46,7 @@
     {"name":"customizables","order":7,"path":"folders/Sprites/player/customizables.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"fnt_battle_hud","order":7,"path":"fonts/fnt_battle_hud/fnt_battle_hud.yy",},
     {"name":"fnt_battle_options","order":3,"path":"fonts/fnt_battle_options/fnt_battle_options.yy",},
     {"name":"fnt_battle_text","order":2,"path":"fonts/fnt_battle_text/fnt_battle_text.yy",},
     {"name":"fnt_inventory_title","order":1,"path":"fonts/fnt_inventory_title/fnt_inventory_title.yy",},
@@ -128,11 +129,15 @@
     {"name":"spr_menu_messagebox","order":1,"path":"sprites/spr_menu_messagebox/spr_menu_messagebox.yy",},
     {"name":"spr_move_category_icons","order":6,"path":"sprites/spr_move_category_icons/spr_move_category_icons.yy",},
     {"name":"spr_move_type_icons","order":5,"path":"sprites/spr_move_type_icons/spr_move_type_icons.yy",},
+    {"name":"spr_portrait_border","order":5,"path":"sprites/spr_portrait_border/spr_portrait_border.yy",},
     {"name":"spr_skill_selector","order":7,"path":"sprites/spr_skill_selector/spr_skill_selector.yy",},
     {"name":"spr_slime_dead","order":5,"path":"sprites/spr_slime_dead/spr_slime_dead.yy",},
     {"name":"spr_slime_dying","order":3,"path":"sprites/spr_slime_dying/spr_slime_dying.yy",},
     {"name":"spr_slime_hurt","order":2,"path":"sprites/spr_slime_hurt/spr_slime_hurt.yy",},
     {"name":"spr_slime_idle","order":1,"path":"sprites/spr_slime_idle/spr_slime_idle.yy",},
+    {"name":"spr_stat_bar_outline","order":6,"path":"sprites/spr_stat_bar_outline/spr_stat_bar_outline.yy",},
+    {"name":"spr_stat_bar_targeting","order":8,"path":"sprites/spr_stat_bar_targeting/spr_stat_bar_targeting.yy",},
+    {"name":"spr_stat_bar","order":7,"path":"sprites/spr_stat_bar/spr_stat_bar.yy",},
     {"name":"Sprite33","order":5,"path":"sprites/Sprite33/Sprite33.yy",},
   ],
 }

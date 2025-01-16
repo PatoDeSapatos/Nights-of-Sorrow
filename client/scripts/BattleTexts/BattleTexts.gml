@@ -20,7 +20,7 @@ function add_battle_text(_text) {
 		draw_set_font(_prev_fnt);
 		
 		if (array_length(texts) <= 0) {
-			curr_x = -(_width + padding);
+			curr_x = gui_w + _width + padding;
 		} else {
 			page++;	
 		}

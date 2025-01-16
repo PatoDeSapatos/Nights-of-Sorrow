@@ -26,9 +26,10 @@ enum CONDITIONS {
 }
 
 enum RESOURCES {
+	ENERGY,
 	MANA,
 	LIFE,
-	ENERGY
+	LENGTH
 }
 
 function get_type_color(_type) {
