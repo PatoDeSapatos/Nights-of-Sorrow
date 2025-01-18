@@ -139,6 +139,7 @@ public class DungeonWSHandler {
              * }
              */
             case UPDATE_INVENTORY:
+                System.out.println(data.toString());
                 wsc.dungeonService.updateInventory(data);
                 break;
             /**

@@ -21,4 +21,4 @@ global.controls = {
 }
 
 randomize();
-room_goto(rm_test);
+room_goto(rm_main_menu);

@@ -55,7 +55,7 @@ public class DungeonService {
 
     public void updateInventory(JSONObject data) {
         var dungeon = getDungeonByInvite(data.getString("invite"));
-        var entity = dungeon.getEntityById(data.getString("entityId"));
+        var entity = dungeon.getEntityById(String.valueOf(data.get("entityId")));
 
         if (entity != null) {
             entity.setInventory(data.getJSONArray("inventory"));
