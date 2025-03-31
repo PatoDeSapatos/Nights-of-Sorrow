@@ -87,3 +87,34 @@ function draw_text_border(_x, _y, _text, _border_color) {
 	draw_set_color(_text_col);
 	draw_text(_x, _y, _text);
 }
+
+function draw_desc_box(_x, _y, _text, _pointing_right=false) {	
+	var _border = 15;
+	
+	var _valign = draw_get_valign();
+	var _halign = draw_get_halign();
+	var _fnt = draw_get_font();
+	
+	draw_set_font(fnt_desc_box);
+	draw_set_valign(fa_middle);
+	draw_set_halign(fa_right);
+	
+	var _xscale = (string_width(_text)+_border)/sprite_get_width(spr_desc_box);
+	var _yscale = (string_height(_text)+_border)/sprite_get_height(spr_desc_box);
+	
+	var _gui_scale = 2;
+	
+	var _m = matrix_get(matrix_world); // get current matrix  
+    var _new_m = matrix_build(0,0,0, 0,0,0, _gui_scale, _gui_scale, 0);
+	
+	matrix_set(matrix_world, _new_m); 
+	
+	draw_sprite_ext(spr_desc_box, 0, _x/_gui_scale, _y/_gui_scale, _xscale, _yscale, 0, c_white, 1);
+	draw_text_border((_x - 2.5*_xscale - _border/2)/_gui_scale, _y/_gui_scale, _text, c_black);
+	
+	matrix_set(matrix_world, _m); 
+	
+	draw_set_valign(_valign);
+	draw_set_halign(_halign);
+	draw_set_font(_fnt);
+}

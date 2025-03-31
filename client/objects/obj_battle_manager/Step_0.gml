@@ -13,7 +13,7 @@ var _mouse_y = mouse_hover.y;
 
 animating = battle_check_animating();
 
-with(obj_battle_unit) {	
+with(obj_battle_entity) {	
 	var _x = screenToTileXG(x, y, other.tile_size, other.init_x, other.init_y);
 	var _y = screenToTileYG(x, y, other.tile_size, other.init_x, other.init_y);
 
@@ -49,9 +49,15 @@ cancel_input = keyboard_check_pressed(vk_escape) || keyboard_check_pressed(vk_ba
 attack_input = keyboard_check_pressed(ord("Q"));
 item_input = keyboard_check_pressed(ord("W"));
 move_input = keyboard_check_pressed(ord("E"));
+interact_input = keyboard_check_pressed(ord("F"));
 
 move_camera_input = keyboard_check_pressed(ord("M"));
 skip_input = keyboard_check_pressed(ord("R"));
+
+//if (mouse_hover.x != -1 && mouse_hover.y != noone && l_click) {
+//	var _propinfo = new PropInfo(spr_props, 0, false, 10, noone)
+//	battle_create_props(_propinfo, mouse_hover);
+//}
 
 battle_execute_cutscene();
 

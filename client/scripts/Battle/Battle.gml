@@ -1,20 +1,25 @@
-function BattleUnit(_stats, _max_hp, _hp, _inventory, _position, _sprites, _movement, _weakness, _resistences, _immunities, _attack_types, _player_username, _stat_changes=new Stats(), _condition=noone) constructor {
+function BattleUnit(_position, _stat_changes=new Stats(), _condition=noone) constructor {
+	position = _position;
+	stat_changes = _stat_changes;
+	condition = _condition;
+}
+
+function PartyUnit(_stats, _hp, _mana, _energy, _inventory, _position, _sprites, _movement, _weakness, _resistences, _immunities, _attack_types, _player_username, _stat_changes=new Stats(), _condition=noone) : BattleUnit(_position, _stat_changes, _condition) constructor {
 	name = _player_username;
 	stats = _stats;
-	max_hp = _max_hp;
+	max_hp = stats.hp;
 	hp = _hp;
-	stat_changes = _stat_changes;
+	mana = _mana;
+	energy = _energy;
 	inventory = _inventory;
-	position = _position;
 	sprites = _sprites;
 	movement = _movement;
 	weakness = _weakness;
 	resistences = _resistences;
 	immunities = _immunities;
-	attack_types = _attack_types ;
+	attack_types = _attack_types;
 	player_username = _player_username;
 	is_player = _player_username == global.server.username;
-	condition = _condition;
 	is_enemy = false;
 	focus = false;
 }
@@ -22,19 +27,19 @@ function BattleUnit(_stats, _max_hp, _hp, _inventory, _position, _sprites, _move
 function EnemyUnit(_position, _enemy_id, _stat_changes=new Stats(), _condition=noone) : BattleUnit(_position, _stat_changes, _condition) constructor {
 	enemy_info = get_enemy(_enemy_id);
 	name = enemy_info.display_name;
-	position = _position;
 	stats = enemy_info.stats;
-	stat_changes = _stat_changes;
 	max_hp = enemy_info.stats.hp;
 	hp = max_hp;
+	energy = enemy_info.stats.energy;
+	mana = enemy_info.stats.mana;
 	sprites = enemy_info.sprites;
 	weakness = enemy_info.weakness;
 	resistences = enemy_info.resistences;
 	immunities = enemy_info.immunities;
 	attack_types = enemy_info.attack_types;
 	movement = enemy_info.movement;
-	condition = _condition;
 	
+	player_username = "";
 	is_player = false;
 	is_enemy = true;
 	inventory = [];
@@ -50,8 +55,8 @@ function init_demo_battle(_grid_size) {
 	var _inventory2 = [];
 	inventory_add_item(_inventory2, 4, 5);
 	
-	var _player_unit1 = new BattleUnit(new Stats(100, 10, 10, 5, 5, 100, 0), 100, 100, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit2 = new BattleUnit(new Stats(100, 10, 10, 5, 5, 100, 0), 100, 100, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit1 = new PartyUnit(new Stats(100, 10, 10, 5, 5, 100, 0, 80, 30), 100, 80, 30, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit2 = new PartyUnit(new Stats(100, 10, 10, 5, 5, 100, 0, 80, 30), 100, 80, 30, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], [MOVE_TYPES.FIRE], global.server.username);
 	
 	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME", new Stats());
 	var _enemy2 = new EnemyUnit({x: 2, y: 1}, "SLIME", new Stats());
@@ -110,15 +115,15 @@ function move_unit_path(_id, _path) {
 function unit_use_action(_action, _user, _targets, _origion_point, _area) {
 	with (obj_battle_manager) {		
 		var _cutscene = [cutscene_use_action,_user, _action, _targets, _origion_point, _area];
-		battle_create_cutscene([_cutscene])
+		battle_create_cutscene([_cutscene]);
 	}	
 }
 
 function unit_take_damage(_damage, _user, _target, _types, _is_physical) {
 	with (_target) {
 		for (var i = 0; i < array_length(_types); ++i) {
-		    if (array_contains(_target.unit.immunities, _types[i])) {
-				add_battle_text( string("It does'nt affect {0}", _target.unit.name) );
+		    if (struct_exists(_target.unit, "immunities") && array_contains(_target.unit.immunities, _types[i])) {
+				add_battle_text( string("It doesn't affect {0}", _target.unit.name) );
 				return;
 			}
 		}
@@ -127,10 +132,10 @@ function unit_take_damage(_damage, _user, _target, _types, _is_physical) {
 		
 		var _resistance_multiplier = 0;
 		for (var i = 0; i < array_length(_types); ++i) {
-		    if (array_contains(_target.unit.weakness, _types[i])) {
+		    if (struct_exists(_target.unit, "weakness") && array_contains(_target.unit.weakness, _types[i])) {
 				_resistance_multiplier++;
 			}
-			if (array_contains(_target.unit.resistences, _types[i])) {
+			if (struct_exists(_target.unit, "resistences") && array_contains(_target.unit.resistences, _types[i])) {
 				_resistance_multiplier--;	
 			}
 		}
@@ -292,4 +297,12 @@ function unit_in_tile(_tile_x, _tile_y) {
 		}
 	}
 	return false;
+}
+
+function battle_create_floating_text(_text, _x, _y, _col, _font=fnt_inventory_title) {
+	instance_create_depth(_x, _y, -1000, obj_battle_floating_text, {
+		text: _text,
+		col: _col,
+		font: _font
+	})
 }

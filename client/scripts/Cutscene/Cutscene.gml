@@ -166,6 +166,43 @@ function cutscene_use_action(_user, _action, _targets, _origin_point, _area) {
 	var _frames = (_user.object_index == obj_party_unit) ? _user.idle_frames-1 : sprite_get_number(_user.sprite_index)-1;
 	
 	if (_user.image_index >= _frames) {
+		var _resource = _action.resource;
+		var _cost = _action.costValue;
+		var _missing_resource = false;
+		
+		switch(_resource) {
+			case RESOURCES.LIFE:
+				if (_user.unit.hp <= _cost) _missing_resource = true;	
+				else _user.unit.hp -= _cost;
+				break;
+			case RESOURCES.MANA:
+				if (_user.unit.mana <= _cost) _missing_resource = true;	
+				else _user.unit.mana -= _cost;
+				break;
+			case RESOURCES.ENERGY:
+				if (_user.unit.energy <= _cost) _missing_resource = true;	
+				else _user.unit.energy -= _cost;
+				break;
+		}
+		
+		if (_missing_resource) {
+			add_battle_text(string("Not enough {0}", get_resource_name(_resource)));	
+			battle_text_set_color(get_resource_color(_resource), 2, 2);
+			_user.effect = noone;
+			_user.sprite_index = image;
+			_user.image_index = 0;
+			battle_action_end(_targets);
+			return;
+		}
+		
+		if (_action.costValue != 0) {
+			instance_create_depth(_user.x + random_range(-20, 20), _user.y + random_range(-20, 20), _user.depth-1000, obj_battle_floating_text, {
+				text: string("-{0}", _action.costValue),
+				col: get_resource_color(_resource),
+				font: fnt_inventory_title
+			})
+		}
+		
 		if (struct_exists(_action, "hit_effect") && !is_undefined(_action.hit_effect)) {
 			for (var i = 0; i < array_length(_targets); ++i) {
 			    var _target = _targets[i];

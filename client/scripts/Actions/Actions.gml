@@ -94,7 +94,7 @@ global.actions = {
 		types: [MOVE_TYPES.SLASHING, MOVE_TYPES.BLUDGEONING, MOVE_TYPES.PIERCING],
 		moveCategory: MOVE_CATEGORY.PHYSICAL,
 		costValue: 2,
-		resource: RESOURCES.LIFE,
+		resource: RESOURCES.ENERGY,
 		userAnimation: "attack",
 		hit_effect: spr_effect_hit,
 		targetRequired: true,
@@ -111,6 +111,23 @@ global.actions = {
 			
 			unit_take_damage(_damage, _user, _targets[0], _types, true);
 		}	
+	},
+	guard: {
+		name: "Guard",
+		description: "protect yourself!",
+		types: [MOVE_TYPES.NORMAL],
+		moveCategory: MOVE_CATEGORY.STATUS,
+		costValue: 0,
+		resource: RESOURCES.ENERGY,
+		userAnimation: "idle",
+		targetRequired: false,
+		range: -1,
+		
+		func: function(_user) {
+			_user.defended = true;
+			battle_create_floating_text("Guarding!", _user.x, _user.y, c_white);
+			add_battle_text( string("{0} sets up the guard!", _user.unit.name) );
+		}
 	},
 	attackBoost: {
 		name: "Attack Boost",

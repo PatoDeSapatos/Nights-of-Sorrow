@@ -18,29 +18,36 @@ if (can_draw) {
 		var _h = sprite_get_height(spr_key_button)*scale + 10;
 		var _option_xscale = _w/sprite_get_width(spr_battle_option);
 		var _option_yscale = _h/sprite_get_height(spr_battle_option);
+		var _inv = 1;
 		
 		//var _dir = -(360/(array_length(options)*2)) + _h*i;
-		var _dir = (_h/1.2)*i - 45;
-		var _currx = _xx + lengthdir_x(distance, _dir);
-		var _curry = _yy + lengthdir_y(distance, _dir);
+		var _dir = _option.angle;
+		var _center = _dir == 90 || _dir == 270;
+		
+		var _currx = _xx + lengthdir_x(distance, _dir) - (_center ? (_w/2 - sprite_get_xoffset(spr_battle_option)*_option_xscale) : 0);
+		var _curry = _yy + lengthdir_y(distance, _dir) + (_center ? 5 : 0);
 		
 		if (_dir > 90 && _dir < 270) {
 			_option_xscale *= -1;
+			_inv = -1;
 		}
 		
 		_option.able = true;
 		if (_option.name == "Move" && obj_battle_manager.movement_actions <= 0) {
 			_option.able = false;	
-		} else if ((_option.name == "Attack" || _option.name == "Item") && obj_battle_manager.main_actions <= 0 && !obj_battle_manager.extra_action) {
+		} else if ((_option.name == "Attack" || _option.name == "Item" || _option.name == "Skills" || _option.name == "Guard") && obj_battle_manager.main_actions <= 0 && !obj_battle_manager.extra_action) {
 			_option.able = false;
 		}
+		
+		var _x1 = _currx - sprite_get_xoffset(spr_battle_option)*_option_xscale + 10*_inv;
+		var _x2 = _currx - sprite_get_xoffset(spr_battle_option)*_option_xscale + _w*_inv - 10*_inv;
 		
 		var _selected = point_in_rectangle(
 			mouse_x,
 			mouse_y,
-			_currx - sprite_get_xoffset(spr_battle_option)*_option_xscale + 10,
+			_inv > 0 ? _x1 : _x2,
 			_curry - sprite_get_yoffset(spr_battle_option)*_option_yscale + 10,
-			_currx - sprite_get_xoffset(spr_battle_option)*_option_xscale + _w - 10,
+			_inv > 0 ? _x2 : _x1,
 			_curry - sprite_get_yoffset(spr_battle_option)*_option_yscale + _h - 10,
 		);
 		
@@ -63,8 +70,8 @@ if (can_draw) {
 		
 		// Name
 		draw_set_font(fnt_battle_options);
-		draw_set_halign(fa_left);
-		draw_text(_currx + sprite_get_width(spr_key_button)/2 + option_border, _curry, _option.name);
+		draw_set_halign( _inv < 0 ? fa_right : fa_left );
+		draw_text(_currx + (sprite_get_width(spr_key_button)/2 + option_border)*_inv, _curry, _option.name);
 
 		draw_set_alpha(1)
 	}

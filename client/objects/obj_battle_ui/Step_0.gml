@@ -15,7 +15,7 @@ if (can_draw) {
 
 	// Keyboard
 	for (var i = 0; i < array_length(options); ++i) {
-	    if( options[i].able && variable_instance_get(obj_battle_manager, options[i].input_name) ) {
+	    if( options[i].able && keyboard_check_pressed(options[i].key) ) {
 			exit_state_turn(options[i].state);
 			break;
 		}
@@ -28,16 +28,4 @@ if (can_draw) {
 			break;
 		}
 	}
-	
-	// Camera
-	with(global.camera) {
-		var _buffer_x = clamp((mouse_x - camera_x - camera_w/2)/300, -100, 100);
-		var _buffer_y = clamp((mouse_y - camera_y - camera_h/2)/300, -100, 100);
-		
-		camera_set_x_buffer(_buffer_x, .2);
-		camera_set_y_buffer(_buffer_y, .2);
-	}
-	
-	camera_zoom(25, true, .25);
-	camera_set_bar(50, .15);
 }

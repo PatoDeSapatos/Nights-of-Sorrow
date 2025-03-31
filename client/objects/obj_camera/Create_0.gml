@@ -20,6 +20,10 @@ target_x = x;
 target_y = y;
 camera_delay = .05;
 
+// Inputs
+mouse_x_previous = device_mouse_x_to_gui(0);
+mouse_y_previous = device_mouse_y_to_gui(0);
+
 // ------------- VFX -------------
 state = noone;
 inside_room_camera = false;

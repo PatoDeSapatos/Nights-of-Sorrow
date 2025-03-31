@@ -46,6 +46,7 @@ function battle_state_turn() {
 	battle_check_dead_units();
 	
 	check_charging();
+	turn_camera();
 	
 	// Main Action
 	if (main_actions > 0) {
@@ -139,6 +140,7 @@ function set_state_targeting(_action) {
 
 function battle_state_targeting() {
 	var _user = extra_action ? extra_turn_user : units[turns];
+	turn_camera();
 	
 	// No target action
 	if (!selected_action.targetRequired) {
@@ -216,7 +218,7 @@ function battle_state_targeting() {
 			    var _xx = action_origin.x + _x;
 			    var _yy = action_origin.y + _y;
 				
-				if (_xx >= 0 && _yy >= 0 && calc_in_shape_range(action_origin.x, action_origin.y, _xx, _yy, selected_action.shape)) {
+				if ((_xx >= 0 && _yy >= 0) && (calc_in_shape_range(action_origin.x, action_origin.y, _xx, _yy, selected_action.shape) <= _range)) {
 					array_push(action_area, [_xx, _yy]);	
 				}
 			}
@@ -226,7 +228,7 @@ function battle_state_targeting() {
 		
 		action_targets = [];
 
-		with (obj_battle_unit) {
+		with (obj_battle_entity) {
 			if (
 				(!struct_exists(other.selected_action, "targetSelf"))
 				|| ((!other.selected_action.targetSelf) && _user.id == self.id)
@@ -261,7 +263,7 @@ function end_state_targeting() {
 	action_area = [];
 	
 	if (instance_exists(target_indicator)) instance_destroy(target_indicator);
-	with(obj_battle_unit) {
+	with(obj_battle_entity) {
 		in_target = false;	
 	}
 	
@@ -273,7 +275,7 @@ function end_state_targeting() {
 function calc_in_shape_range(_x1, _y1, _x2, _y2, _shape) {
 	switch(_shape) {
 		case MOVE_SHAPES.CIRCLE:
-			return sqrt(sqr(_x1 - _x2) + sqr(_y1 - _y2));
+			return sqrt( sqr(_x2 - _x1) + sqr(_y2 - _y1) );
 		case MOVE_SHAPES.SQUARE:
 			return floor( sqrt(sqr(_x1 - _x2) + sqr(_y1 - _y2)) );
 		default:
@@ -283,6 +285,7 @@ function calc_in_shape_range(_x1, _y1, _x2, _y2, _shape) {
 
 function battle_state_extra() {
 	check_charging();
+	turn_camera();
 	movement_actions = 0;
 	
 	// Main Action
@@ -365,9 +368,10 @@ function battle_state_waiting() {
 	}
 	
 	battle_check_dead_units();
-	camera_zoom_reset();
+	turn_camera();
 	
 	if (!animating) {
+		camera_zoom_reset();
 		
 		if (extra_action && extra_turn_user != noone) {
 			if(extra_turn_user.unit.player_username == global.server.username) {
@@ -504,6 +508,19 @@ function exit_state_turn(_new_state) {
 	}
 }
 
+function turn_camera() {
+	with(global.camera) {
+		var _buffer_x = clamp((mouse_x - camera_x - camera_w/2)/10, -10, 10);
+		var _buffer_y = clamp((mouse_y - camera_y - camera_h/2)/10, -10, 10);
+		
+		camera_set_x_buffer(_buffer_x, .2);
+		camera_set_y_buffer(_buffer_y, .2);
+	}
+	
+	camera_zoom(25, true, .25);
+	camera_set_bar(50, .15);	
+}
+
 function check_attack() {	
 	//if (keyboard_check_pressed(ord("A")) || (l_click && unit_hover != noone && !unit_hover.is_dead)) {
 	//	set_state_targeting(global.actions.attack);
@@ -569,7 +586,7 @@ function end_battle() {
 		}
 		
 		show_message("Cabou!")
-		instance_destroy(obj_battle_unit);
+		instance_destroy(obj_battle_entity);
 		instance_destroy(obj_battle_effect);
 		instance_destroy(obj_battle_manager);
 	}

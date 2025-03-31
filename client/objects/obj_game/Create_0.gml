@@ -5,6 +5,7 @@ global.pause = false;
 global.loading = false;
 global.loading_screen = false;
 global.can_zoom = false;
+global.can_pan = false;
 global.enemies = ds_map_create();
 global.items = {};
 global.recipes = {};
@@ -22,3 +23,8 @@ global.controls = {
 
 randomize();
 room_goto(rm_test);
+
+global.settings = {
+	camera_sensibility: 100,
+	vibrations: true
+}

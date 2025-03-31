@@ -64,6 +64,7 @@ cancel_input = false;
 attack_input = false;
 item_input = false;
 move_input = false;
+interact_input = false;
 
 move_camera_input = false;
 skip_input = false;
@@ -92,6 +93,7 @@ movement_tile = {
 
 player_turn = false;
 units = [];
+props = [];
 player_units = [];
 queued_allies = [];
 queued_enemies = [];

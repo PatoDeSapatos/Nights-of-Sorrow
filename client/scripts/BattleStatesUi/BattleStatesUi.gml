@@ -1,4 +1,12 @@
 function battle_start_state_attack() {
+	
+}
+
+function battle_state_attack() {
+	
+}
+
+function battle_start_state_skills() {
 	var _skills = [global.actions.attack, global.actions.fireBall, global.actions.attackBoost, global.actions.lightRay, global.actions.poisonMist];
 	
 	if (array_length(_skills) <= 0) {
@@ -9,12 +17,11 @@ function battle_start_state_attack() {
 	
 	inventory = instance_create_depth(0, 0, -1000, obj_skill_inventory);
 	inventory.skills = _skills;
-	camera_set_x_buffer(5, .5);
 	camera_zoom(10, true);
-	state = battle_state_attack;
+	state = battle_state_skills;
 }
 
-function battle_state_attack() {
+function battle_state_skills() {
 	if (instance_exists(inventory)) {
 		var _action = inventory.skills[inventory.selected_item];
 	
@@ -47,7 +54,6 @@ function battle_start_state_item() {
 	inventory = instance_create_depth(0, 0, -1000, obj_battle_item_inventory);
 	inventory.inventory = _items;
 	
-	camera_set_x_buffer(5, .5);
 	camera_zoom(10, true);
 	state = battle_state_item;
 }
@@ -181,10 +187,139 @@ function battle_end_state_move() {
 	}
 }
 
+function battle_set_state_interact() {
+	with(obj_battle_manager) {
+		var _user = extra_action ? extra_turn_user : units[turns];
+		var _range = 2;
+		
+		action_tiles = [];
+		for (var _y = -_range; _y <= _range; ++_y) {
+			for (var _x = -_range; _x <= _range; ++_x) {
+				var _xx = _user.unit.position.x + _x;
+				var _yy = _user.unit.position.y + _y;
+			   
+				var _value = sqrt(sqr(_user.unit.position.x - _xx) + sqr(_user.unit.position.y - _yy));
+
+				if (_value <= _range && _xx >= 0 && _yy >= 0 && _xx <= array_length(grid[0]) && _yy <= array_length(grid)) {
+					array_push(action_tiles, [_xx, _yy]);   
+				}
+			}
+		}	
+	
+		action_possible_targets = array_concat(units, props);
+	
+		action_possible_targets = array_filter(action_possible_targets, method({_user, _range}, function (_unit) {
+			return (sqrt(sqr(_user.unit.position.x - _unit.unit.position.x) + sqr(_user.unit.position.y - _unit.unit.position.y)) <= _range);
+		}));
+	
+		array_sort(action_possible_targets, method({_user}, function(_unit1, _unit2) {
+			return calc_unit_distance(_user, _unit2) - calc_unit_distance(_user, _unit1);
+		}));
+	
+		current_target = 0;
+	
+		state = battle_state_interact;	
+	}
+}
+
+function battle_state_interact() {
+	if (cancel_input) {
+		end_state_interact();
+	}
+	
+	if (array_length(action_possible_targets) <= 0) return;
+	
+	with(obj_battle_entity) {
+		in_target = false;
+	}
+	
+	var _target = action_possible_targets[current_target];
+	global.camera.follow = _target;
+	_target.in_target = true;
+	
+	var _offset = right_input - left_input;
+	current_target = clamp(current_target + _offset, 0, array_length(action_possible_targets)-1);
+	
+	if (confirm_input) {
+		state = battle_state_desc;
+	}
+}
+
+function battle_state_desc() {
+	global.camera.follow = action_possible_targets[current_target];
+	obj_battle_ui.show_desc = true;
+	
+	if (cancel_input) {
+		obj_battle_ui.show_desc = false;
+		camera_reset_buffer();
+		camera_zoom_reset();
+		state = battle_state_interact;
+	}
+}
+
+function end_state_interact() {
+	action_possible_targets = [];
+	current_target = 0;
+	obj_battle_ui.show_desc = false;
+	
+	if (instance_exists(target_indicator)) instance_destroy(target_indicator);
+	with(obj_battle_entity) {
+		in_target = false;	
+	}
+	
+	global.camera.follow = extra_turn_user != noone ? extra_turn_user : units[turns];
+	state = battle_state_turn;
+	prev_state = noone;
+}
+
 function battle_skip_turn() {
 	with(obj_battle_manager) {
 		main_actions = 0;
 		movement_actions = 0;
 		extra_action = false;
 	}	
+}
+
+function battle_set_free_camera() {
+	with(obj_battle_manager) {
+		exit_state_turn( battle_state_free_camera);
+		camera_reset_bar();
+		obj_camera.state = noone;
+		global.can_zoom = true;
+		global.can_pan = true;
+	}
+}
+
+function battle_state_free_camera() {
+	global.camera.follow = noone;
+	
+	var _hover = false;
+	
+	with(obj_battle_entity) {
+		if (!_hover && (mouse_x > bbox_left && mouse_x < bbox_right) && (mouse_y > bbox_top && mouse_y < bbox_bottom)) {
+			in_target = true;
+			_hover = true;
+			continue;
+		}
+		
+		in_target = false;	
+	}
+	
+	
+	if (cancel_input) {
+		global.camera.follow = units[turns];
+		global.can_pan = false;
+		global.can_zoom = false;
+		state = prev_state;
+		
+		with(obj_battle_entity) {
+			in_target = false;	
+		}
+	}
+}
+
+function battle_state_guard() {
+	var _user = extra_action ? extra_turn_user : units[turns];
+	unit_use_action(global.actions.guard, _user, _user, _user.unit.position, [])
+	state = prev_state
 }

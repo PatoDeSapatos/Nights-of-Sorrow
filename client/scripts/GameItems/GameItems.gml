@@ -31,16 +31,6 @@ function Consumable_Item(_name, _description, _display_name, _sprId, _category, 
 	action = _action;
 }
 
-function Stats(_hp = 0, _defense = 0, _magic_defense = 0, _attack = 0, _magic_attack = 0, _spd = 0, _luck = 0) constructor {
-	hp = _hp;
-	defense = _defense;
-	magic_defense = _magic_defense;
-	attack = _attack;
-	magic_attack = _magic_attack;
-	spd = _spd;
-	luck = _luck;
-}
-
 function add_material_item( _name, _description, _display_name, _sprId, _category, _max_stack = 999 ) {
 	struct_set( global.items, struct_names_count(global.items), new Material_Item(_name, _description, _display_name, _sprId, _category, _max_stack) );
 }

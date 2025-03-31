@@ -3,9 +3,7 @@
 // Pre set variables
 // unit = new Battle_Unit();
 // scale = 1;
-
-image_xscale = scale;
-image_yscale = scale;
+event_inherited();
 
 sprites = unit.sprites
 idle_frames = 4;
@@ -19,7 +17,6 @@ clothing = 0;
 
 is_broken = false;
 is_dead = false;
-in_target = false;
 animating = false;
 
 ready = false;
@@ -30,5 +27,3 @@ focusing = false;
 
 effect = noone;
 effect_image = 0;
-
-z = obj_battle_manager.tile_size/4;

@@ -45,7 +45,14 @@ function inventory_draw_skills() {
 	
 		// Item Image
 		var _type = (struct_exists(_item, "types")) ? (_item.types[0]) : (0);
-		draw_sprite_ext( spr_move_type_icons, _type, items_box_name_x - items_box_spr_size, _y, global.res_scale * 2, global.res_scale * 2, 0, c_white, 1 );
+		var _icon_scale = global.res_scale * 2;
+		var _icon_w = sprite_get_width(spr_move_type_icons)*_icon_scale;
+		var _icon_h = sprite_get_height(spr_move_type_icons)*_icon_scale;
+		
+		draw_sprite_ext( spr_move_type_icons, _type, items_box_name_x - items_box_spr_size, _y, _icon_scale, _icon_scale, 0, c_white, 1 );
+		if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), items_box_name_x - items_box_spr_size - _icon_w/2, _y - _icon_h/2, items_box_name_x - items_box_spr_size + _icon_w/2, _y + _icon_h/2)) {
+			draw_desc_box(items_box_w - _string_w - (items_box_name_h - _string_h) - 10, _y, "");	
+		}
 	
 		// Item Name
 		draw_set_color(c_white);
@@ -68,6 +75,10 @@ function inventory_draw_skills() {
 		draw_roundrect_color(items_box_w - _string_w - (items_box_name_h - _string_h), _y - _string_h, items_box_w - (items_box_name_h - _string_h), _y + _string_h, c_black, c_black, false);
 		draw_text_color(items_box_w - _string_w/2 - (items_box_name_h - _string_h), _y, _string, _col, _col, _col, _col, 1);
 		
+		if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), items_box_x + items_box_w - _string_w - (items_box_name_h - _string_h), items_box_name_y + _y - _string_h, items_box_x + items_box_w - (items_box_name_h - _string_h),items_box_name_y + _y + _string_h)) {
+			draw_desc_box(items_box_w - _string_w - (items_box_name_h - _string_h) - 10, _y, "Skill Cost");
+		}
+
 		//draw_set_halign(fa_right);
 		
 		//draw_text_color(items_box_w - (items_box_name_h - _string_h), _y, get_resource_name(_item.resource), _col, _col, _col, _col, 1);

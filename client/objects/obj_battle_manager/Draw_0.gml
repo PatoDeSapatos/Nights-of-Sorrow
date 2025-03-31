@@ -28,7 +28,7 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 			}
 		}
 
-		if (array_length(action_tiles) > 0 && state == battle_state_targeting) {
+		if (array_length(action_tiles) > 0 && (state == battle_state_targeting || state == battle_state_interact)) {
 			for (var k = 0; k < array_length(action_tiles); ++k) {
 			    if ( action_tiles[k, 0] == _x && action_tiles[k, 1] == _y) {
 					_in_action_range = true;

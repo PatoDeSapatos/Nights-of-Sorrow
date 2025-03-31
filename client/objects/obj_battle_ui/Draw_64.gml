@@ -1,5 +1,4 @@
 /// @description
-
 if (can_draw) {
 	var _gui_scale = display_get_gui_width()/global.camera.camera_w*obj_battle_manager.scale;
 	var gui_w = display_get_gui_width()/_gui_scale;
@@ -25,14 +24,28 @@ if (can_draw) {
 		var _bar_y = gui_h - border_y - bar_scale*(sprite_get_height(spr_stat_bar_outline)-1)*i - (portrait_size - bar_h*3);
 		var _bar_x = border_x + portrait_size;
 		
+		var _resouce = _unit.unit.hp;
+		var _max_resource = _unit.unit.stats.hp;
+		
+		switch(i) {
+			case RESOURCES.MANA:
+				_resouce = _unit.unit.mana;
+				_max_resource = _unit.unit.stats.mana;
+				break;
+			case RESOURCES.ENERGY:
+				_resouce = _unit.unit.energy;
+				_max_resource = _unit.unit.stats.energy;
+				break;
+		}
+		
 		matrix_set(matrix_world, _new_m);
 		draw_sprite_ext(spr_stat_bar, 0, _bar_x, _bar_y, bar_scale, bar_scale, 0, c_white, .5);
-		draw_sprite_ext(spr_stat_bar, 0, _bar_x, _bar_y, bar_scale*((_unit.unit.hp+sprite_get_xoffset(spr_stat_bar_outline))/(_unit.unit.stats.hp+sprite_get_xoffset(spr_stat_bar_outline))), bar_scale, 0, get_resource_color(i), 1);
+		draw_sprite_ext(spr_stat_bar, 0, _bar_x, _bar_y, bar_scale*((_resouce+sprite_get_xoffset(spr_stat_bar_outline))/(_max_resource+sprite_get_xoffset(spr_stat_bar_outline))), bar_scale, 0, get_resource_color(i), 1);
 		draw_sprite_ext(spr_stat_bar_outline, 0, _bar_x, _bar_y, bar_scale, bar_scale, 0, c_white, 1);    
 		matrix_set(matrix_world, _m);
 	
 		draw_set_color(c_white);
-		draw_text_border(_bar_x*_gui_scale + (bar_w - sprite_get_xoffset(spr_stat_bar_outline)*bar_scale)*_gui_scale/2, _bar_y*_gui_scale - sprite_get_height(spr_stat_bar_outline)*bar_scale*_gui_scale/2, string("{1}/{0}", _unit.unit.stats.hp, _unit.unit.hp), c_black);
+		draw_text_border(_bar_x*_gui_scale + (bar_w - sprite_get_xoffset(spr_stat_bar_outline)*bar_scale)*_gui_scale/2, _bar_y*_gui_scale - sprite_get_height(spr_stat_bar_outline)*bar_scale*_gui_scale/2, string("{0}/{1}", _resouce, _max_resource), c_black);
 	}
 	
 	matrix_set(matrix_world, _new_m);
@@ -57,8 +70,22 @@ if (can_draw) {
 			var _bar_y = border_y + portrait_size - bar_scale*(sprite_get_height(spr_stat_bar_outline)-1)*i;
 			var _bar_x = border_x + portrait_size;
 		
+			var _resouce = _allie.hp;
+			var _max_resource = _allie.stats.hp;
+		
+			switch(i) {
+				case RESOURCES.MANA:
+					_resouce = _allie.mana;
+					_max_resource = _allie.stats.mana;
+					break;
+				case RESOURCES.ENERGY:
+					_resouce = _allie.energy;
+					_max_resource = _allie.stats.energy;
+					break;
+			}
+		
 			draw_sprite_ext(spr_stat_bar, 0, _bar_x, _bar_y, bar_scale*2, bar_scale, 0, c_white, .5);
-			draw_sprite_ext(spr_stat_bar, 0, _bar_x, _bar_y, bar_scale*2*((_allie.hp+sprite_get_xoffset(spr_stat_bar_outline))/(_allie.stats.hp+sprite_get_xoffset(spr_stat_bar_outline))), bar_scale, 0, get_resource_color(i), 1);
+			draw_sprite_ext(spr_stat_bar, 0, _bar_x, _bar_y, bar_scale*2*((_resouce+sprite_get_xoffset(spr_stat_bar_outline))/(_max_resource+sprite_get_xoffset(spr_stat_bar_outline))), bar_scale, 0, get_resource_color(i), 1);
 		
 			draw_sprite_ext(spr_stat_bar_outline, 0, _bar_x, _bar_y, bar_scale*2, bar_scale, 0, c_white, 1);
 		}
@@ -94,5 +121,8 @@ if (can_draw) {
 	
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
-	
+}
+
+if (show_desc) {
+	draw_unit_desc(global.camera.follow);	
 }

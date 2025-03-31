@@ -3,20 +3,9 @@ if ( follow != noone && instance_exists(follow) || is_struct(follow) ) {
 	target_x = follow.x;
 	target_y = follow.y;
 	
-	x = lerp(x + x_buffer, target_x, camera_delay);
-	y = lerp(y + y_buffer, target_y, camera_delay);
+	x = lerp(x, target_x + x_buffer, camera_delay);
+	y = lerp(y, target_y + y_buffer, camera_delay);
 }
-
-//x_buffer = lerp(x_buffer, x_buffer_target, x_buffer_rate);
-//y_buffer = lerp(y_buffer, y_buffer_target, y_buffer_rate);
-
-//if (abs(x_buffer - x_buffer_target) <= x_buffer_rate) {
-//	x_buffer = x_buffer_target;	
-//}
-
-//if (abs(y_buffer - y_buffer_target) <= y_buffer_rate) {
-//	y_buffer = y_buffer_target;	
-//}
 
 if (state != noone) {
 	state();	
@@ -40,6 +29,11 @@ if ( global.can_zoom ) {
 }
 camera_set_view_size( view_camera[0], camera_w, camera_h );
 
+if ( global.can_pan && mouse_check_button(mb_right) ) {
+	x -= (device_mouse_x_to_gui(0) - mouse_x_previous) * ((global.settings.camera_sensibility * camera_w/RES_W) / 200);
+	y -= (device_mouse_y_to_gui(0) - mouse_y_previous) * ((global.settings.camera_sensibility * camera_h/RES_H ) / 200)
+}
+
 if (inside_room_camera) { 
 	x = clamp(x, camera_w * 0.5, room_width - (camera_w * 0.5));
 	y = clamp(y, camera_h * 0.5, room_height - (camera_h * 0.5));
@@ -56,3 +50,6 @@ if (keyboard_check_pressed(ord("V"))) {
 		view_visible[1] = 0
 	}
 }
+
+mouse_x_previous = device_mouse_x_to_gui(0);
+mouse_y_previous = device_mouse_y_to_gui(0);
