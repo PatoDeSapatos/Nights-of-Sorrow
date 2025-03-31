@@ -46,7 +46,6 @@ map = -1
 generate_map()
 
 instance_create_layer(0, 0, "Instances", obj_dungeon_chat)
-instance_create_layer(0, 0, "Instances", obj_player_inventory)
 
 update_entities = function (_data) {
 	var _entities = struct_get(_data, "entities");
@@ -75,6 +74,7 @@ update_entities = function (_data) {
 			_entity.entity_id = _entity_id;
 			ds_map_set(entities, _entity_id, _entity);
 			if ( global.server.username == _username ) {
+                instance_create_layer(0, 0, "Instances", obj_player_inventory)
 				player_entity_id = _entity_id
 				global.camera.follow = _entity
 

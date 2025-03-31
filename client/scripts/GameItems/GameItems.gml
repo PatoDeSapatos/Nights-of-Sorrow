@@ -20,7 +20,7 @@ function Item(_name, _description, _display_name, _sprId, _category, _max_stack)
 	category = _category;
 }
 
-function Material_Item(_name, _description, _display_name, _sprId, _category, _max_stack) : Item(_name, _display_name, _sprId, _category, _max_stack) constructor {}
+function Material_Item(_name, _description, _display_name, _sprId, _category, _max_stack) : Item(_name, _description, _display_name, _sprId, _category, _max_stack) constructor {}
 
 function Equipment_Item(_name, _description, _display_name, _sprId, _category, _stats, _slot, _max_stack ) : Item(_name, _description, _display_name, _sprId, _category, _max_stack) constructor {
 	slot = _slot;
@@ -46,7 +46,7 @@ function add_consumable_item( _name, _description, _display_name, _sprId, _categ
 function init_items() {
 	// Without Stats
 	add_material_item( "SLIME_BALL", "", "Bola de Slime", 0, ItemCategory.MATERIAL, 20 );
-	add_material_item( "BONE", "Osso", 1, ItemCategory.MATERIAL );
+	add_material_item( "BONE", "", "Osso", 1, ItemCategory.MATERIAL );
 	
 	// With Stats
 	add_equipment_item( "MAD_HAMMER", "", "Martelo Maluco", 2, ItemCategory.WEAPON, new Stats(0, 0, 0, 5, 0, 0), bothHandsSlot, 1 );
