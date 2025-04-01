@@ -26,6 +26,7 @@ function battle_state_start_turn() {
 	current_waiting_frames = 0;	
 	obj_camera.follow = units[turns];
 	units[turns].is_broken = false;
+	units[turns].defended = false;
 	
 	if (units[turns].unit.hp <= 0) {
 		add_battle_text( string("{0} is fainted.", units[turns].unit.name) );
@@ -234,7 +235,7 @@ function battle_state_targeting() {
 				|| ((!other.selected_action.targetSelf) && _user.id == self.id)
 				|| (unit.hp <= 0 && (!struct_exists(other.selected_action, "targetDead") || other.selected_action.targetDead == CONDITIONS.NEVER))
 			) {
-				break;	
+				continue;	
 			}
 			
 			in_target = false;
@@ -371,7 +372,6 @@ function battle_state_waiting() {
 	turn_camera();
 	
 	if (!animating) {
-		camera_zoom_reset();
 		
 		if (extra_action && extra_turn_user != noone) {
 			if(extra_turn_user.unit.player_username == global.server.username) {

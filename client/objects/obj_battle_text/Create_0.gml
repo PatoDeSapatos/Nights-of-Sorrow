@@ -1,5 +1,7 @@
 /// @description
 
+col = make_color_rgb(16, 20, 31)
+
 texts = [];
 text_width = [];
 text_height = [];

@@ -14,7 +14,7 @@ draw_rectangle(
 );
 
 // Background
-draw_set_color(c_dkgray);
+draw_set_color(col);
 draw_rectangle(
 	curr_x - padding,
 	start_y - padding,

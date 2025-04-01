@@ -28,5 +28,3 @@ global.settings = {
 	camera_sensibility: 100,
 	vibrations: true
 }
-
-room_goto(rm_main_menu);

@@ -10,8 +10,8 @@
   "name":"obj_battle_text",
   "overriddenProperties":[],
   "parent":{
-    "name":"battle",
-    "path":"folders/Objetos/dungeon/battle.yy",
+    "name":"hud",
+    "path":"folders/Objetos/dungeon/battle/hud.yy",
   },
   "parentObjectId":null,
   "persistent":false,

@@ -4,7 +4,7 @@ function BattleUnit(_position, _stat_changes=new Stats(), _condition=noone) cons
 	condition = _condition;
 }
 
-function PartyUnit(_stats, _hp, _mana, _energy, _inventory, _position, _sprites, _movement, _weakness, _resistences, _immunities, _attack_types, _player_username, _stat_changes=new Stats(), _condition=noone) : BattleUnit(_position, _stat_changes, _condition) constructor {
+function PartyUnit(_stats, _hp, _mana, _energy, _inventory, _position, _sprites, _movement, _weakness, _resistences, _immunities, _basic_attack, _player_username, _stat_changes=new Stats(), _condition=noone) : BattleUnit(_position, _stat_changes, _condition) constructor {
 	name = _player_username;
 	stats = _stats;
 	max_hp = stats.hp;
@@ -17,7 +17,7 @@ function PartyUnit(_stats, _hp, _mana, _energy, _inventory, _position, _sprites,
 	weakness = _weakness;
 	resistences = _resistences;
 	immunities = _immunities;
-	attack_types = _attack_types;
+	basic_attack = _basic_attack;
 	player_username = _player_username;
 	is_player = _player_username == global.server.username;
 	is_enemy = false;
@@ -36,7 +36,7 @@ function EnemyUnit(_position, _enemy_id, _stat_changes=new Stats(), _condition=n
 	weakness = enemy_info.weakness;
 	resistences = enemy_info.resistences;
 	immunities = enemy_info.immunities;
-	attack_types = enemy_info.attack_types;
+	basic_attack = enemy_info.basic_attack;
 	movement = enemy_info.movement;
 	
 	player_username = "";
@@ -55,8 +55,8 @@ function init_demo_battle(_grid_size) {
 	var _inventory2 = [];
 	inventory_add_item(_inventory2, 4, 5);
 	
-	var _player_unit1 = new PartyUnit(new Stats(100, 10, 10, 5, 5, 100, 0, 80, 30), 100, 80, 30, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], [MOVE_TYPES.FIRE], global.server.username);
-	var _player_unit2 = new PartyUnit(new Stats(100, 10, 10, 5, 5, 100, 0, 80, 30), 100, 80, 30, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], [MOVE_TYPES.FIRE], global.server.username);
+	var _player_unit1 = new PartyUnit(new Stats(100, 10, 10, 5, 5, 100, 0, 80, 30), 100, 80, 30, _inventory1, {x: 0, y: 0}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], global.basic_attacks.magic_missile, global.server.username);
+	var _player_unit2 = new PartyUnit(new Stats(100, 10, 10, 5, 5, 100, 0, 80, 30), 100, 80, 30, _inventory2, {x: 0, y: 2}, _player_sprites, 6, [MOVE_TYPES.BLUDGEONING], [], [], global.basic_attacks.unarmed, global.server.username);
 	
 	var _enemy1 = new EnemyUnit({x: 1, y: 0}, "SLIME", new Stats());
 	var _enemy2 = new EnemyUnit({x: 2, y: 1}, "SLIME", new Stats());
@@ -146,10 +146,15 @@ function unit_take_damage(_damage, _user, _target, _types, _is_physical) {
 				extra_turn_given = false;
 				extra_action = true;
 				extra_turn_user = _user;
+				
+				add_battle_text("It's Super Effective!!")
+				battle_create_floating_text("One More!", _target.x, _target.y, c_yellow)
 			}
 		}
 		
-		var _final_damage = round( (_damage - (_defense/(_defense + 100))));
+		var _is_guarding = (_target.defended) ? (1.5) : (1);
+		
+		var _final_damage = round( (_damage - (_defense*_is_guarding/(_defense + 100))));
 		_final_damage = round(_final_damage + _final_damage*_resistance_multiplier*.5);
 		if (_final_damage > 0) {
 			_target.unit.focus = false;  
@@ -305,4 +310,33 @@ function battle_create_floating_text(_text, _x, _y, _col, _font=fnt_inventory_ti
 		col: _col,
 		font: _font
 	})
+}
+
+function battle_change_resource(_user, _resource, _value) {
+	var _missing_resource = false;
+		
+	switch(_resource) {
+		case RESOURCES.LIFE:
+			if (_user.unit.hp + _value <= 0) _missing_resource = true;	
+			else if (_user.unit.hp + _value <= _user.unit.stats.hp) _user.unit.hp += _value;
+			break;
+		case RESOURCES.MANA:
+			if (_user.unit.mana + _value <= 0) _missing_resource = true;	
+			else if (_user.unit.mana + _value <= _user.unit.stats.mana) _user.unit.mana += _value;
+			break;
+		case RESOURCES.ENERGY:
+			if (_user.unit.energy + _value <= 0) _missing_resource = true;	
+			else if (_user.unit.energy + _value <= _user.unit.stats.energy) _user.unit.energy += _value;
+			break;
+	}
+		
+	if (_value != 0) {
+		instance_create_depth(_user.x + random_range(-20, 20), _user.y + random_range(-20, 20), _user.depth-1000, obj_battle_floating_text, {
+			text: string("{0}", _value),
+			col: get_resource_color(_resource),
+			font: fnt_inventory_title
+		})
+	}
+	
+	return _missing_resource;
 }

@@ -1,11 +1,11 @@
-function Enemy(_display_name, _stats, _sprites, _init_state, _movement, _actions, _attack_types, _weakness, _resistences, _immunities, _drops, _battle_script) constructor {
+function Enemy(_display_name, _stats, _sprites, _init_state, _movement, _actions, _basic_attack, _weakness, _resistences, _immunities, _drops, _battle_script) constructor {
 	display_name = _display_name;
 	stats = _stats;
 	sprites = _sprites;
 	init_state = _init_state;
 	movement = _movement;
 	actions = _actions;
-	attack_types = _attack_types;
+	basic_attack = _basic_attack;
 	weakness = _weakness;
 	resistences = _resistences;
 	immunities = _immunities;
@@ -44,7 +44,7 @@ function init_enemies() {
 	// Slime
 	ds_map_add(global.enemies, "SLIME", new Enemy(
 		"Slime",
-		new Stats(10, 3, 5, 2, 0, 0, 0),
+		new Stats(10, 3, 5, 2, 0, 0, 0, 10, 10),
 		{
 			idle: spr_slime_idle,
 			walking: spr_slime_idle,
@@ -56,7 +56,7 @@ function init_enemies() {
 		enemy_chase_idle,
 		6,
 		[global.actions.attack],
-		[MOVE_TYPES.BLUDGEONING],
+		global.basic_attacks.unarmed,
 		[MOVE_TYPES.FIRE],
 		[MOVE_TYPES.SLASHING],
 		[MOVE_TYPES.POISON],

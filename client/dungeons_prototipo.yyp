@@ -38,6 +38,7 @@
     {"$GMFolder":"","%Name":"Camera","folderPath":"folders/Scripts/Camera.yy","name":"Camera","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Dungeon","folderPath":"folders/Scripts/Dungeon.yy","name":"Dungeon","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"battle","folderPath":"folders/Scripts/Dungeon/battle.yy","name":"battle","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Actions","folderPath":"folders/Scripts/Dungeon/battle/Actions.yy","name":"Actions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"entities","folderPath":"folders/Scripts/Dungeon/entities.yy","name":"entities","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"enemies","folderPath":"folders/Scripts/Dungeon/entities/enemies.yy","name":"enemies","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Inventory","folderPath":"folders/Scripts/Dungeon/Inventory.yy","name":"Inventory","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -96,7 +97,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1100.0.713",
+    "IDEVersion":"2024.11.0.179",
   },
   "name":"dungeons_prototipo",
   "resources":[
@@ -159,6 +160,7 @@
     {"id":{"name":"rm_test","path":"rooms/rm_test/rm_test.yy",},},
     {"id":{"name":"rm_waiting_room","path":"rooms/rm_waiting_room/rm_waiting_room.yy",},},
     {"id":{"name":"Actions","path":"scripts/Actions/Actions.yy",},},
+    {"id":{"name":"BasicAttacks","path":"scripts/BasicAttacks/BasicAttacks.yy",},},
     {"id":{"name":"Battle","path":"scripts/Battle/Battle.yy",},},
     {"id":{"name":"BattleStates","path":"scripts/BattleStates/BattleStates.yy",},},
     {"id":{"name":"BattleStatesUi","path":"scripts/BattleStatesUi/BattleStatesUi.yy",},},

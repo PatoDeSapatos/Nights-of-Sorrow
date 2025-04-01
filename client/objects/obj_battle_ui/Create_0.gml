@@ -16,11 +16,11 @@ options = [
 	new battle_option("Guard", battle_state_guard, "move_input", ord("A"), noone, 330),
 	new battle_option("Item", battle_start_state_item, "item_input", ord("E"), noone, 210),
 	new battle_option("Skills", battle_start_state_skills, "skills_input", ord("W"), noone, 10),
-	new battle_option("Attack", battle_start_state_attack, "attack_input", ord("Q"), noone, 170),
+	new battle_option("Attack", battle_state_attack, "attack_input", ord("Q"), noone, 170),
 ];
 
 controls = [
-	new battle_option("End Turn", battle_skip_turn, "skip_input", ord(""), noone, 0),
+	new battle_option("End Turn", battle_skip_turn, "skip_input", ord("R"), noone, 0),
 	new battle_option("Free Camera", battle_set_free_camera, "move_camera_input", ord("M"), noone, 0),
 	new battle_option("Inspect", battle_set_state_interact, "interact_input", ord("F"), noone, 0),
 ]

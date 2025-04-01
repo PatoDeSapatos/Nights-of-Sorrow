@@ -1,11 +1,3 @@
-function battle_start_state_attack() {
-	
-}
-
-function battle_state_attack() {
-	
-}
-
 function battle_start_state_skills() {
 	var _skills = [global.actions.attack, global.actions.fireBall, global.actions.attackBoost, global.actions.lightRay, global.actions.poisonMist];
 	
@@ -321,5 +313,11 @@ function battle_state_free_camera() {
 function battle_state_guard() {
 	var _user = extra_action ? extra_turn_user : units[turns];
 	unit_use_action(global.actions.guard, _user, _user, _user.unit.position, [])
+	main_actions--
 	state = prev_state
+}
+
+function battle_state_attack() {
+	var _user = extra_action ? extra_turn_user : units[turns];
+	set_state_targeting(_user.unit.basic_attack);
 }

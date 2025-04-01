@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Actions",
+  "%Name":"BasicAttacks",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Actions",
+  "name":"BasicAttacks",
   "parent":{
     "name":"Actions",
     "path":"folders/Scripts/Dungeon/battle/Actions.yy",

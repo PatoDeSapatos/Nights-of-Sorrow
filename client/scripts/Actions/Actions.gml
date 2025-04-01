@@ -107,9 +107,8 @@ global.actions = {
 			var _user_attack = unit_get_stats(_user, "attack");
 			
 			var _damage = ceil(_user_attack + random_range(-_user_attack * .25, _user_attack * .25));
-			var _types = _user.unit.attack_types;
 			
-			unit_take_damage(_damage, _user, _targets[0], _types, true);
+			unit_take_damage(_damage, _user, _targets[0], [MOVE_TYPES.SLASHING], true);
 		}	
 	},
 	guard: {
