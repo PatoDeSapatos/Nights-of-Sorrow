@@ -147,4 +147,6 @@ for (var i = 0; i < array_length(enemies); ++i) {
 	array_push(units, _unit);
 }
 
+layer_depth(layer_get_id("Background"), depth + 1000)
+
 global.loading_screen = false;

@@ -76,7 +76,6 @@ function init_demo_battle(_grid_size) {
 }
 
 function init_battle(_grid, _allies, _enemies, _battle_host) {
-	
 	instance_create_depth(0, 0, 0, obj_battle_manager, {
 		grid: _grid,
 		allies: _allies,

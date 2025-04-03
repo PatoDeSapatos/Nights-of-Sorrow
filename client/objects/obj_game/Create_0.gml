@@ -22,7 +22,7 @@ global.controls = {
 }
 
 randomize();
-room_goto(rm_test);
+room_goto(rm_battle_demo);
 
 global.settings = {
 	camera_sensibility: 100,

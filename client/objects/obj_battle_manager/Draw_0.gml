@@ -5,6 +5,9 @@ var _mouse_tile_y = screenToTileYG(mouse_x, mouse_y, tile_size, init_x, init_y);
 mouse_hover.x = -1;
 mouse_hover.y = -1;
 
+show_debug_message( layer_get_depth(layer_get_id("Background")) )
+
+
 for (var _y = 0; _y < array_length(grid); ++_y) {
     for (var _x = 0; _x < array_length(grid[0]); ++_x) {
 		var _xx = tileToScreenXExt(_x, _y, tile_size, init_x);
@@ -54,17 +57,19 @@ for (var _y = 0; _y < array_length(grid); ++_y) {
 				}
 			}
 		}
-				
+		
 		if (_in_path || _in_action_area) {
 			draw_sprite_ext(spr_dungeon_tileset, 5, _xx, _yy, scale, scale, 0, c_white, 1);
-		} else draw_sprite_ext(spr_dungeon_tileset, grid[_y][_x].spr, _xx, _yy, scale, scale, 0, c_white, 1);
-	    
+		} else {
+			draw_sprite_ext(spr_dungeon_tileset, grid[_y][_x].spr, _xx, _yy, scale, scale, 0, c_white, 1);
+		}
 
 		if (_in_mov_range || _in_action_range) {
 			draw_sprite_ext(spr_dungeon_tileset, 2, _xx, _yy, scale, scale, 0, c_white, .75);
 		}
 	}
 }
+
 
 if (mouse_hover.x == -1 || mouse_hover.y == -1) {
 	path = [];	
